@@ -1,0 +1,11 @@
+.container {
+  height: 30px;
+  padding: 0 250px;
+  background: var(--text-color);
+  color: rgb(241, 241, 241);
+  font-size: 0.7rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  line-height: 50%;
+}

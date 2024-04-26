@@ -1,0 +1,92 @@
+.header {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+}
+
+.headerMain {
+  padding: 40px 250px 15px 250px;
+  /* background-color: red; */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mainLeft {
+  display: flex;
+  align-items: center;
+}
+
+.mainLeft img {
+  width: 165px;
+  margin-right: 25px;
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.inputContainer svg {
+  position: absolute;
+  left: 20px;
+  top: 12px;
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.searchInput {
+  border: 2px solid var(--primary-color);
+  outline: var(--primary-color);
+  /* background-color: #f7f7f7; */
+  padding: 10px 0 10px 60px;
+  width: 22vw;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.searchInput::placeholder {
+  color: var(--primary-color);
+}
+
+.mainRight {
+  font-size: 1rem;
+  display: flex;
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.iconContainer {
+  margin-left: 40px;
+  cursor: pointer;
+}
+
+.iconContainer a {
+  display: inline-block;
+  display: flex;
+  align-items: center;
+}
+
+.iconContainer svg {
+  display: inline-block;
+  padding: 3px;
+  margin-right: 5px;
+  border: 1px solid rgb(216, 216, 216);
+  border-radius: 7px;
+  stroke-width: 0.5;
+}
+
+.iconContainer:first-child svg {
+  color: rgb(255, 72, 0);
+}
+
+.iconContainer:nth-child(2) svg {
+  color: rgb(57, 133, 255);
+}
+
+.iconContainer:nth-child(3) svg {
+  color: rgb(255, 0, 0);
+}
+
+.iconContainer:nth-child(4) svg {
+  color: rgb(90, 57, 255);
+}

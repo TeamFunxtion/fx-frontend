@@ -1,0 +1,48 @@
+.navigation {
+  padding: 5px 250px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  display: flex;
+}
+
+.navigation ul {
+  display: flex;
+}
+
+.allCategory {
+  font-size: 2.3rem;
+  cursor: pointer;
+  margin-right: 25px;
+}
+
+.allCategory:hover {
+  color: var(--primary-color);
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.list svg {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.list span {
+}
+
+.right {
+  display: flex;
+}
+
+.right li {
+  margin-left: 25px;
+  color: rgb(171, 171, 171);
+}
