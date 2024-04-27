@@ -1,0 +1,26 @@
+.categoryList {
+  width: 170px;
+  position: absolute;
+  top: 165px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: 1px solid rgb(240, 240, 240);
+  font-size: 0.91rem;
+}
+
+.categoryList li {
+  width: 100%;
+}
+
+.categoryList a {
+  display: inline-block;
+  width: inherit;
+  padding: 10px 25px;
+  box-sizing: border-box;
+}
+
+.categoryList a:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
