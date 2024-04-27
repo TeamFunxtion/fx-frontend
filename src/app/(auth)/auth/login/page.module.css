@@ -1,0 +1,8 @@
+.loginButton {
+  width: 100%;
+  background-color: var(--primary-color) !important;
+}
+
+.loginButton:hover {
+  background-color: rgb(0, 75, 224) !important;
+}

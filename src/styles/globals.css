@@ -45,3 +45,13 @@ a {
 .active {
   color: var(--primary-color);
 }
+
+html,
+body {
+  height: 100%;
+}
+
+main {
+  height: calc(100% - 171px);
+  padding: 0 250px 0 250px;
+}
