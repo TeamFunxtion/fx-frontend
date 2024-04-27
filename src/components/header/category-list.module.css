@@ -16,7 +16,7 @@
 .categoryList a {
   display: inline-block;
   width: inherit;
-  padding: 10px 25px;
+  padding: 5px 25px;
   box-sizing: border-box;
 }
 

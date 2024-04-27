@@ -1,18 +1,15 @@
 import Link from "next/link"
 import styles from "./category-list.module.css"
+import { categories } from "@/app/constants"
 
 export default function CategoryList({ showCategoryList, handleShowCategory }) {
 	return (
 		showCategoryList ? <ul className={styles.categoryList} onMouseLeave={() => handleShowCategory(false, false)}>
-			<li><Link href="/">전체</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
-			<li><Link href="/">카테고리</Link></li>
+			{
+				categories.map((category) => (
+					<li><Link href="/">{category}</Link></li>
+				))
+			}
 		</ul> : <></>
 	)
 }

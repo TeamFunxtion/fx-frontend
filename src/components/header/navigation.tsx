@@ -44,7 +44,7 @@ export default function Navigation() {
 			</div>
 			<ul className={styles.right}>
 				<li><Link href="/auth/login">로그인</Link></li>
-				<li><Link href="/auth/signup">회원가입</Link></li>
+				<li><Link href="/auth/join">회원가입</Link></li>
 			</ul>
 		</nav>
 	)
