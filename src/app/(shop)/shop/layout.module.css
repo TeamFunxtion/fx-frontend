@@ -1,0 +1,12 @@
+.container {
+  padding-top: 35px;
+  display: flex;
+}
+
+.shopMainContainer {
+  padding-left: 110px;
+}
+
+.shpMainPageBody {
+  padding-top: 50px;
+}

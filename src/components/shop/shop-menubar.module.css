@@ -1,0 +1,29 @@
+.container {
+  width: 150px;
+  padding: 0 20px;
+}
+
+.pageTitle {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 35px;
+}
+
+.listContainer {
+  margin-top: 35px;
+}
+
+.listTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.listContainer li {
+  margin: 10px 0;
+  font-size: 0.96rem;
+}
+
+.listContainer li:hover {
+  color: var(--primary-color);
+}
