@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: {
     template: "%s | Funxtion",
-    default: "Fun한 경매! Funxtion"
+    default: "Fun한 경매 ! Funxtion"
   },
   description: "Fun한 경매! Funxtion",
   icons: {
