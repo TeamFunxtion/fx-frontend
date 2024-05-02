@@ -16,7 +16,7 @@ export default function ShopMenubar() {
 
 			<ul className={styles.listContainer}>
 				<h3 className={styles.listTitle}>내 정보</h3>
-				<li><Link href="/shop">회원정보 수정</Link></li>
+				<li><Link href="/shop/update">회원정보 수정</Link></li>
 				<li><Link href="/shop">관심 상품</Link></li>
 				<li><Link href="/shop">팔로잉</Link></li>
 				<li><Link href="/shop">팔로워</Link></li>
