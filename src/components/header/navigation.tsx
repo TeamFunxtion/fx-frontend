@@ -1,12 +1,15 @@
 'use client'
 
 import { useState, useRef } from "react";
-import { BsAlarm, BsBagHeart, BsEmojiSmile, BsList } from "react-icons/bs";
+import { BsList } from "react-icons/bs";
 import styles from "./navigation.module.css";
 import Link from "next/link";
 import CategoryList from "./category-list";
+import { useRecoilState } from "recoil";
+import { UserState } from "../../recoil/user.js";
 
 export default function Navigation() {
+	const [user, setUser] = useRecoilState(UserState);
 	const [showCategoryList, setShowCategoryList] = useState(false);
 	const timer: any = useRef(null);
 
@@ -42,10 +45,12 @@ export default function Navigation() {
 					</li>
 				</ul>
 			</div>
-			<ul className={styles.right}>
-				<li><Link href="/auth/login">로그인</Link></li>
-				<li><Link href="/auth/join">회원가입</Link></li>
-			</ul>
+			{
+				!user.email && <ul className={styles.right}>
+					<li><Link href="/auth/login">로그인</Link></li>
+					<li><Link href="/auth/join">회원가입</Link></li>
+				</ul>
+			}
 		</nav>
 	)
 }

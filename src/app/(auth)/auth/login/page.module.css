@@ -1,8 +1,15 @@
-.loginButton {
-  width: 100%;
-  background-color: var(--primary-color) !important;
+.loginForm {
 }
 
-.loginButton:hover {
-  background-color: rgb(0, 75, 224) !important;
+.btnContainer {
+  margin-top: 20px;
+}
+
+.loginBtn {
+  width: 100%;
+  /* background-color: var(--primary-color) !important; */
+}
+
+.loginBtn:hover {
+  /* background-color: rgb(0, 75, 224) !important; */
 }
