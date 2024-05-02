@@ -1,0 +1,164 @@
+.section {
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+.sectionTop {
+  height: 500px;
+  /* background-color: red; */
+  display: flex;
+}
+
+.imgContainer {
+  /* width: 35%; */
+}
+
+.imgContainer img {
+  height: 100%;
+  aspect-ratio: 1;
+}
+
+.contentContainer {
+  width: 100%;
+  margin-left: 65px;
+  position: relative;
+}
+
+.productTitle {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/*
+ * 등록일,조회수,관심...
+ */
+
+.etcRow {
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.etcText {
+  display: flex;
+  gap: 10px;
+  color: grey;
+}
+
+.etcIcon {
+  display: flex;
+  gap: 15px;
+  font-size: 1.6rem;
+}
+/**/
+
+.priceTxt {
+  font-size: 3rem;
+  font-weight: 600;
+  padding-bottom: 30px;
+  border-bottom: 1px solid grey;
+}
+
+.infoList {
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  color: var(--text-color);
+}
+
+.infoCol {
+  display: grid;
+  grid-template-columns: 120px auto;
+}
+
+/*
+ * 버튼영역
+ */
+
+.btnContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  position: absolute;
+  bottom: 0;
+}
+
+.btnContainer button {
+  padding: 22px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  /* border-radius: 12px; */
+  color: white;
+  outline: none;
+  border: none;
+  position: relative;
+  bottom: 0;
+}
+
+.btnChat {
+  background-color: #333333;
+}
+
+.btnBid {
+  background-color: var(--primary-color);
+}
+
+.btnCool {
+  background-color: orange;
+}
+
+/*
+	상품 정보 & 판매자 정보
+*/
+
+.sectionBottom {
+  margin-top: 55px;
+  display: grid;
+  grid-template-columns: auto 350px;
+  gap: 30px;
+  padding-bottom: 50px;
+}
+
+.sectionBottom h3 {
+  width: 100%;
+  padding: 30px 0;
+  border-bottom: 1px solid rgb(235, 235, 235);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.productDescription {
+  width: 90%;
+  padding: 30px 0 150px 0;
+}
+
+.userInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5px;
+  font-size: 1.2rem;
+}
+
+.userInfo img {
+  width: 80;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.userIntro {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.followBtn {
+  width: 100%;
+  padding: 5px;
+
+  background-color: white;
+  border: 1px solid grey;
+}

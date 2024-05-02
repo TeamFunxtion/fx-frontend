@@ -1,0 +1,49 @@
+.section {
+}
+
+/*
+ *  상품 검색 필터 영역
+ */
+
+.header {
+  color: rgb(53, 53, 53);
+}
+
+.header h2 {
+  margin-top: 20px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 25px 0;
+  border-bottom: 2px solid black;
+}
+
+.header ul > li {
+  /* background-color: red; */
+  display: flex;
+  font-size: 1rem;
+  border-bottom: 1px solid rgb(228, 228, 228);
+}
+
+/*
+ *  상품목록 영역
+ */
+
+.main {
+  /* background-color: aquamarine; */
+  margin-top: 60px;
+}
+
+.sortBar {
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: grey;
+}
+
+.productList {
+  padding: 30px 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
