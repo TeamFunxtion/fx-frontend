@@ -55,3 +55,9 @@ main {
   height: calc(100% - 171px);
   padding: 0 250px 0 250px;
 }
+
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}

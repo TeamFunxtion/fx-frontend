@@ -1,68 +1,60 @@
 'use client'
-import { TextField, Button } from "@mui/material";
 import styles from "./page.module.css";
 import api from "@/utils/api";
-import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { UserState } from "@/recoil/user";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { BsKeyFill, BsPersonCircle } from "react-icons/bs";
+
+interface FormValues {
+	email: string,
+	password: string
+}
 
 export default function LoginPage() {
-	const [user, setUser] = useState({
-		email: '',
-		password: '',
-	});
-	const router = useRouter();
-	const setUserState = useSetRecoilState(UserState);
-
-	const login = async () => {
-		const { email, password } = user;
-
-		if (!email) {
-			toast.error("이메일을 입력하세요.");
-			return false;
-		}
-
-		if (!password) {
-			toast.error("비밀번호를 입력하세요.");
-			return false;
-		}
-
-		const res = await api.post('/members/login', user);
+	const { register, handleSubmit, watch, formState: { errors } } = useForm<FormValues>()
+	const onSubmitHandler: SubmitHandler<FormValues> = async (values) => {
+		console.log(values)
+		const res = await api.post('/members/login', values);
 		// console.log(res);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			const { memberDto } = data;
 			console.log(memberDto);
 			setUserState(memberDto);
-			toast.success(msg);
+			toast.success(msg || '로그인 성공!');
 			router.push("/");
 		} else {
-			toast.error(msg)
+			toast.error(msg || '로그인 실패..');
 		}
 	}
 
-	const handleChangeInput = (e: any) => {
-		setUser({
-			...user,
-			[e.target.name]: e.target.value
-		});
-	}
+	const router = useRouter();
+	const setUserState = useSetRecoilState(UserState);
 
 	return (
-		<div>
-			<div>
-				<h1>로그인</h1>
-				<h3>로그인해보세요!</h3>
+		<div className={styles.formContainer}>
+			<h1>로그인</h1>
+			<form onSubmit={handleSubmit(onSubmitHandler)}>
+				<label className={styles.label}><BsPersonCircle /></label>
+				<input className={styles.input} {...register("email", { required: true, pattern: /^\S+@\S+$/i })} type="email" placeholder="이메일" />
+				<label className={styles.label}><BsKeyFill /></label>
+				<input className={styles.input} {...register("password", { required: true, minLength: 6 })} type="password" placeholder="비밀번호" />
+				<button className={styles.submit} type="submit">이메일로 로그인</button>
+			</form>
+
+			<div className={styles.divide}>OR</div>
+
+			<div className={styles.oauthContainer}>
+				<img
+					src="/images/oauth/kakao_login_large_wide.png"
+					alt="kakao_login"
+				/>
 			</div>
-			<div className={styles.loginForm}>
-				<TextField fullWidth label="이메일" type="email" name="email" onChange={(e) => handleChangeInput(e)} placeholder="이메일을 입력하세요." size="small" margin="normal" />
-				<TextField fullWidth label="비밀번호" type="password" name="password" onChange={(e) => handleChangeInput(e)} placeholder="비밀번호를 입력하세요." size="small" />
-				<div className={styles.btnContainer}>
-					<Button className={styles.loginBtn} variant="contained" size="large" onClick={login} disabled={!user.email || !user.password}>로그인</Button>
-				</div>
-			</div>
+
+
 		</div >
 	)
 }
