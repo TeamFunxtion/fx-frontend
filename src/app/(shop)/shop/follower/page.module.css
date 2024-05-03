@@ -1,0 +1,31 @@
+.title {
+	font-size:1.8rem;
+	font-weight: 600;
+	height: 150px;
+}
+
+.follow {
+	width: 100%;
+	border-bottom: 1px solid gray;
+	padding-bottom: 20px;
+	font-weight: 600;
+	font-size: 1.4rem;
+}
+
+.followCount {
+	color: var(--primary-color);
+}
+
+.followList {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 290px;
+}
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	place-items: center;
+	grid-row-gap: 20px
+}
+
