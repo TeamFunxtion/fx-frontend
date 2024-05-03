@@ -4,7 +4,7 @@ import api from "@/utils/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
-import { UserState } from "@/recoil/user";
+import { userInfoState } from "@/store/atoms";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { BsKeyFill, BsPersonCircle } from "react-icons/bs";
 
@@ -23,7 +23,7 @@ export default function LoginPage() {
 		if (resultCode == '200') {
 			const { memberDto } = data;
 			console.log(memberDto);
-			setUserState(memberDto);
+			setUserInfoState(memberDto);
 			toast.success(msg || '로그인 성공!');
 			router.push("/");
 		} else {
@@ -32,7 +32,7 @@ export default function LoginPage() {
 	}
 
 	const router = useRouter();
-	const setUserState = useSetRecoilState(UserState);
+	const setUserInfoState = useSetRecoilState(userInfoState);
 
 	return (
 		<div className={styles.formContainer}>
@@ -41,7 +41,7 @@ export default function LoginPage() {
 				<label className={styles.label}><BsPersonCircle /></label>
 				<input className={styles.input} {...register("email", { required: true, pattern: /^\S+@\S+$/i })} type="email" placeholder="이메일" />
 				<label className={styles.label}><BsKeyFill /></label>
-				<input className={styles.input} {...register("password", { required: true, minLength: 6 })} type="password" placeholder="비밀번호" />
+				<input className={styles.input} {...register("password", { required: true, minLength: 4 })} type="password" placeholder="비밀번호" />
 				<button className={styles.submit} type="submit">이메일로 로그인</button>
 			</form>
 
