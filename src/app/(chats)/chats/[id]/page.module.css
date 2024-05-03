@@ -1,88 +1,3 @@
-.container {
-	height: 100%;
-	display:flex;
-	
-}
-.roomList {
-	width: 35%;
-	padding-top: 30px;
-	max-height: 100%;
-	overflow: auto;
-	border-right: 1px solid lightgray;
-}
-.roomCount {
-
-	font-size: larger;
-	font-weight: bold;
-	padding-bottom: 30px;
-	padding-left: 20px;
-	border-bottom: 1px solid lightgray;
-}
-.list {
-	display: flex;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	padding-right: 5px;
-	padding-left: 5px;
-	
-}
-.list:hover {
-	background-color: rgb(220, 220, 220);
-}
-
-.profileImg {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
-}
-
-.productImg {
-	width: 35px;
-	height: 35px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
-	
-}
-
-.shortcut {
-	width: 100%;
-	padding-left: 7px;
-	padding-top: 3px;		
-}
-
-.name {
-	font-weight: bold;
-	padding-bottom: 5px;
-}
-
-.msgArea {
-	display: flex;
-	justify-content: space-between;
-}
-
-.lastMsg {
-	font-size: small;
-	color: gray;
-	width: 300%
-}
-
-.lastMsgDate {
-	font-size: small;
-	color: gray;
-	width: 100%;
-	text-align:right;
-	padding-right: 3px;
-}
-
-.chatRoom {
-	padding-top: 20px;
-	max-height: 100%;
-	width: 65%;
-	overflow: auto;
-	
-}
-
 .chatRoomHeader {
 	display: flex;
 	border-bottom: 1px solid lightgray;
@@ -91,6 +6,7 @@
 	justify-content: space-between;
 	align-items: center;
 }
+
 .chatProfile {
 	display: flex;
 	padding-bottom: 10px;
@@ -129,14 +45,13 @@
 	font-size: medium;
 }
 
-
-
 .chatView {
 	padding-top: 30px;
 	padding-left: 30px;
 	padding-right: 30px;
 	height: 600px;
 	border-bottom: 1px solid lightgray;
+	overflow: auto;
 	
 }
 
@@ -202,6 +117,7 @@
 	background-color: rgb(245, 245, 245);
 	border: 0;
 	padding-left: 10px;
+	overflow: auto;
 }
 
 .inputMsg::placeholder {
@@ -212,38 +128,25 @@
 	outline: 1px solid lightgray;
 }
 
-.noChatRoom {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+.profileImg {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid lightgray;
+}
+
+.productImg {
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	border: 1px solid lightgray;
 	
 }
 
-.height {
-	height: 90%
-}
-
-.noRoom svg {
-	font-size: 75px;
-}
-
-.noChat svg {
-	font-size: 75px;
-}
-
-.noChatFont {
-	font-size: larger;
-	text-align: center;
-	font-weight: bold;
-}
-
-.chatIcon {
-	display: flex;
-	justify-content: center;
-}
-
-.noChatFontSmall {
-	font-size: medium;
-	text-align: center;
+.chatRoom {
+	padding-top: 20px;
+	max-height: 100%;
+	width: 65%;
+	overflow: auto;
+	
 }
