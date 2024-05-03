@@ -129,10 +129,7 @@
 	font-size: medium;
 }
 
-.chatting {
-	
-	
-}
+
 
 .chatView {
 	padding-top: 30px;
@@ -213,4 +210,40 @@
 
 .inputMsg:focus {
 	outline: 1px solid lightgray;
+}
+
+.noChatRoom {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+}
+
+.height {
+	height: 90%
+}
+
+.noRoom svg {
+	font-size: 75px;
+}
+
+.noChat svg {
+	font-size: 75px;
+}
+
+.noChatFont {
+	font-size: larger;
+	text-align: center;
+	font-weight: bold;
+}
+
+.chatIcon {
+	display: flex;
+	justify-content: center;
+}
+
+.noChatFontSmall {
+	font-size: medium;
+	text-align: center;
 }
