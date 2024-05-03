@@ -51,6 +51,11 @@ body {
   height: 100%;
 }
 
+/* 스크롤 너비만큼 main영역이 좁아져서 숨김 */
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
 main {
   height: calc(100% - 171px);
   padding: 0 250px 0 250px;

@@ -38,7 +38,7 @@ function HeaderMain() {
 					</Link>
 				</div>
 				<div className={styles.iconContainer}>
-					<Link href="/talks">
+					<Link href="/chats">
 						<BsChatDots />
 						<span>채팅</span>
 					</Link>
