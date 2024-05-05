@@ -30,9 +30,9 @@ export default function Follower() {
 				</div> :
 				<div className={styles.grid}>
 					{
-						followList.map(function (list, i) {
+						followList.map(function (item) {
 							return (
-								<FollowCard follow={followList[i]} />
+								<FollowCard item={item} followList={followList} setFollowList={setFollowList} />
 							)
 						})
 					}
