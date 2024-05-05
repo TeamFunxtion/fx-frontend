@@ -1,8 +1,54 @@
-.loginButton {
-  width: 100%;
-  background-color: var(--primary-color) !important;
+.formContainer h1 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
 }
 
-.loginButton:hover {
-  background-color: rgb(0, 75, 224) !important;
+.form {
+  /* width: 100%; */
+}
+
+.input {
+  width: 100%;
+  padding: 15px 35px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border: 1px solid rgb(223, 223, 223);
+}
+
+.label {
+  position: relative;
+  top: 36px;
+  left: 10px;
+}
+
+.error {
+  font-size: 0.9rem;
+  color: red;
+  margin-bottom: 5px;
+}
+
+.submit {
+  width: 100%;
+  padding: 15px 10px;
+  background: var(--primary-color);
+  color: white;
+  /* font-weight: 600; */
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+.divide {
+  margin: 15px 0;
+  font-size: 0.9rem;
+  /* font-weight: 600; */
+  color: grey;
+  text-align: center;
+}
+
+.oauthContainer {
+}
+
+.oauthContainer img {
+  width: 100%;
+  cursor: pointer;
 }

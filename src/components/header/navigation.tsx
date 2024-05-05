@@ -1,14 +1,23 @@
 'use client'
-
-import { useState, useRef } from "react";
-import { BsAlarm, BsBagHeart, BsEmojiSmile, BsList } from "react-icons/bs";
+import { useState, useRef, useEffect } from "react";
+import { BsList } from "react-icons/bs";
 import styles from "./navigation.module.css";
 import Link from "next/link";
 import CategoryList from "./category-list";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
+import api from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function Navigation() {
+	const user = useRecoilValue(userInfoState);
+	const resetUser = useResetRecoilState(userInfoState);
+	const router = useRouter();
 	const [showCategoryList, setShowCategoryList] = useState(false);
 	const timer: any = useRef(null);
+
+	const setSsrCompleted = useSsrComplectedState();
+	useEffect(setSsrCompleted, [setSsrCompleted]);
 
 	const handleShowCategory = (flag: boolean, isLazy: boolean) => {
 		if (timer.current) clearTimeout(timer.current);
@@ -20,6 +29,16 @@ export default function Navigation() {
 					setShowCategoryList(flag);
 				}, 1500);
 			}
+		}
+	}
+
+	const logout = async () => {
+		const res = await api.post("/members/logout");
+		console.log(res);
+		const { data: { resultCode } } = res;
+		if (resultCode == '200') {
+			resetUser();
+			router.push("/");
 		}
 	}
 
@@ -43,8 +62,16 @@ export default function Navigation() {
 				</ul>
 			</div>
 			<ul className={styles.right}>
-				<li><Link href="/auth/login">로그인</Link></li>
-				<li><Link href="/auth/join">회원가입</Link></li>
+				{
+					!user.id ?
+						<>
+							<li><Link href="/auth/login">로그인</Link></li>
+							<li><Link href="/auth/join">회원가입</Link></li>
+						</>
+						: <>
+							<li onClick={logout}><Link href="">로그아웃</Link></li>
+						</>
+				}
 			</ul>
 		</nav>
 	)
