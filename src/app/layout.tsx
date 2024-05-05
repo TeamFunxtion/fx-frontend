@@ -40,7 +40,34 @@ export default function RootLayout({
           <main>
             {children}
           </main>
-          <Toaster />
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              success: {
+                style: {
+                  background: '#00D26A',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: '#00D26A',
+                }
+              },
+              error: {
+                style: {
+                  background: 'red',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: 'red',
+                }
+              },
+            }}
+            containerStyle={{
+              bottom: 50
+            }}
+          />
         </RecoilRootWrapper>
       </body>
     </html>
