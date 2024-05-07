@@ -1,15 +1,15 @@
 'use client'
 import { BsCardImage, BsX } from "react-icons/bs"
 import styles from "./ProductsNewForm.module.css"
-import { FormControl, FormControlLabel, FormControlLabelProps, Radio, RadioGroup, RadioGroupProps } from "@mui/material"
-import { useForm, SubmitHandler, FieldValues, Control, FieldPath, RegisterOptions, useController } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import api from "@/utils/api"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import { ChangeEvent, useState } from "react"
+import { useState } from "react"
 import { categories } from "@/app/constants"
 import { useRecoilValue } from "recoil"
 import { userInfoState } from "@/store/atoms"
+import MRadio, { TRadioGroup } from "../atom/MRadio"
 
 interface FormValues {
 	storeId: string,
@@ -21,30 +21,8 @@ interface FormValues {
 	salesTypeId: string,
 	location: string,
 	coolPrice: string,
-	endDate: string,
+	endDays: number,
 }
-
-export type TControl<T extends FieldValues> = {
-	control: Control<T>;
-	name: FieldPath<T>;
-	rules?: Omit<
-		RegisterOptions<T>,
-		"valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"
-	>;
-};
-
-export type TRadioGroup = Omit<FormControlLabelProps, "control">;
-
-// 만약 props 가 더 필요하다면 아래 정의하면 됩니다.
-type CustomSelectProps = {
-	group: TRadioGroup[];
-	size?: "medium" | "small";
-	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-};
-
-type TProps<T extends FieldValues> = Omit<RadioGroupProps, "onChange"> &
-	CustomSelectProps &
-	TControl<T>;
 
 export default function ProductsNewForm() {
 	const { register, getValues, control, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<FormValues>({
@@ -58,7 +36,7 @@ export default function ProductsNewForm() {
 			salesTypeId: "SA01",
 			location: "",
 			coolPrice: "",
-			endDate: "1",
+			endDays: 1,
 		}
 	});
 	const router = useRouter();
@@ -215,8 +193,8 @@ export default function ProductsNewForm() {
 							<div className={styles.rowLabel}>경매 종료일</div>
 							<div className={styles.rowContent}>
 								<MRadio
-									group={endDateRadioGroup}
-									name="endDate"
+									group={endDaysRadioGroup}
+									name="endDays"
 									control={control}
 									rules={{ required: "반드시 입력해주세요." }}
 								/>
@@ -244,50 +222,8 @@ const salesTypeRadioGroup: TRadioGroup[] = [
 	{ label: "일반 판매", value: "SA03" },
 ];
 
-const endDateRadioGroup: TRadioGroup[] = [
-	{ label: "1일", value: "1" },
-	{ label: "2일", value: "2" },
-	{ label: "3일", value: "3" },
+const endDaysRadioGroup: TRadioGroup[] = [
+	{ label: "1일", value: 1 },
+	{ label: "2일", value: 2 },
+	{ label: "3일", value: 3 },
 ];
-
-function MRadio<T extends FieldValues>(props: TProps<T>) {
-	const {
-		name,
-		rules,
-		control,
-		group,
-		size = "medium",
-		onChange: propsOnChange,
-	} = props;
-	const {
-		field: { value, onChange },
-	} = useController({
-		name,
-		rules,
-		control,
-	});
-
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		onChange(event);
-		if (propsOnChange) {
-			propsOnChange(event);
-		}
-	};
-
-	return (
-		<FormControl>
-			<RadioGroup row name={name} value={value} onChange={handleChange}>
-				{group.map(({ value: radioValue, disabled, label }, index) => (
-					<FormControlLabel
-						key={index}
-						value={radioValue}
-						label={label}
-						control={
-							<Radio size={size} value={radioValue} disabled={disabled} />
-						}
-					/>
-				))}
-			</RadioGroup>
-		</FormControl>
-	);
-}
