@@ -6,9 +6,14 @@
   }
 .buttondiv{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     padding: 50px 50px 50px 50px;
     
+}
+.outButton{
+    background-color: orange;
+    color: white;
+    width: 100px;
 }
 
 .input{
@@ -33,11 +38,6 @@
     height: 200px;
 }
 
-.outButton{
-    background-color: orange;
-    color: white;
-    width: 100px;
-}
 .form{
     text-align : left;
 
