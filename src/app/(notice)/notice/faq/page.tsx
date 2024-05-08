@@ -1,16 +1,14 @@
-"use client"
 import styles from './page.module.css';
-import React, { useState } from 'react';
-import { data } from './data';
-import SingleQuestion from './Question';
+import api from '@/utils/api';
 
 
-export default function App() {
-	// 데이터 셋한걸 useState에 상태관리
-	const [question, setQuestion] = useState<any[]>(data);
-
-	//클릭한 id값 useState에 상태관리
-	const [index, setIndex] = useState<number>(0);
+export default async function FAQPage() {
+	// todo. 목록 조회
+	const result = await api.get("/faqs");
+	/*console.log(result);
+	console.log("여긴?")
+	console.log(result.data)*/
+	const faqList = result.data;
 
 	return (
 		<div>
@@ -25,10 +23,20 @@ export default function App() {
 
 				<div className={styles.container}>
 					<section className="info">
-						{question.map((val) => (
+						{/* {question.map((val) => (
 							//components에 props 넘겨준다.
 							<SingleQuestion key={val.id} setIndex={setIndex} index={index} {...val} />
-						))}
+						))} */}
+						{
+							faqList.map((faq, index) => (
+								<div className={styles.noticeDiv} key={index}>
+									<div className={styles.noticeContent}>
+										{faq.faqTitle}
+										{faq.faqContent}
+									</div>
+								</div>
+							))
+						}
 						<ul className={styles.noticePage}>
 							<li><a href="" className={styles.noticePageUpDown}>이전</a></li>
 							<li><a href="" className={styles.noticePageNum}>1</a></li>

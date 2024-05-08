@@ -1,6 +1,7 @@
 import React, { Dispatch, useState } from 'react';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import styles from './page.module.css'
+
 //type 정의
 interface IProps {
 	title: string;
