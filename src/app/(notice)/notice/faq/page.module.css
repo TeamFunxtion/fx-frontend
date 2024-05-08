@@ -1,10 +1,12 @@
 .noticeMain{
 	display: flex;
 	margin-top: 50px;
+
 }
 
 .noticeAside{
 	width: 130px;
+	position: fixed;
 }
 
 .noticeNotice{
@@ -21,12 +23,11 @@
 
 .noticeSection{
 
-	width: 1500px;
+	width: 1200px;
 	
 }
 
 .noticeDiv{
-	margin-left: 40px;
 	border: 2px solid rgba(121, 121, 121, 0.5);
 	display: flex;
 	justify-content: space-between;
@@ -65,7 +66,6 @@
 	justify-content: center;
 	align-content: center;
 	text-align: center;
-	
 }
 
 .noticePage li{
@@ -77,3 +77,45 @@
 	font-weight: 400;
 }
 
+
+
+
+
+.container {
+	position: fixed;
+	background: var(--clr-white);
+	border-radius: var(--radius);
+	max-width: var(--fixed-width);
+	display: grid;
+	gap: 1rem 2rem;
+	margin-left: 200px;
+}
+.container h3 {
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+
+.article p {
+	margin-left: 40px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	display: flex;
+	justify-content: space-between;
+}
+
+.btn {
+	background: transparent;
+	border-color: transparent;
+	width: 2rem;
+	height: 2rem;
+	background: var(--clr-grey-special);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	color: var(--clr-red-special);
+	cursor: pointer;
+	margin-left: 1rem;
+	align-self: center;
+	min-width: 2rem;
+}
