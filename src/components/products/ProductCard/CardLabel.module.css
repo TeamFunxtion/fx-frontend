@@ -1,0 +1,8 @@
+.labelSpan {
+  font-size: 0.9rem;
+  background-color: chartreuse;
+  padding: 2px 5px;
+  border-radius: 10px;
+  display: inline-block;
+  font-weight: 600;
+}

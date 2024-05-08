@@ -3,6 +3,7 @@ import { BsChatDots, BsHeart, BsLightningChargeFill, BsPersonRaisedHand, BsRobot
 import { scrollToTop, elapsedTime, dateFormatterYYYYMMDDHHmm, numberFormatter } from "@/utils/common";
 import { getProductQualityNameKR } from "@/utils/product";
 import styles from "./ProductDetailInfo.module.css"
+import CardLabel from "./ProductCard/CardLabel";
 
 export default function ProductDetailInfo({ productDetail }) {
 	scrollToTop();
@@ -21,6 +22,10 @@ export default function ProductDetailInfo({ productDetail }) {
 							<li>{elapsedTime(productDetail.createDate) || "42분 전"}</li>
 							<li>조회수 {productDetail.views}</li>
 							<li>관심 {productDetail.interests || '0'}</li>
+							{productDetail.salesTypeId !== "SA03" ? <>
+								<CardLabel label="경매" backgroundColor="dodgerblue" color="white" /> {productDetail.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
+							</> : <CardLabel label="대화 거래" color="black" />
+							}
 						</ul>
 						<ul className={styles.etcIcon}>
 							<li><BsHeart /></li>
@@ -29,6 +34,7 @@ export default function ProductDetailInfo({ productDetail }) {
 						</ul>
 					</div>
 					<h3 className={styles.priceTxt}>{numberFormatter(productDetail.currentPrice)}원</h3>
+
 					{
 						productDetail.salesTypeId !== "SA03" && <div className={styles.infoContainer}>
 							<ul className={styles.infoList}>

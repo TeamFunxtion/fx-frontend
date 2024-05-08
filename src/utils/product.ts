@@ -8,3 +8,16 @@ export const getProductQualityNameKR = (typeId: string) => {
       return typeId;
   }
 };
+
+export const getProductSalesNameKR = (typeId: string) => {
+  switch (typeId) {
+    case "SA01":
+      return "경매";
+    case "SA02":
+      return "블라인드 경매";
+    case "SA03":
+      return "대화 거래";
+    default:
+      return typeId;
+  }
+};

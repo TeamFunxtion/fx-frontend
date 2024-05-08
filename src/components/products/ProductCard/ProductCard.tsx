@@ -2,6 +2,7 @@
 import styles from "./ProductCard.module.css"
 import { dateFormatterYYYYMMDDHHmm, numberFormatter } from "@/utils/common"
 import { useRouter } from "next/navigation"
+import CardLabel from "./CardLabel";
 
 export default function ProductCard({ product }) {
 	const router = useRouter();
@@ -17,6 +18,12 @@ export default function ProductCard({ product }) {
 				<img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" />
 			</div>
 			<div className={styles.cardBody}>
+				<div>
+					{product.salesTypeId !== "SA03" ? <>
+						<CardLabel label="경매" backgroundColor="dodgerblue" color="white" /> {product.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
+					</> : <CardLabel label="대화 거래" />
+					}
+				</div>
 				<h3 className={styles.productTitle}>{product.productTitle}</h3>
 				{
 					product.salesTypeId !== 'SA03' ? <ul className="">
@@ -45,6 +52,6 @@ export default function ProductCard({ product }) {
 						</ul>
 				}
 			</div>
-		</li>
+		</li >
 	)
 }

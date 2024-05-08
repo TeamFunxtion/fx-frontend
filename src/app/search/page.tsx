@@ -1,4 +1,4 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/products/ProductCard/ProductCard";
 import styles from "./page.module.css";
 import ProductSearchFilter from "@/components/search/ProductSearchFilter";
 import { API_URL } from "../constants";
