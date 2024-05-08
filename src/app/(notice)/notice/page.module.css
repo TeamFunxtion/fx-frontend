@@ -22,7 +22,7 @@
 
 .noticeSection{
 
-	width: 1000px;
+	width: 1300px;
 	
 }
 
@@ -49,10 +49,31 @@
 	border-radius: 30px
 
 }
-.noticeContent{
+.noticeTitle{
 	align-content: center;
 	text-align: left;
 	width: 60%;
+}
+
+.noticeContent{
+	margin-left: 40px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	display: flex;
+	justify-content: space-between;
+}
+
+.noticeContentDetail{
+	margin: 5px 10px;
+	line-height: 1.5;
+	color: rgb(0, 106, 219);
+	
+}
+
+.noticeIc{
+	margin-right: 5px;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
 }
 
 .noticeSysdate{
