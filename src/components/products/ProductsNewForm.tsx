@@ -52,7 +52,7 @@ export default function ProductsNewForm() {
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			toast.success(msg || '상품이 등록되었습니다!');
-			router.push("/products/sidfdsijfjf");
+			router.push(`/products/${data.id}`);
 		} else {
 			toast.error(msg || '상품 등록을 실패했습니다!');
 		}

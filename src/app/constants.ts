@@ -1,3 +1,5 @@
+export const API_URL = "http://localhost:8090/api/v1";
+
 export const categories = [
   { categoryId: "CA01", categoryName: "여성의류" },
   { categoryId: "CA02", categoryName: "남성의류" },

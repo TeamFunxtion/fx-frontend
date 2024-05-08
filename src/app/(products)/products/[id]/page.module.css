@@ -117,7 +117,7 @@
 .sectionBottom {
   margin-top: 55px;
   display: grid;
-  grid-template-columns: auto 350px;
+  grid-template-columns: 70% auto;
   gap: 30px;
   padding-bottom: 50px;
 }
@@ -133,6 +133,8 @@
 .productDescription {
   width: 90%;
   padding: 30px 0 150px 0;
+  word-wrap: break-word;
+  line-height: 1.5rem;
 }
 
 .userInfo {
