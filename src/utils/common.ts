@@ -1,6 +1,10 @@
 import moment from "moment";
 import _ from "moment";
 
+export const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
 export const elapsedTime = (date: number): string => {
   const start = new Date(date);
   const end = new Date();
