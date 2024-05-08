@@ -4,16 +4,30 @@ import { scrollToTop, elapsedTime, dateFormatterYYYYMMDDHHmm, numberFormatter } 
 import { getProductQualityNameKR } from "@/utils/product";
 import styles from "./ProductDetailInfo.module.css"
 import CardLabel from "./ProductCard/CardLabel";
+import { useEffect } from "react";
+import SimpleImageSlider from "react-simple-image-slider";
+import Link from "next/link";
 
 export default function ProductDetailInfo({ productDetail }) {
-	scrollToTop();
+	const { seller } = productDetail;
+
+	useEffect(() => {
+		scrollToTop();
+	}, [])
+
+	const images = productDetail.images.map((img: any) => img.imageUrl);
 
 	return (
 		<section className={styles.section} >
 			<div className={styles.sectionTop}>
 				<div className={styles.imgContainer}>
-					<img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" />
-					{/* <img src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e" alt="" /> */}
+					{images && images.length > 0 ? <SimpleImageSlider
+						width={500}
+						height={500}
+						images={images}
+						showBullets={true}
+						showNavs={true}
+					/> : <img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" />}
 				</div>
 				<div className={styles.contentContainer}>
 					<h2 className={styles.productTitle}>{productDetail.productTitle} </h2>
@@ -33,14 +47,14 @@ export default function ProductDetailInfo({ productDetail }) {
 							<li><BsRobot /></li>
 						</ul>
 					</div>
-					<h3 className={styles.priceTxt}>{numberFormatter(productDetail.currentPrice)}원</h3>
-
+					<h3 className={styles.priceTxt}>{productDetail.salesTypeId !== "SA02" ? `${numberFormatter(productDetail.currentPrice)}원` : '?'}
+					</h3>
 					{
 						productDetail.salesTypeId !== "SA03" && <div className={styles.infoContainer}>
 							<ul className={styles.infoList}>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
-									<div className={styles.content}>{numberFormatter(productDetail.bidCount) || '0'}명</div>
+									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명</div>
 								</li>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>시작가</div>
@@ -52,7 +66,7 @@ export default function ProductDetailInfo({ productDetail }) {
 								</li>
 								{
 									productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <li className={styles.infoCol}>
-										<div className={styles.label}>즉시구매</div>
+										<div className={styles.label}>즉구가</div>
 										<div className={styles.content}>{numberFormatter(productDetail.coolPrice) || '0'}원</div>
 									</li>
 								}
@@ -74,7 +88,7 @@ export default function ProductDetailInfo({ productDetail }) {
 					<div className={styles.btnContainer}>
 						<button className={styles.btnChat}><BsChatDots />&nbsp;1:1채팅</button>
 						{productDetail.salesTypeId !== "SA03" && <button className={styles.btnBid}><BsPersonRaisedHand />&nbsp;입찰</button>}
-						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={styles.btnCool}><BsLightningChargeFill />즉시구매</button>}
+						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={styles.btnCool}><BsLightningChargeFill />바로 구매</button>}
 					</div>
 				</div>
 			</div>
@@ -87,13 +101,15 @@ export default function ProductDetailInfo({ productDetail }) {
 				</div>
 				<div>
 					<h3>판매자 정보</h3>
-					<div className={styles.userInfo}>
-						<h4>인천핵주먹류연우</h4>
-						<img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" />
-					</div>
-					<div className={styles.userIntro}>
-						저는 인천의자랑 핵주먹 류연우입니다.저는 인천의자랑 핵주먹 류연우입니다.저는 인천의자랑 핵주먹 류연우입니다.저는 인천의자랑 핵주먹 류연우입니다.
-					</div>
+					<Link href={`/shop/${seller.id}`}>
+						<div className={styles.userInfo}>
+							<h4>{seller.nickname}</h4>
+							<img src={seller.profileImageUrl} alt="유저 이미지" />
+						</div>
+						<div className={styles.userIntro}>
+							{seller.intro}
+						</div>
+					</Link>
 					<button className={styles.followBtn}>+ 팔로우</button>
 				</div>
 			</div>

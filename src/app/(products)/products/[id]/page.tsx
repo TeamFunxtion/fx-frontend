@@ -15,18 +15,17 @@ export async function generateMetadata({ params: { id } }: IParams) {
 export async function getProductDetail(id: string) {
 	// await new Promise((resolve) => setTimeout(resolve, 5000));
 	// throw new Error("Oops...");
-	const response = await fetch(`${API_URL}/products/${id}`);
+	const response = await fetch(`${API_URL}/products/${id}`, { method: 'GET', cache: 'no-store' });
 	return response.json();
 }
 
 export default async function ProductDetailPage({
 	params: { id }
 }: IParams) {
-	console.log(id);
-
+	// console.log(id);
 	const { data } = await getProductDetail(id);
 	const productDetail = data;
-
+	// console.log(productDetail);
 	return (
 		<ProductDetailInfo productDetail={productDetail} />
 	)

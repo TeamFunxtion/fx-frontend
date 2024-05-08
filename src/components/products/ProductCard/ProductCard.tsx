@@ -32,7 +32,7 @@ export default function ProductCard({ product }) {
 							<div className="rowContent">{numberFormatter(product.currentPrice)}원</div>
 						</li>
 						<li className={styles.textRow}>
-							<div className="rowLabel">즉시구매</div>
+							<div className="rowLabel">즉구가</div>
 							<div className="rowContent">{product.coolPrice ? `${numberFormatter(product.coolPrice)}원` : '없음'}</div>
 						</li>
 						<li className={styles.textRow}>
