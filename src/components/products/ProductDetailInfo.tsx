@@ -52,8 +52,9 @@ export default function ProductDetailInfo({ productDetail }) {
 	const clickFastPurchase = () => {
 		if (!id) {
 			router.push(LOGIN_URL);
+		} else {
+			createNewBid(productDetail.coolPrice);
 		}
-		createNewBid(productDetail.coolPrice);
 	}
 
 	useEffect(() => {
