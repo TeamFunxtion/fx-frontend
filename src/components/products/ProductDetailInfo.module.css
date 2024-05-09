@@ -73,6 +73,10 @@
   grid-template-columns: 120px auto;
 }
 
+.label {
+  font-weight: 600;
+}
+
 /*
  * 버튼영역
  */
@@ -117,7 +121,7 @@
 .sectionBottom {
   margin-top: 55px;
   display: grid;
-  grid-template-columns: auto 350px;
+  grid-template-columns: 70% auto;
   gap: 30px;
   padding-bottom: 50px;
 }
@@ -133,6 +137,8 @@
 .productDescription {
   width: 90%;
   padding: 30px 0 150px 0;
+  word-wrap: break-word;
+  line-height: 1.5rem;
 }
 
 .userInfo {
@@ -145,7 +151,7 @@
 }
 
 .userInfo img {
-  width: 80;
+  width: 80px;
   height: 80px;
   border-radius: 50%;
 }
@@ -157,8 +163,8 @@
 
 .followBtn {
   width: 100%;
-  padding: 5px;
+  padding: 10px 5px;
 
   background-color: white;
-  border: 1px solid grey;
+  border: 1px solid rgb(209, 209, 209);
 }
