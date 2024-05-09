@@ -14,15 +14,22 @@ import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import PointNotEnoughModal from "../modal/PointNotEnoughModal";
+import BidHistoryModal from "../modal/BidHistoryModal";
 
 export default function ProductDetailInfo({ productDetail }) {
-	const { seller } = productDetail;
+	const { seller, bids } = productDetail;
 	const [showModalBid, setShowModalBid] = useState(false)
 	const [showModalPoint, setShowModalPoint] = useState(false)
+	const [showModalHistory, setShowModalHistory] = useState(false)
+
 	const router = useRouter();
 	const { id } = useRecoilValue(userInfoState);
 
 	const LOGIN_URL = "/auth/login";
+
+	const clickHistoryModal = () => {
+		setShowModalHistory(!showModalHistory);
+	}
 
 	const clickPointModal = () => {
 		setShowModalPoint(!showModalPoint);
@@ -102,6 +109,7 @@ export default function ProductDetailInfo({ productDetail }) {
 
 	return (
 		<section className={styles.section} >
+			{showModalHistory && <BidHistoryModal clickModal={clickHistoryModal} bidList={[...bids]} />}
 			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
 			{showModalBid && <BidModal
 				clickModal={clickBidModal}
@@ -143,7 +151,7 @@ export default function ProductDetailInfo({ productDetail }) {
 							<ul className={styles.infoList}>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
-									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명</div>
+									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;<span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span></div>
 								</li>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>시작가</div>

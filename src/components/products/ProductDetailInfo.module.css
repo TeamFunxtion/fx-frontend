@@ -77,6 +77,12 @@
   font-weight: 600;
 }
 
+.bidCountText {
+  color: grey;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /*
  * 버튼영역
  */
@@ -92,7 +98,7 @@
 
 .btnContainer button {
   padding: 22px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   cursor: pointer;
   /* border-radius: 12px; */
   color: white;
