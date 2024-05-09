@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function Chats() {
+
 	const path = usePathname();
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
