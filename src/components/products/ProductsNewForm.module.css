@@ -107,7 +107,13 @@
 
 .categoryItem:hover {
   cursor: pointer;
-  background-color: dodgerblue;
+  background-color: rgb(223, 223, 223);
+}
+
+.selected {
+  color: white;
+  font-weight: 600;
+  background-color: dodgerblue !important;
 }
 
 .textArea {

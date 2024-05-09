@@ -1,8 +1,19 @@
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/products/ProductCard/ProductCard";
 import styles from "./page.module.css";
 import ProductSearchFilter from "@/components/search/ProductSearchFilter";
+import { API_URL } from "../constants";
 
-export default function ProductsSearchPage() {
+
+export async function getProductList() {
+	const response = await fetch(`${API_URL}/products`, { method: 'GET' });
+	return response.json();
+}
+
+export default async function ProductsSearchPage() {
+	const result = await getProductList();
+	console.log(result);
+	const productList = result.data;
+
 	return (
 		<section className={styles.section}>
 			<div className={styles.header}>
@@ -22,7 +33,9 @@ export default function ProductsSearchPage() {
 
 				<ul className={styles.productList}>
 					{
-						new Array(30).fill(<ProductCard />)
+						productList.map((product, index) => (
+							<ProductCard key={index} product={product} />
+						))
 					}
 				</ul>
 			</div>

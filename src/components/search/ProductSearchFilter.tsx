@@ -1,4 +1,4 @@
-import styles from "@/styles/search/ProductSearchFilter.module.css";
+import styles from "./ProductSearchFilter.module.css";
 
 export default function ProductSearchFilter() {
 	return (
