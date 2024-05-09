@@ -1,14 +1,24 @@
+"use client";
+import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import api from '@/utils/api';
 
+// FAQPage 컴포넌트
+export default function FAQPage() {
+	const [faqList, setFaqList] = useState([]);
+	const [openIndex, setOpenIndex] = useState(null);
 
-export default async function FAQPage() {
-	// todo. 목록 조회
-	const result = await api.get("/faqs");
-	/*console.log(result);
-	console.log("여긴?")
-	console.log(result.data)*/
-	const faqList = result.data;
+	useEffect(() => {
+		async function fetchFaqs() {
+			const response = await api.get("/faqs");
+			setFaqList(response.data);
+		}
+		fetchFaqs();
+	}, []);
+
+	const toggleAccordion = (index) => {
+		setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
+	};
 
 	return (
 		<div>
@@ -20,35 +30,48 @@ export default async function FAQPage() {
 					<li><a href="/notice/faq">자주 묻는 질문</a></li>
 					<li><a href="/notice/">1:1문의</a></li>
 				</aside>
-
 				<div className={styles.container}>
-					<section className="info">
-						{/* {question.map((val) => (
-							//components에 props 넘겨준다.
-							<SingleQuestion key={val.id} setIndex={setIndex} index={index} {...val} />
-						))} */}
-						{
-							faqList.map((faq, index) => (
-								<div className={styles.noticeDiv} key={index}>
-									<div className={styles.noticeContent}>
-										{faq.faqTitle}
-										{faq.faqContent}
-									</div>
-								</div>
-							))
-						}
-						<ul className={styles.noticePage}>
-							<li><a href="" className={styles.noticePageUpDown}>이전</a></li>
-							<li><a href="" className={styles.noticePageNum}>1</a></li>
-							<li><a href="" className={styles.noticePageNum}>2</a></li>
-							<li><a href="" className={styles.noticePageNum}>3</a></li>
-							<li><a href="" className={styles.noticePageUpDown}>다음</a></li>
-						</ul>
+					<section className={styles.noticeSection}>
+						<div className={styles.noticeDiv}>
+							{faqList.map((faq, index) => (
+								<AccordionItem
+									key={index}
+									index={index}
+									question={faq.faqTitle}
+									answer={faq.faqContent}
+									isOpen={openIndex === index}
+									toggleAccordion={toggleAccordion}
+									date={faq.createDate}
+								/>
+							))}
+						</div>
+						<div>
+							<ul className={styles.noticePage}>
+								<li><a href="" className={styles.noticePageUpDown}>이전</a></li>
+								<li><a href="" className={styles.noticePageNum}>1</a></li>
+								<li><a href="" className={styles.noticePageNum}>2</a></li>
+								<li><a href="" className={styles.noticePageNum}>3</a></li>
+								<li><a href="" className={styles.noticePageUpDown}>다음</a></li>
+							</ul>
+						</div>
 					</section>
 				</div>
 			</div>
 		</div>
+	);
+}
 
-
+// AccordionItem 컴포넌트
+function AccordionItem({ index, question, answer, isOpen, toggleAccordion, date }) {
+	return (
+		<div className={styles.noticeDiv} onClick={() => toggleAccordion(index)}>
+			<div className={styles.noticeisOpen}>
+				<div className={styles.noticeQ}>Q</div>
+				<h3 className={styles.noticeContent}>{question}</h3>
+				<div className={styles.noticeSysdate}>{date}</div>
+				{isOpen ? '-' : '+'}
+			</div>
+			{isOpen && <div>{answer}</div>}
+		</div>
 	);
 }
