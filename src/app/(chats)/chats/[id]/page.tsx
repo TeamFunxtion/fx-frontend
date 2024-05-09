@@ -39,6 +39,14 @@ export default function User() {
 		}
 	}
 
+	const updateMsg = async () => {
+		const res = await api.patch(`chats/${id}/messages`, { userId: userId, roomId: id });
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			toast.success(msg || `${id}방 채팅 읽기 완료!`);
+		}
+	}
+
 
 	const insertMsg = async () => {
 		const res = await api.post(`chats/${id}/messages`, { userId: userId, roomId: id, message: chat });
@@ -51,6 +59,7 @@ export default function User() {
 
 
 	useEffect(() => {
+		updateMsg();
 		getChatRoomInfo();
 		getChatMsg();
 	}, [id])
@@ -60,8 +69,10 @@ export default function User() {
 	// 	getChatRoomInfo();
 	// 	getChatMsg();
 	// }, [id, msgList])
+	for (let i = 0; i < msgList.length; i++) {
+		console.log(msgList[i].message);
+	}
 
-	console.log(msgList);
 	// console.log(chatRoomInfo.product.productTitle);
 
 
