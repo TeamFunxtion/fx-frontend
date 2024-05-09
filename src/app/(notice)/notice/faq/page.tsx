@@ -37,11 +37,13 @@ export default function FAQPage() {
 								<AccordionItem
 									key={index}
 									index={index}
+									id={faq.id}
 									question={faq.faqTitle}
 									answer={faq.faqContent}
 									isOpen={openIndex === index}
 									toggleAccordion={toggleAccordion}
-									date={faq.createDate}
+									createdate={faq.createDate}
+									updatedate={faq.updateDate}
 								/>
 							))}
 						</div>
@@ -62,13 +64,15 @@ export default function FAQPage() {
 }
 
 // AccordionItem 컴포넌트
-function AccordionItem({ index, question, answer, isOpen, toggleAccordion, date }) {
+function AccordionItem({ index, question, answer, isOpen, toggleAccordion, createdate, updatedate, id }) {
 	return (
 		<div className={styles.noticeDiv} onClick={() => toggleAccordion(index)}>
 			<div className={styles.noticeisOpen}>
 				<div className={styles.noticeQ}>Q</div>
 				<h3 className={styles.noticeContent}>{question}</h3>
-				<div className={styles.noticeSysdate}>{date}</div>
+				<div className={styles.noticeContent}>작성자:{id}</div>
+				<div className={styles.noticeSysdate}>{createdate}</div>
+				<div className={styles.noticeSysdate}>{updatedate}</div>
 				{isOpen ? '-' : '+'}
 			</div>
 			{isOpen && <div>{answer}</div>}
