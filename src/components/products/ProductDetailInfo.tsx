@@ -53,6 +53,7 @@ export default function ProductDetailInfo({ productDetail }) {
 		if (!id) {
 			router.push(LOGIN_URL);
 		}
+		createNewBid(productDetail.coolPrice);
 	}
 
 	useEffect(() => {
@@ -99,7 +100,7 @@ export default function ProductDetailInfo({ productDetail }) {
 			const { data: { resultCode, msg, data } } = response;
 			if (resultCode === "200") {
 				toast.success(msg);
-				clickBidModal();
+				setShowModalBid(false);
 				router.refresh();
 			} else {
 				toast.error(msg);
@@ -116,6 +117,11 @@ export default function ProductDetailInfo({ productDetail }) {
 				handleOk={createNewBid}
 				productDetail={productDetail}
 			/>}
+			{
+				productDetail.statusTypeId !== 'ST01' && <div className={styles.alert}>
+					😅 해당 상품은 거래가 진행중인 상품입니다. 입찰 또는 바로구매가 제한됩니다.
+				</div>
+			}
 			<div className={styles.sectionTop}>
 				<div className={styles.imgContainer}>
 					{images && images.length > 0 ? <SimpleImageSlider
@@ -184,8 +190,8 @@ export default function ProductDetailInfo({ productDetail }) {
 					</div>
 					<div className={styles.btnContainer}>
 						<button className={styles.btnChat} onClick={clickChatting}>💬1:1채팅</button>
-						{productDetail.salesTypeId !== "SA03" && <button className={styles.btnBid} onClick={clickBidModal}>✋입찰</button>}
-						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={styles.btnCool} onClick={clickFastPurchase}>⚡바로 구매</button>}
+						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBidModal} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
 					</div>
 				</div>
 			</div>

@@ -186,7 +186,7 @@ export default function ProductsNewForm() {
 						{salesTypeId === "SA01" && <li className={styles.listRow}>
 							<div className={styles.rowLabel}>즉시 구매가</div>
 							<div className={styles.rowContent}>
-								<input className={styles.input} type="text" placeholder="즉시 구매가" />
+								<input className={styles.input} {...register("coolPrice")} type="text" placeholder="즉시 구매가" />
 							</div>
 						</li>}
 						<li className={styles.listRow}>
