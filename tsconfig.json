@@ -32,7 +32,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/(notice)/notice/faqtest"
   ],
   "exclude": [
     "node_modules"
