@@ -1,16 +1,49 @@
 "use client"
 import styles from "./page.module.css";
-import {data} from './data';
-import React,{useState} from "react";
-import SingleQuestion from './Question'
+import React, { useEffect, useState } from "react";
+import api from "@/utils/api";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";;
+
+export default function Notice() {
+
+	
+	const [Page,setPage] = useState(1);
+	const [list, setList] = useState();
+	const [idcode, setIdcode] = useState("")
+	const getList = async () => {
+		const result = await api.get(`/notices?page=${Page-1}`);
+		console.log(result.data);
+		setList(result.data);
+	}
+
+	useEffect(() => {
+		getList();
+	}, [Page])
 
 
-export default function Notice({
+	const PageNum = (num) =>{  	
+		setPage(num);
+	}
+	const PageDown = () =>{  	
+		
+		setPage(Page-1);
+	}
+	const PageUp = () =>{  	
+	
+		setPage(Page+1);
+	}
 
-}) {
-	const [question, setQuestion] = useState<any[]>(data);
-	const [index,setIndex] = useState<number>(0);
+	const accordion = (id: string) => {
+		console.log(id);
+		if (idcode === id) {
+			setIdcode("")
+			console.log(idcode);
+		} else {
+			setIdcode(id)
+			console.log(idcode);
+		}
 
+	};
 
 
 	return (
@@ -24,22 +57,43 @@ export default function Notice({
 			</aside>
 
 			<section className={styles.noticeSection}>
-				<div className="container">
-				<section className="info">
-					{question.map((val) =>(
-					<SingleQuestion key = {val.id}
-					setIndex={setIndex} index={index} {...val}/>
-				))}
-				</section>
-				</div>
-	
+
+
+			
+				{
+					list != null &&
+					list.map(function (notice) {
+						return (
+							
+							<div className="container">
+								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
+									<div className={styles.noticeQ}>Q</div>
+									<div className={styles.noticeTitle} >{notice.title}</div>
+									<div className={styles.noticeSysdate}>{notice.createDate}</div>
+									<div className={styles.noticeIc}>
+										{notice.id === idcode ?
+											<IoIosArrowUp /> : <IoIosArrowDown />
+										}
+									</div>
+								</div>
+								{notice.id === idcode && <div className={styles.noticeContent}><p className={styles.noticeContentDetail}>{notice.content}</p></div>}
+							</div>
+						);
+					})}
+			
+
+
 				<div>
 					<ul className={styles.noticePage}>
-						<li><a href="" className={styles.noticePageUpDown}>이전</a></li>
-						<li><a href="" className={styles.noticePageNum}>1</a></li>
-						<li><a href="" className={styles.noticePageNum}>2</a></li>
+						{Page <= 1 ?
+						<li className={styles.noticePageUpDownBlock}><a className={styles.noticePageUpDown}>이전</a></li>
+						:
+						<li><a onClick={() => PageDown()} className={styles.noticePageUpDown}>이전</a></li>
+						}
+						
+						
 						<li><a href="" className={styles.noticePageNum}>3</a></li>
-						<li><a href="" className={styles.noticePageUpDown}>다음</a></li>
+						<li><a onClick={() => PageUp()} className={styles.noticePageUpDown}>다음</a></li>
 					</ul>
 				</div>
 			</section>
