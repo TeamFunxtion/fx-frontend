@@ -1,5 +1,5 @@
 "use client"
-import { BsChatDots, BsHeart, BsLightningChargeFill, BsPersonRaisedHand, BsRobot, BsShare } from "react-icons/bs";
+import { BsHeart, BsRobot, BsShare } from "react-icons/bs";
 import { scrollToTop, elapsedTime, dateFormatterYYYYMMDDHHmm, numberFormatter } from "@/utils/common";
 import { getProductQualityNameKR } from "@/utils/product";
 import styles from "./ProductDetailInfo.module.css"
@@ -13,14 +13,20 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
+import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 
 export default function ProductDetailInfo({ productDetail }) {
 	const { seller } = productDetail;
 	const [showModalBid, setShowModalBid] = useState(false)
+	const [showModalPoint, setShowModalPoint] = useState(false)
 	const router = useRouter();
 	const { id } = useRecoilValue(userInfoState);
 
 	const LOGIN_URL = "/auth/login";
+
+	const clickPointModal = () => {
+		setShowModalPoint(!showModalPoint);
+	}
 
 	const clickBidModal = () => {
 		if (!id) {
@@ -55,7 +61,7 @@ export default function ProductDetailInfo({ productDetail }) {
 			userId: id,
 			point,
 		});
-		return response.data;
+		return response.data.data;
 	}
 
 	const createNewBid = async (bidPrice) => {
@@ -72,29 +78,31 @@ export default function ProductDetailInfo({ productDetail }) {
 			return;
 		}
 
-		const hasMoney = await !checkUserHasMoney(bidPrice);
+		const hasMoney = await checkUserHasMoney(bidPrice);
 		if (!hasMoney) {
-			toast.error("보유하신 포인트가 부족합니다!");
+			setShowModalBid(false);
+			setShowModalPoint(true);
 			return;
-		}
-
-		const response = await api.post(`/products/bid`, {
-			bidderId: id,
-			productId: productDetail.id,
-			bidPrice,
-		});
-		const { data: { resultCode, msg, data } } = response;
-		if (resultCode === "200") {
-			toast.success(msg);
-			clickBidModal();
-			router.refresh();
 		} else {
-			toast.error(msg);
+			const response = await api.post(`/products/bid`, {
+				bidderId: id,
+				productId: productDetail.id,
+				bidPrice,
+			});
+			const { data: { resultCode, msg, data } } = response;
+			if (resultCode === "200") {
+				toast.success(msg);
+				clickBidModal();
+				router.refresh();
+			} else {
+				toast.error(msg);
+			}
 		}
 	}
 
 	return (
 		<section className={styles.section} >
+			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
 			{showModalBid && <BidModal
 				clickModal={clickBidModal}
 				handleOk={createNewBid}
