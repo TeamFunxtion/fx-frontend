@@ -1,11 +1,15 @@
 "use client"
 import styles from "./page.module.css"
 import { useState } from "react";
+
+
 export default function User() {
+
+
 	const today = new Date();
 	let nowTime = ''
 	if (today.getHours() >= 12) {
-		nowTime = '오후' + today.getHours() + ':' + today.getMinutes();
+		nowTime = '오후' + (today.getHours() - 12) + ':' + today.getMinutes();
 	} else {
 		nowTime = '오전 ' + today.getHours() + ':' + today.getMinutes();
 	}
