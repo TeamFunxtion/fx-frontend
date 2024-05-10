@@ -1,24 +1,48 @@
+"use client"
 import ProductCard from "@/components/products/ProductCard/ProductCard";
 import styles from "./page.module.css";
 import ProductSearchFilter from "@/components/search/ProductSearchFilter";
-import { API_URL } from "../constants";
+import api from "@/utils/api";
+import { useEffect, useState } from "react";
+import Pagination from '@mui/material/Pagination';
+import { useSearchParams } from "next/navigation";
 
+export default function ProductsSearchPage() {
+	const [list, setList] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [pageInfo, setPageInfo] = useState({
+		totalPages: 1,
+		totalElements: 1,
+	});
+	const searchParams = useSearchParams();
 
-export async function getProductList() {
-	const response = await fetch(`${API_URL}/products`, { method: 'GET', cache: 'no-store' });
-	return response.json();
-}
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setCurrentPage(value);
+		getList(value);
+	};
 
-export default async function ProductsSearchPage() {
-	const result = await getProductList();
-	console.log(result);
-	const productList = result.data;
+	const getList = async (pageNo) => {
+		const result = await api.get("/products", {
+			params: {
+				page: pageNo || 1,
+				keyword: searchParams.get("keyword") || "",
+			}
+		});
+		setList(result.data.content);
+		setPageInfo({
+			totalPages: result.data.totalPages,
+			totalElements: result.data.totalElements,
+		})
+	}
+
+	useEffect(() => {
+		getList(1);
+	}, [])
 
 	return (
 		<section className={styles.section}>
 			<div className={styles.header}>
-				<h2>상품 검색 결과</h2>
-				{/* <button>초기화</button> */}
+				<h2>상품 검색 결과 <span>({pageInfo.totalElements})</span></h2>
 				<ProductSearchFilter />
 			</div>
 			<div className={styles.main}>
@@ -33,11 +57,22 @@ export default async function ProductsSearchPage() {
 
 				<ul className={styles.productList}>
 					{
-						productList.map((product, index) => (
-							<ProductCard key={index} product={product} />
+						list.map((item, index) => (
+							<ProductCard key={index} product={item} />
 						))
 					}
 				</ul>
+
+				<div className={styles.paginationBar}>
+					<Pagination
+						count={pageInfo.totalPages}
+						page={currentPage}
+						onChange={handleChange}
+						showFirstButton={true}
+						showLastButton={true}
+						size='large'
+					/>
+				</div>
 			</div>
 		</section>
 	)

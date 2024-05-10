@@ -47,3 +47,9 @@
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 15px;
 }
+
+.paginationBar {
+  display: flex;
+  justify-content: center;
+  padding: 55px 0;
+}
