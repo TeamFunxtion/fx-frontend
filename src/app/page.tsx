@@ -3,7 +3,7 @@ import { API_URL } from "./constants";
 import styles from "./page.module.css"
 
 export async function getAllProducts() {
-  const response = await fetch(`${API_URL}/products`);
+  const response = await fetch(`${API_URL}/products`, { cache: 'no-store' });
   return await response.json();
 }
 
@@ -17,7 +17,7 @@ export default async function AppPage() {
       <div className={styles.mainBanner}></div>
       <ul className={styles.productList}>
         {
-          products.map((product, index) => (
+          products && products.map((product, index) => (
             <ProductCard product={product} />
           ))
         }

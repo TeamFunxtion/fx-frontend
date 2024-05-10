@@ -141,7 +141,7 @@ export default function ProductDetailInfo({ productDetail }) {
 							<li>조회수 {productDetail.views}</li>
 							<li>관심 {productDetail.interests || '0'}</li>
 							{productDetail.salesTypeId !== "SA03" ? <>
-								<CardLabel label="경매" backgroundColor="dodgerblue" color="white" /> {productDetail.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
+								<CardLabel label="경매" backgroundColor="#0057ff" color="white" /> {productDetail.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
 							</> : <CardLabel label="대화 거래" color="black" />
 							}
 						</ul>
