@@ -49,7 +49,7 @@ export default function Navigation() {
 					<span className={showCategoryList ? 'active' : ''}><BsList /></span>
 					<CategoryList showCategoryList={showCategoryList} handleShowCategory={handleShowCategory} />
 				</div>
-				<ul className={styles.list}>
+				{/* <ul className={styles.list}>
 					<li className={styles.tab}>
 						<Link href="/search">경매 둘러보기</Link>
 					</li>
@@ -59,7 +59,7 @@ export default function Navigation() {
 					<li className={styles.tab}>
 						<Link href="/search">무료나눔</Link>
 					</li>
-				</ul>
+				</ul> */}
 			</div>
 			<ul className={styles.right}>
 				{
