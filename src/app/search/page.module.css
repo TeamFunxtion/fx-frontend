@@ -53,3 +53,10 @@
   justify-content: center;
   padding: 55px 0;
 }
+
+.noResult {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: rgb(53, 53, 53);
+}

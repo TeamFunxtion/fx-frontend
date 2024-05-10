@@ -5,20 +5,22 @@ import ProductSearchFilter from "@/components/search/ProductSearchFilter";
 import api from "@/utils/api";
 import { useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ProductsSearchPage() {
+	const searchParams = useSearchParams();
 	const [list, setList] = useState([]);
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
 	const [pageInfo, setPageInfo] = useState({
 		totalPages: 1,
 		totalElements: 1,
 	});
-	const searchParams = useSearchParams();
+	const router = useRouter();
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
-		getList(value);
+		router.push(`/search?keyword=${searchParams.get("keyword") || ''}&page=${value}`)
+		// getList(value);
 	};
 
 	const getList = async (pageNo) => {
@@ -36,8 +38,18 @@ export default function ProductsSearchPage() {
 	}
 
 	useEffect(() => {
-		getList(1);
+		getList(currentPage);
 	}, [])
+
+	useEffect(() => {
+		if (!searchParams.get("page")) {
+			setCurrentPage(1);
+			getList(1);
+		} else {
+			getList(currentPage);
+		}
+
+	}, [searchParams])
 
 	return (
 		<section className={styles.section}>
@@ -63,16 +75,24 @@ export default function ProductsSearchPage() {
 					}
 				</ul>
 
-				<div className={styles.paginationBar}>
-					<Pagination
-						count={pageInfo.totalPages}
-						page={currentPage}
-						onChange={handleChange}
-						showFirstButton={true}
-						showLastButton={true}
-						size='large'
-					/>
-				</div>
+				{
+					list.length == 0 && <div className={styles.noResult}>
+						😝 조회된 결과가 없습니다.
+					</div>
+				}
+
+				{
+					list.length > 0 && <div className={styles.paginationBar}>
+						<Pagination
+							count={pageInfo.totalPages}
+							page={currentPage}
+							onChange={handleChange}
+							showFirstButton={true}
+							showLastButton={true}
+							size='large'
+						/>
+					</div>
+				}
 			</div>
 		</section>
 	)
