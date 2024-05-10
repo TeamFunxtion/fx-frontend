@@ -47,9 +47,49 @@ export default function User() {
 		}
 	}
 
+	var ws;
+
+	function wsOpen() {
+		ws = new WebSocket("ws://localhost:8080/chatting/2");
+		wsEvt();
+		console.log(ws);
+	}
+
+	function wsEvt() {
+		ws.onopen = function (data) {
+			//소켓이 열리면 초기화 세팅하기
+			console.log("dddddd")
+		}
+
+		ws.onmessage = function (data) {
+			var msg = data.data;
+			if (msg != null && msg.trim() != '') {
+				$("#chating").append("<p>" + msg + "</p>");
+			}
+		}
+
+		document.addEventListener("keypress", function (e) {
+			if (e.keyCode == 13) { //enter press
+				send();
+			}
+		});
+	}
+	const send = () => {
+		const option = {
+			type: 'message',
+			roomNumber: 1,
+			sessionId: '',
+			userName: 'test',
+			msg: 'hi'
+		}
+
+		ws.send(JSON.stringify(option));
+	}
+
 	useEffect(() => {
 		updateMsg();
 		getChatRoomInfo();
+		wsOpen();
 	}, [])
 
 
