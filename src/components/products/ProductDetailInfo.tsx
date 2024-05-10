@@ -158,7 +158,11 @@ export default function ProductDetailInfo({ productDetail }) {
 							<ul className={styles.infoList}>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
-									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;<span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span></div>
+									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;
+										{
+											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span>
+										}
+									</div>
 								</li>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>시작가</div>
