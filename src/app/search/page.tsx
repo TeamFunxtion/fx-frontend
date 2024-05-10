@@ -6,6 +6,7 @@ import api from "@/utils/api";
 import { useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
 import { useSearchParams, useRouter } from "next/navigation";
+import { getCategoryNameKR } from "@/utils/product";
 
 export default function ProductsSearchPage() {
 	const searchParams = useSearchParams();
@@ -16,6 +17,8 @@ export default function ProductsSearchPage() {
 		totalElements: 1,
 	});
 	const router = useRouter();
+	const keyword = searchParams.get("keyword");
+	const category = searchParams.get("category");
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
@@ -24,10 +27,12 @@ export default function ProductsSearchPage() {
 	};
 
 	const getList = async (pageNo) => {
+
 		const result = await api.get("/products", {
 			params: {
 				page: pageNo || 1,
-				keyword: searchParams.get("keyword") || "",
+				keyword,
+				category,
 			}
 		});
 		setList(result.data.content);
@@ -54,8 +59,11 @@ export default function ProductsSearchPage() {
 	return (
 		<section className={styles.section}>
 			<div className={styles.header}>
-				<h2>상품 검색 결과 <span>({pageInfo.totalElements})</span></h2>
-				<ProductSearchFilter />
+				<h2>
+					{category && <span style={{ color: 'dodgerblue' }}>'{getCategoryNameKR(category)}'&nbsp;&nbsp;</span>}
+					{keyword && <span style={{ color: 'dodgerblue' }}>'{keyword}'&nbsp;&nbsp;</span>}
+					검색 결과 <span style={{ color: 'grey' }}>{pageInfo.totalElements}개</span></h2>
+				{/* <ProductSearchFilter /> */}
 			</div>
 			<div className={styles.main}>
 				<div>
