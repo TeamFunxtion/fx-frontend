@@ -1,24 +1,128 @@
 "use client"
-import { BsChatDots, BsHeart, BsLightningChargeFill, BsPersonRaisedHand, BsRobot, BsShare } from "react-icons/bs";
+import { BsHeart, BsRobot, BsShare } from "react-icons/bs";
 import { scrollToTop, elapsedTime, dateFormatterYYYYMMDDHHmm, numberFormatter } from "@/utils/common";
 import { getProductQualityNameKR } from "@/utils/product";
 import styles from "./ProductDetailInfo.module.css"
 import CardLabel from "./ProductCard/CardLabel";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import SimpleImageSlider from "react-simple-image-slider";
 import Link from "next/link";
+import BidModal from "../modal/BidModal";
+import api from "@/utils/api";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/atoms";
+import PointNotEnoughModal from "../modal/PointNotEnoughModal";
+import BidHistoryModal from "../modal/BidHistoryModal";
 
 export default function ProductDetailInfo({ productDetail }) {
-	const { seller } = productDetail;
+	const { seller, bids } = productDetail;
+	const [showModalBid, setShowModalBid] = useState(false)
+	const [showModalPoint, setShowModalPoint] = useState(false)
+	const [showModalHistory, setShowModalHistory] = useState(false)
+
+	const router = useRouter();
+	const { id } = useRecoilValue(userInfoState);
+
+	const LOGIN_URL = "/auth/login";
+
+	const clickHistoryModal = () => {
+		setShowModalHistory(!showModalHistory);
+	}
+
+	const clickPointModal = () => {
+		setShowModalPoint(!showModalPoint);
+	}
+
+	const clickBidModal = () => {
+		if (!id) {
+			router.push(LOGIN_URL);
+		} else {
+			setShowModalBid(!showModalBid);
+		}
+	}
+
+	const clickChatting = () => {
+		if (!id) {
+			router.push(LOGIN_URL);
+		}
+	}
+
+	const clickFastPurchase = () => {
+		if (!id) {
+			router.push(LOGIN_URL);
+		} else {
+			createNewBid(productDetail.coolPrice);
+		}
+	}
 
 	useEffect(() => {
 		scrollToTop();
 	}, [])
 
+
 	const images = productDetail.images.map((img: any) => img.imageUrl);
+
+
+	const checkUserHasMoney = async (point) => {
+		const response = await api.post(`/members/has-money`, {
+			userId: id,
+			point,
+		});
+		return response.data.data;
+	}
+
+	const createNewBid = async (bidPrice) => {
+		if (!bidPrice) {
+			toast.error("입찰가를 입력해주세요!");
+			return;
+		}
+
+		if (productDetail.salesTypeId === "SA01" && bidPrice <= productDetail.currentPrice) {
+			toast.error("입찰가가 현재가보다 낮습니다!");
+			return;
+		} else if (productDetail.salesTypeId === "SA02" && bidPrice <= productDetail.productPrice) {
+			toast.error("입찰가가 시작가보다 낮습니다!");
+			return;
+		}
+
+		const hasMoney = await checkUserHasMoney(bidPrice);
+		if (!hasMoney) {
+			setShowModalBid(false);
+			setShowModalPoint(true);
+			return;
+		} else {
+			const response = await api.post(`/products/bid`, {
+				bidderId: id,
+				productId: productDetail.id,
+				bidPrice,
+			});
+			const { data: { resultCode, msg, data } } = response;
+			if (resultCode === "200") {
+				toast.success(msg);
+				setShowModalBid(false);
+				router.refresh();
+			} else {
+				toast.error(msg);
+			}
+		}
+	}
 
 	return (
 		<section className={styles.section} >
+			{showModalHistory && <BidHistoryModal clickModal={clickHistoryModal} bidList={[...bids]} />}
+			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
+			{showModalBid && <BidModal
+				clickModal={clickBidModal}
+				handleOk={createNewBid}
+				productDetail={productDetail}
+			/>}
+			{
+				productDetail.statusTypeId !== 'ST01' && <div className={styles.alert}>
+					😅 해당 상품은 거래가 진행중인 상품입니다. 입찰 또는 바로구매가 제한됩니다.
+				</div>
+			}
 			<div className={styles.sectionTop}>
 				<div className={styles.imgContainer}>
 					{images && images.length > 0 ? <SimpleImageSlider
@@ -54,7 +158,7 @@ export default function ProductDetailInfo({ productDetail }) {
 							<ul className={styles.infoList}>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
-									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명</div>
+									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;<span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span></div>
 								</li>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>시작가</div>
@@ -86,9 +190,9 @@ export default function ProductDetailInfo({ productDetail }) {
 						</ul>
 					</div>
 					<div className={styles.btnContainer}>
-						<button className={styles.btnChat}><BsChatDots />&nbsp;1:1채팅</button>
-						{productDetail.salesTypeId !== "SA03" && <button className={styles.btnBid}><BsPersonRaisedHand />&nbsp;입찰</button>}
-						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={styles.btnCool}><BsLightningChargeFill />바로 구매</button>}
+						<button className={styles.btnChat} onClick={clickChatting}>💬1:1채팅</button>
+						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBidModal} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
 					</div>
 				</div>
 			</div>

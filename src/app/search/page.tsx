@@ -5,7 +5,7 @@ import { API_URL } from "../constants";
 
 
 export async function getProductList() {
-	const response = await fetch(`${API_URL}/products`, { method: 'GET' });
+	const response = await fetch(`${API_URL}/products`, { method: 'GET', cache: 'no-store' });
 	return response.json();
 }
 
