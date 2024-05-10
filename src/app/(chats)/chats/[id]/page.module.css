@@ -43,8 +43,22 @@
 	text-align: center;
 	color: gray;
 	font-size: medium;
+	overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
+/* .chatView {
+	padding-top: 30px;
+	padding-left: 30px;
+	padding-right: 30px;
+	height: 600px;
+	border-bottom: 1px solid lightgray;
+	overflow: auto; 
+	
+	
+} */
 .chatView {
 	padding-top: 30px;
 	padding-left: 30px;
@@ -52,13 +66,19 @@
 	height: 600px;
 	border-bottom: 1px solid lightgray;
 	overflow: auto;
-	
+	/* flex-direction: column; */ /* 해당 줄 주석 처리 또는 삭제 */
+	display: flex; /* 세로로 배치되도록 변경 */
+	flex-direction:column-reverse;
 }
+
+
+
 
 .opponent {
 	display: flex;
 	align-items:end;
 	margin-bottom: 10px;
+	justify-content: flex-start
 }
 
 .opponentMsg {
