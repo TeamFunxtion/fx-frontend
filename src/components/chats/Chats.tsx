@@ -26,8 +26,6 @@ export default function Chats() {
 		}
 	}
 	const router = useRouter();
-	// console.log(chatRoomList);
-	// console.log(chatRoomList[2].store.nickname);
 	useEffect(() => {
 		getChatRoomList();
 	}, []);

@@ -15,30 +15,20 @@ export default function User() {
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
-	// const { chatRoomId } = router.query;
+
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
-	const [msgList, setMsgList] = useState([])
 	const getChatRoomInfo = async () => {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
-
 		}
 	}
 
-	const getChatMsg = async () => {
-		const res = await api.get(`chats/${id}/messages?id=${id}`)
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			const newList = [...msgList, ...data];
-			setMsgList(newList);
-			toast.success(msg || `${id}방 채팅내역조회 성공!`);
-		}
-	}
 
+	// DB연동 (채팅 읽음 처리)
 	const updateMsg = async () => {
 		const res = await api.patch(`chats/${id}/messages`, { userId: userId, roomId: id });
 		const { data: { resultCode, msg, data } } = res;
@@ -47,7 +37,7 @@ export default function User() {
 		}
 	}
 
-
+	// DB연동 (채팅메시지 추가)
 	const insertMsg = async () => {
 		const res = await api.post(`chats/${id}/messages`, { userId: userId, roomId: id, message: chat });
 		const { data: { resultCode, msg, data } } = res;
@@ -57,58 +47,12 @@ export default function User() {
 		}
 	}
 
-
 	useEffect(() => {
 		updateMsg();
 		getChatRoomInfo();
-		getChatMsg();
-	}, [id])
+	}, [])
 
 
-	// useEffect(() => {
-	// 	getChatRoomInfo();
-	// 	getChatMsg();
-	// }, [id, msgList])
-	for (let i = 0; i < msgList.length; i++) {
-		console.log(msgList[i].message);
-	}
-
-	// console.log(chatRoomInfo.product.productTitle);
-
-
-	// const userInfoValue = useRecoilValue(userInfoState);
-	// const [chatRoomList, setChatRoomList] = useState([]);
-	// const getChatRoomList = async () => {
-	// 	const res = await api.get('/chats?id=' + userInfoValue.id);
-	// 	const { data: { resultCode, msg, data } } = res;
-	// 	if (resultCode == '200') {
-	// 		const newList = [...chatRoomList, ...data];
-	// 		setChatRoomList(newList);
-	// 		toast.success(msg || '채팅방 조회 성공!');
-	// 	}
-	// }
-
-	// console.log(chatRoomList.length);
-	// // console.log(chatRoomList[2].store.nickname);
-	// useEffect(() => {
-	// 	getChatRoomList();
-	// }, []);
-
-
-	// const today = new Date();
-	// let nowTime = ''
-	// if (today.getHours() >= 12) {
-	// 	nowTime = '오후' + (today.getHours() - 12) + ':' + today.getMinutes();
-	// } else {
-	// 	nowTime = '오전 ' + today.getHours() + ':' + today.getMinutes();
-	// }
-	// const [rooms, setRooms] = useState(['나는 채팅방이 있는 상태야']);
-	// const [myMsg, setMyMsg] = useState
-	// 	([{
-	// 		text: "안녕 못한데요?",
-	// 		read: "안읽음",
-	// 		time: "오후 7:04"
-	// 	}])
 	const [chat, setChat] = useState('');
 	return (
 		<div className={styles.chatRoom}>
@@ -134,7 +78,7 @@ export default function User() {
 
 					<div>
 
-						{msgList.map(function (msg, index) {
+						{chatRoomInfo && chatRoomInfo.chatMessages && chatRoomInfo.chatMessages.map(function (msg, index) {
 							let month = (new Date(msg.createDate).getMonth() + 1).toString();
 							if (Number(month) < 10) {
 								month = "0" + month;
@@ -192,13 +136,7 @@ export default function User() {
 							setChat(e.target.value)
 						}} onKeyPress={(e) => {
 							if (e.key == 'Enter') {
-								// let newList = [...myMsg];
-								// newList.push({
-								// 	text: chat,
-								// 	read: '안읽음',
-								// 	time: nowTime
-								// })
-								// setMyMsg(newList);
+
 								insertMsg();
 							}
 						}} />
