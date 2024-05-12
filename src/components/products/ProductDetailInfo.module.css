@@ -54,13 +54,28 @@
 .etcText {
   display: flex;
   gap: 10px;
-  color: grey;
+  color: rgb(181, 181, 181);
+}
+
+.etcText li {
+  display: flex;
+  align-items: center;
 }
 
 .etcIcon {
   display: flex;
   gap: 15px;
-  font-size: 1.6rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.etcIcon li {
+  padding: 5px 5px 0px 5px;
+  border-radius: 5px;
+}
+
+.etcIcon li:hover {
+  background-color: rgb(220, 220, 220);
 }
 /**/
 

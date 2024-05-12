@@ -1,11 +1,12 @@
 import moment from "moment";
 import _ from "moment";
+import toast from "react-hot-toast";
 
 export const scrollToTop = () => {
   window.scrollTo(0, 0);
 };
 
-export const elapsedTime = (date: number): string => {
+export const elapsedTime = (date: string): string => {
   const start = new Date(date);
   const end = new Date();
 
@@ -37,4 +38,11 @@ export const dateFormatterYYYYMMDDHHmm = (date: string) => {
 export const numberFormatter = (num: number) => {
   let returnString = num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return returnString;
+};
+
+export const copyClipboard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast.success("클립보드에 복사 완료!");
+  } catch (e) {}
 };
