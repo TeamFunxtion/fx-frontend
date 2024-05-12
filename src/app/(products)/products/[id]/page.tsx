@@ -1,5 +1,6 @@
 import { API_URL } from "@/app/constants";
 import ProductDetailInfo from "@/components/products/ProductDetailInfo";
+import api from "@/utils/api";
 
 interface IParams {
 	params: { id: string }
@@ -19,14 +20,16 @@ export async function getProductDetail(id: string) {
 	return response.json();
 }
 
-export default async function ProductDetailPage({
+export function increaseViews(id: string) {
+	api.get(`${API_URL}/products/${id}/views`);
+}
+
+export default function ProductDetailPage({
 	params: { id }
 }: IParams) {
 	// console.log(id);
-	const { data } = await getProductDetail(id);
-	const productDetail = data;
-	// console.log(productDetail);
+	increaseViews(id);
 	return (
-		<ProductDetailInfo productDetail={productDetail} />
+		<ProductDetailInfo id={id} />
 	)
 }

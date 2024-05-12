@@ -1,3 +1,6 @@
+import { categories } from "@/app/constants";
+import _ from "lodash";
+
 export const getProductQualityNameKR = (typeId: string) => {
   switch (typeId) {
     case "QU01":
@@ -20,4 +23,8 @@ export const getProductSalesNameKR = (typeId: string) => {
     default:
       return typeId;
   }
+};
+
+export const getCategoryNameKR = categoryId => {
+  return _.find(categories, { categoryId }).categoryName;
 };
