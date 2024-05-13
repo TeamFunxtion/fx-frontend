@@ -4,6 +4,9 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import "../styles/reset.css";
 import Header from "../components/header/header";
+import { Toaster } from 'react-hot-toast';
+import RecoilRootWrapper from "@/components/RecoilWrapper";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,11 +35,49 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${pretendard.variable}`}>
+      <Head>
+        {/* 스크롤 위치 기억하도록 설정 (+ next.config.js) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `history.scrollRestoration = "manual"`,
+          }}
+        />
+      </Head>
       <body className={pretendard.className}>
-        <Header />
-        <main>
-          {children}
-        </main>
+        <RecoilRootWrapper>
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Toaster
+            position="bottom-center"
+            toastOptions={{
+              success: {
+                style: {
+                  background: '#00D26A',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: '#00D26A',
+                }
+              },
+              error: {
+                style: {
+                  background: 'red',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: 'red',
+                }
+              },
+            }}
+            containerStyle={{
+              bottom: 50
+            }}
+          />
+        </RecoilRootWrapper>
       </body>
     </html>
   );

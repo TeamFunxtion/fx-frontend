@@ -1,0 +1,126 @@
+.noticeMain{
+	display: flex;
+	margin-top: 50px;
+
+}
+
+.noticeAside{
+	width: 130px;
+	position: fixed;
+}
+
+.noticeNotice{
+	font-weight: bold;
+	font-size: 20px;
+
+}
+
+.noticeAside li{
+	margin-top: 15px;
+	list-style: none;
+	font-size: 15px;
+}
+
+.noticeSection{
+
+	width: 1200px;
+	
+}
+
+.noticeDiv{
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	 /*display: flex;*/
+	 justify-content: space-between;
+}
+.noticeisOpen{
+	display: flex;
+	justify-content: space-between;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	align-content: center;
+}
+
+
+
+
+.noticeQ{
+	margin: 5px 0;
+	margin-left: 30px;
+	background-color: rgb(8, 115, 228);
+	color: white;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	align-content: center;
+	border-radius: 30px
+
+}
+.noticeContent{
+	align-content: center;
+	text-align: left;
+	width: 60%;
+}
+
+.noticeSysdate{
+	margin-right: 15px;
+	align-content: center;
+	
+}
+
+.noticePage{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+}
+
+.noticePage li{
+	color: rgb(35, 98, 176);
+	margin-top: 30px;
+	padding: 0.3rem 0.6rem;
+	border: 0.8px solid rgb(8, 115, 228,0.3);
+	border-radius: 2px;
+	font-weight: 400;
+}
+
+
+
+
+
+.container {
+	position: fixed;
+	background: var(--clr-white);
+	border-radius: var(--radius);
+	max-width: var(--fixed-width);
+	display: grid;
+	gap: 1rem 2rem;
+	margin-left: 200px;
+}
+.container h3 {
+	line-height: 1.2;
+	font-weight: 500;
+}
+
+
+.article p {
+	margin-left: 40px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	display: flex;
+	justify-content: space-between;
+}
+
+.btn {
+	background: transparent;
+	border-color: transparent;
+	width: 2rem;
+	height: 2rem;
+	background: var(--clr-grey-special);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	color: var(--clr-red-special);
+	cursor: pointer;
+	margin-left: 1rem;
+	align-self: center;
+	min-width: 2rem;
+}

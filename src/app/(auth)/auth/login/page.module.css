@@ -1,8 +1,11 @@
-.loginButton {
-  width: 100%;
-  background-color: var(--primary-color) !important;
+.divide {
+  margin: 15px 0;
+  font-size: 0.9rem;
+  color: grey;
+  text-align: center;
 }
 
-.loginButton:hover {
-  background-color: rgb(0, 75, 224) !important;
+.oauthContainer img {
+  width: 100%;
+  cursor: pointer;
 }

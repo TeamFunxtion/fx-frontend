@@ -12,8 +12,8 @@ export default function ShopInfo() {
 				</div>
 				<div className={styles.headerRight}>
 					<div><Link href="/shop">상품 311</Link></div>
-					<div><Link href="/shop">팔로잉 30</Link></div>
-					<div><Link href="/shop">팔로워 143</Link></div>
+					<div><Link href="/shop/following">팔로잉 30</Link></div>
+					<div><Link href="/shop/follower">팔로워 143</Link></div>
 					<div><Link href="/shop">후기 1,300</Link></div>
 				</div>
 			</div>

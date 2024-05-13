@@ -1,0 +1,79 @@
+.noticeMain{
+	display: flex;
+	margin-top: 50px;
+}
+
+.noticeAside{
+	width: 130px;
+}
+
+.noticeNotice{
+	font-weight: bold;
+	font-size: 20px;
+
+}
+
+.noticeAside li{
+	margin-top: 15px;
+	list-style: none;
+	font-size: 15px;
+}
+
+.noticeSection{
+
+	width: 1500px;
+	
+}
+
+.noticeDiv{
+	margin-left: 40px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	display: flex;
+	justify-content: space-between;
+}
+
+
+
+
+
+.noticeQ{
+	margin: 5px 0;
+	margin-left: 30px;
+	background-color: rgb(8, 115, 228);
+	color: white;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	align-content: center;
+	border-radius: 30px
+
+}
+.noticeContent{
+	align-content: center;
+	text-align: left;
+	width: 60%;
+}
+
+.noticeSysdate{
+	margin-right: 15px;
+	align-content: center;
+	
+}
+
+.noticePage{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	
+}
+
+.noticePage li{
+	color: rgb(35, 98, 176);
+	margin-top: 30px;
+	padding: 0.3rem 0.6rem;
+	border: 0.8px solid rgb(8, 115, 228,0.3);
+	border-radius: 2px;
+	font-weight: 400;
+}
+

@@ -58,6 +58,12 @@
 .iconContainer {
   margin-left: 40px;
   cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.iconContainer:hover {
+  background-color: rgb(243, 243, 243);
 }
 
 .iconContainer a {
