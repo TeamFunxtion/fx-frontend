@@ -7,6 +7,10 @@ import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useWebSocket from 'react-use-websocket';
+
+
+
 
 
 export default function User() {
@@ -37,64 +41,68 @@ export default function User() {
 		}
 	}
 
-	// DB연동 (채팅메시지 추가)
-	const insertMsg = async () => {
-		const res = await api.post(`chats/${id}/messages`, { userId: userId, roomId: id, message: chat });
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			toast.success(msg || `${id}방 채팅 추가 성공!`);
-			// window.location.reload()
-		}
-	}
 
-	var ws;
-
-	function wsOpen() {
-		ws = new WebSocket("ws://localhost:8080/chatting/2");
-		wsEvt();
-		console.log(ws);
-	}
-
-	function wsEvt() {
-		ws.onopen = function (data) {
-			//소켓이 열리면 초기화 세팅하기
-			console.log("dddddd")
-		}
-
-		ws.onmessage = function (data) {
-			var msg = data.data;
-			if (msg != null && msg.trim() != '') {
-				$("#chating").append("<p>" + msg + "</p>");
-			}
-		}
-
-		document.addEventListener("keypress", function (e) {
-			if (e.keyCode == 13) { //enter press
-				send();
-			}
-		});
-	}
-	const send = () => {
-		const option = {
+	let today = new Date();
+	const insertMsg = () => {
+		sendMessage(JSON.stringify({
 			type: 'message',
-			roomNumber: 1,
-			sessionId: '',
-			userName: 'test',
-			msg: 'hi'
-		}
+			roomNumber: id,
+			sessionId: sessionId,
+			userId: userId,
+			msg: chat,
+			createDate: today
 
-		ws.send(JSON.stringify(option));
+		}))
 	}
+
+
+	// 웹소켓 구현 위치
+
+	const { sendMessage, lastMessage } = useWebSocket(`ws://localhost:8090/chat/${id}`);
+
+	const [sessionId, setSessionId] = useState(0);
+
+	const [messageHistory, setMessageHistory] = useState([]);
+	const [msgList, setMsgList] = useState([]);
+
+	useEffect(() => {
+		if (lastMessage !== null) {
+			setMessageHistory((prev) => {  //기존 메시지에 데이터를 추가합니다.
+				let msg = lastMessage ? lastMessage.data : null;
+				if (msg) {
+					let object = JSON.parse(msg);
+
+					if (object.type === "getId") {
+						setSessionId(object.sessionId);
+					} else if (object.type === "message") {
+						setMsgList((prev) => [...prev, object]);
+					}
+				}
+				return prev.concat(lastMessage)
+			});
+		}
+	}, [lastMessage, setMessageHistory]);
+
+
+	if (msgList.length != 0) {
+		if (msgList[msgList.length - 1].sessionLength >= 3) {
+			for (let i = 0; i < msgList.length; i++) {
+				msgList[i].sessionLength = 3;
+			}
+		}
+	}
+
 
 	useEffect(() => {
 		updateMsg();
 		getChatRoomInfo();
-		wsOpen();
+
 	}, [])
 
 
 	const [chat, setChat] = useState('');
 	return (
+
 		<div className={styles.chatRoom}>
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
@@ -166,6 +174,61 @@ export default function User() {
 								</div>
 							);
 						})}
+						<div>
+							{msgList.map(function (msg, index) {
+								console.log(msgList);
+								let month = (new Date(msg.createDate).getMonth() + 1).toString();
+								if (Number(month) < 10) {
+									month = "0" + month;
+								}
+								let date = (new Date(msg.createDate).getDate()).toString();
+								if (Number(date) < 10) {
+									date = "0" + date;
+								}
+								let hour = (new Date(msg.createDate).getHours()).toString();
+
+								if (Number(hour) > 12) {
+									if (Number(hour) - 12 < 10) {
+										hour = "오후 0" + (Number(hour) - 12);
+									} else {
+										hour = "오후 " + (Number(hour) - 12);
+									}
+
+								} else {
+									if (Number(hour) < 10) {
+										hour = "오전 0" + hour;
+									} else {
+										hour = "오전 " + hour;
+									}
+								}
+								let minute = (new Date(msg.createDate).getMinutes()).toString();
+								if (Number(minute) < 10) {
+									minute = "0" + minute;
+								}
+								let time = month + "/" + date + " " + hour + " : " + minute;
+
+								return (
+									<div key={index}>
+										{msg != null && msg.userId === userId ?
+											<div>
+												<div className={styles.me}>
+													<div className={styles.readMsg}>{msg.sessionLength < 3 ? '안읽음' : ''}</div>
+													<div className={styles.meTime}>{time}</div>
+													<div className={styles.meMsg}>{msg.msg}</div>
+												</div>
+											</div>
+											:
+											<div>
+												<div className={styles.opponent}>
+													<div className={styles.opponentMsg}>{msg.msg}</div>
+													<div className={styles.opponentTime}>{time}</div>
+												</div>
+											</div>
+										}
+									</div>);
+							})}
+						</div>
+
 
 					</div>
 				</div>

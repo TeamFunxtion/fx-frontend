@@ -30,6 +30,7 @@ export default function Chats() {
 		getChatRoomList();
 	}, []);
 
+
 	return (
 		<>
 			<div className={styles.roomList}>
