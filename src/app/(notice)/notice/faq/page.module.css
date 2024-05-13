@@ -6,7 +6,7 @@
 
 .noticeAside{
 	width: 130px;
-	position: fixed;
+
 }
 
 .noticeNotice{
@@ -87,7 +87,7 @@
 
 
 .container {
-	position: fixed;
+	position: absolute;
 	background: var(--clr-white);
 	border-radius: var(--radius);
 	max-width: var(--fixed-width);

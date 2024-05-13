@@ -2,23 +2,61 @@
 import React, { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import api from '@/utils/api';
+import Pagination from '@mui/material/Pagination';
+import { useSearchParams, useRouter } from "next/navigation";
 
 // FAQPage 컴포넌트
 export default function FAQPage() {
 	const [faqList, setFaqList] = useState([]);
 	const [openIndex, setOpenIndex] = useState(null);
+	const searchParams = useSearchParams();
 
+	const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
+	const [pageInfo, setPageInfo] = useState({
+		totalPages: 1,
+		totalElements: 1,
+	});
+	const router = useRouter();
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setCurrentPage(value);
+		router.push(`/notice/faq?keyword=${searchParams.get("keyword") || ''}&page=${value}`)
+		// getList(value);
+	};
+
+
+	const getList = async (pageNo) => {
+
+		const result = await api.get("/faqs", {
+			params: {
+				page: pageNo || 1,
+
+			}
+		});
+	
+		setFaqList(result.data.content);
+		setPageInfo({
+			totalPages: result.data.totalPages,
+			totalElements: result.data.totalElements,
+		})
+	}
+	
 	useEffect(() => {
-		async function fetchFaqs() {
-			const response = await api.get("/faqs");
-			setFaqList(response.data);
-		}
-		fetchFaqs();
-	}, []);
+		getList(currentPage);
+	}, [])
 
 	const toggleAccordion = (index) => {
 		setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
 	};
+
+	useEffect(() => {
+		if (!searchParams.get("page")) {
+			setCurrentPage(1);
+			getList(1);
+		} else {
+			getList(currentPage);
+		}
+
+	}, [searchParams])
 
 	return (
 		<div>
@@ -43,19 +81,27 @@ export default function FAQPage() {
 									isOpen={openIndex === index}
 									toggleAccordion={toggleAccordion}
 									createdate={faq.createDate}
-									updatedate={faq.updateDate}
 								/>
 							))}
 						</div>
-						<div>
-							<ul className={styles.noticePage}>
-								<li><a href="" className={styles.noticePageUpDown}>이전</a></li>
-								<li><a href="" className={styles.noticePageNum}>1</a></li>
-								<li><a href="" className={styles.noticePageNum}>2</a></li>
-								<li><a href="" className={styles.noticePageNum}>3</a></li>
-								<li><a href="" className={styles.noticePageUpDown}>다음</a></li>
-							</ul>
-						</div>
+						{
+					faqList.length == 0 && <div className={styles.noResult}>
+						😝 조회된 결과가 없습니다.
+					</div>
+				}
+
+				{
+					faqList.length > 0 && <div className={styles.paginationBar}>
+						<Pagination
+							count={pageInfo.totalPages}
+							page={currentPage}
+							onChange={handleChange}
+							showFirstButton={true}
+							showLastButton={true}
+							size='large'
+						/>
+					</div>
+				}
 					</section>
 				</div>
 			</div>
