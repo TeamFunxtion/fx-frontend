@@ -3,35 +3,57 @@ import styles from "./page.module.css";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";;
+import { useSearchParams, useRouter } from "next/navigation";
+import Pagination from '@mui/material/Pagination';
 
 export default function Notice() {
 
-	
-	const [Page,setPage] = useState(1);
-	const [list, setList] = useState();
-	const [idcode, setIdcode] = useState("")
-	const getList = async () => {
-		const result = await api.get(`/notices?page=${Page-1}`);
-		console.log(result.data);
-		setList(result.data);
+
+	const [Page, setPage] = useState(1);
+	const searchParams = useSearchParams();
+	const [NoticeList, setNoticeList] = useState([]);
+	const [list, setList] = useState([]);
+	const [currentPage, setCurrentPage] = useState(Number(1));
+	const [idcode, setIdcode] = useState("");
+	const [pageInfo, setPageInfo] = useState({
+		totalPages: 1,
+		totalElements: 1,
+	});
+	const router = useRouter();
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setCurrentPage(value);
+		router.push(`/notice?keyword=${searchParams.get("keyword") || ''}&page=${value}`)
+		// getList(value);
+	};
+	const getList = async (pageNo) => {
+		const result = await api.get("/notices", {
+			params: {
+				page: pageNo || 1,
+			}
+		});
+		setList(result.data.content);
+		setNoticeList(result.data.content);
+		setPageInfo({
+			totalPages: result.data.totalPages,
+			totalElements: result.data.totalElements,
+		})
 	}
+
 
 	useEffect(() => {
-		getList();
-	}, [Page])
+		getList(currentPage);
+	}, [])
 
 
-	const PageNum = (num) =>{  	
-		setPage(num);
-	}
-	const PageDown = () =>{  	
-		
-		setPage(Page-1);
-	}
-	const PageUp = () =>{  	
-	
-		setPage(Page+1);
-	}
+	useEffect(() => {
+		if (!searchParams.get("page")) {
+			setCurrentPage(1);
+			getList(1);
+		} else {
+			getList(currentPage);
+		}
+
+	}, [searchParams])
 
 	const accordion = (id: string) => {
 		console.log(id);
@@ -51,20 +73,23 @@ export default function Notice() {
 			<aside className={styles.noticeAside}>
 				<h3 className={styles.noticeNotice}>고객센터</h3>
 				<br />
+
 				<li><a href="/notice/">공지사항</a></li>
 				<li><a href="/notice/">자주 묻는 질문</a></li>
+
+				<li><a href="/">공지사항</a></li>
+				<li><a href="/notice/faq">자주 묻는 질문</a></li>
 				<li><a href="/notice/">1:1문의</a></li>
 			</aside>
 
 			<section className={styles.noticeSection}>
 
 
-			
+
 				{
-					list != null &&
-					list.map(function (notice) {
+					list.length > 0 && list.map(function (notice) {
 						return (
-							
+
 							<div className="container">
 								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
 									<div className={styles.noticeQ}>Q</div>
@@ -80,20 +105,23 @@ export default function Notice() {
 							</div>
 						);
 					})}
-			
 
 
 				<div>
 					<ul className={styles.noticePage}>
-						{Page <= 1 ?
-						<li className={styles.noticePageUpDownBlock}><a className={styles.noticePageUpDown}>이전</a></li>
-						:
-						<li><a onClick={() => PageDown()} className={styles.noticePageUpDown}>이전</a></li>
+
+						{
+							list.length > 0 && <div className={styles.paginationBar}>
+								<Pagination
+									count={pageInfo.totalPages}
+									page={currentPage}
+									onChange={handleChange}
+									showFirstButton={true}
+									showLastButton={true}
+									size='large'
+								/>
+							</div>
 						}
-						
-						
-						<li><a href="" className={styles.noticePageNum}>3</a></li>
-						<li><a onClick={() => PageUp()} className={styles.noticePageUpDown}>다음</a></li>
 					</ul>
 				</div>
 			</section>

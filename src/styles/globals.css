@@ -66,3 +66,12 @@ button {
   border: none;
   cursor: pointer;
 }
+
+button:hover {
+  opacity: 0.96;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}

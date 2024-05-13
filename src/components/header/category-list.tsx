@@ -6,8 +6,8 @@ export default function CategoryList({ showCategoryList, handleShowCategory }) {
 	return (
 		showCategoryList ? <ul className={styles.categoryList} onMouseLeave={() => handleShowCategory(false, false)}>
 			{
-				categories.map((category) => (
-					<li><Link href="/">{category}</Link></li>
+				categories.map((category, index) => (
+					<li key={index}><Link href={`/search?category=${category.categoryId}`}>{category.categoryName}</Link></li>
 				))
 			}
 		</ul> : <></>

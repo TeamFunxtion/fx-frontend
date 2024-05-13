@@ -1,0 +1,19 @@
+.table {
+  border: 1px solid;
+  border-collapse: collapse;
+  text-align: center;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.table th,
+.table td {
+  border: 1px solid black;
+  padding: 10px 5px;
+}
+
+.table th {
+  background-color: dodgerblue;
+  color: white;
+  font-weight: 600;
+}

@@ -57,6 +57,7 @@
 	border-radius: 50%;
 	border: 1px solid lightgray;
 	
+	
 }
 
 .shortcut {
@@ -78,15 +79,22 @@
 .lastMsg {
 	font-size: small;
 	color: gray;
-	width: 300%
+	width: 150px;
+	overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+	
 }
+
 
 .lastMsgDate {
 	font-size: small;
 	color: gray;
-	width: 100%;
+	width: 40px;
 	text-align:right;
 	padding-right: 3px;
+	
 }
 
 .chatRoom {

@@ -3,6 +3,17 @@
   color: var(--text-color);
 }
 
+.alert {
+  padding: 10px;
+  text-align: center;
+  background-color: rgb(44, 44, 44);
+  color: white;
+  /* border-radius: 15px; */
+  font-size: 1rem;
+  margin-bottom: 15px;
+  letter-spacing: 2px;
+}
+
 .sectionTop {
   height: 500px;
   /* background-color: red; */
@@ -43,13 +54,28 @@
 .etcText {
   display: flex;
   gap: 10px;
-  color: grey;
+  color: rgb(181, 181, 181);
+}
+
+.etcText li {
+  display: flex;
+  align-items: center;
 }
 
 .etcIcon {
   display: flex;
   gap: 15px;
-  font-size: 1.6rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.etcIcon li {
+  padding: 5px 5px 0px 5px;
+  border-radius: 5px;
+}
+
+.etcIcon li:hover {
+  background-color: rgb(220, 220, 220);
 }
 /**/
 
@@ -73,6 +99,16 @@
   grid-template-columns: 120px auto;
 }
 
+.label {
+  font-weight: 600;
+}
+
+.bidCountText {
+  color: grey;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /*
  * 버튼영역
  */
@@ -89,6 +125,7 @@
 .btnContainer button {
   padding: 22px;
   font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
   /* border-radius: 12px; */
   color: white;
@@ -99,7 +136,7 @@
 }
 
 .btnChat {
-  background-color: #333333;
+  background-color: rgb(5, 5, 5);
 }
 
 .btnBid {
@@ -107,7 +144,8 @@
 }
 
 .btnCool {
-  background-color: orange;
+  background-color: rgb(0, 255, 162);
+  color: black !important;
 }
 
 /*
@@ -117,7 +155,7 @@
 .sectionBottom {
   margin-top: 55px;
   display: grid;
-  grid-template-columns: auto 350px;
+  grid-template-columns: 70% auto;
   gap: 30px;
   padding-bottom: 50px;
 }
@@ -133,6 +171,8 @@
 .productDescription {
   width: 90%;
   padding: 30px 0 150px 0;
+  word-wrap: break-word;
+  line-height: 1.5rem;
 }
 
 .userInfo {
@@ -145,7 +185,7 @@
 }
 
 .userInfo img {
-  width: 80;
+  width: 80px;
   height: 80px;
   border-radius: 50%;
 }
@@ -157,8 +197,8 @@
 
 .followBtn {
   width: 100%;
-  padding: 5px;
+  padding: 10px 5px;
 
   background-color: white;
-  border: 1px solid grey;
+  border: 1px solid rgb(209, 209, 209);
 }
