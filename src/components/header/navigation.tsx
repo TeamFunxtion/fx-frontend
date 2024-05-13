@@ -8,6 +8,7 @@ import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import LogoutModal from "../modal/LogoutModal";
 
 export default function Navigation() {
 	const user = useRecoilValue(userInfoState);
@@ -15,6 +16,7 @@ export default function Navigation() {
 	const router = useRouter();
 	const [showCategoryList, setShowCategoryList] = useState(false);
 	const timer: any = useRef(null);
+	const [showModalLogout, setShowModalLogout] = useState(false);
 
 	const setSsrCompleted = useSsrComplectedState();
 	useEffect(setSsrCompleted, [setSsrCompleted]);
@@ -34,16 +36,22 @@ export default function Navigation() {
 
 	const logout = async () => {
 		const res = await api.post("/members/logout");
-		console.log(res);
 		const { data: { resultCode } } = res;
 		if (resultCode == '200') {
+			setShowModalLogout(false);
 			resetUser();
 			router.push("/");
 		}
 	}
 
+
+	const onClickLogout = () => {
+		setShowModalLogout(!showModalLogout);
+	}
+
 	return (
 		<nav className={styles.navigation}>
+			{showModalLogout && <LogoutModal clickModal={onClickLogout} logout={logout} />}
 			<div className={styles.left}>
 				<div className={styles.categoryIcon} onMouseEnter={() => handleShowCategory(true, false)} onMouseLeave={() => handleShowCategory(false, true)}>
 					<span className={showCategoryList ? 'active' : ''}><BsList /></span>
@@ -73,7 +81,7 @@ export default function Navigation() {
 								<img className={styles.profileImg} src={user.profileImageUrl} alt="" />
 								{user.nickname || user.email}
 							</li>
-							<li className={styles.logoutContainer} onClick={logout}><Link href="">로그아웃</Link></li>
+							<li className={styles.logoutContainer} onClick={onClickLogout}><Link href="">로그아웃</Link></li>
 						</>
 				}
 			</ul>
