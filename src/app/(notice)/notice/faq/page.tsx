@@ -10,7 +10,7 @@ export default function FAQPage() {
 	const [faqList, setFaqList] = useState([]);
 	const [openIndex, setOpenIndex] = useState(null);
 	const searchParams = useSearchParams();
-	const [list, setList] = useState([]);
+
 	const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
 	const [pageInfo, setPageInfo] = useState({
 		totalPages: 1,
@@ -32,7 +32,7 @@ export default function FAQPage() {
 
 			}
 		});
-		setList(result.data.content);
+	
 		setFaqList(result.data.content);
 		setPageInfo({
 			totalPages: result.data.totalPages,
@@ -85,13 +85,13 @@ export default function FAQPage() {
 							))}
 						</div>
 						{
-					list.length == 0 && <div className={styles.noResult}>
+					faqList.length == 0 && <div className={styles.noResult}>
 						😝 조회된 결과가 없습니다.
 					</div>
 				}
 
 				{
-					list.length > 0 && <div className={styles.paginationBar}>
+					faqList.length > 0 && <div className={styles.paginationBar}>
 						<Pagination
 							count={pageInfo.totalPages}
 							page={currentPage}
