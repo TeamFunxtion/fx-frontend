@@ -9,9 +9,7 @@ import Pagination from '@mui/material/Pagination';
 export default function Notice() {
 
 
-	const [Page, setPage] = useState(1);
 	const searchParams = useSearchParams();
-	const [NoticeList, setNoticeList] = useState([]);
 	const [list, setList] = useState([]);
 	const [currentPage, setCurrentPage] = useState(Number(1));
 	const [idcode, setIdcode] = useState("");
@@ -32,7 +30,6 @@ export default function Notice() {
 			}
 		});
 		setList(result.data.content);
-		setNoticeList(result.data.content);
 		setPageInfo({
 			totalPages: result.data.totalPages,
 			totalElements: result.data.totalElements,
@@ -73,9 +70,6 @@ export default function Notice() {
 			<aside className={styles.noticeAside}>
 				<h3 className={styles.noticeNotice}>고객센터</h3>
 				<br />
-
-				<li><a href="/notice/">공지사항</a></li>
-				<li><a href="/notice/">자주 묻는 질문</a></li>
 
 				<li><a href="/">공지사항</a></li>
 				<li><a href="/notice/faq">자주 묻는 질문</a></li>
