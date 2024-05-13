@@ -41,6 +41,10 @@
   color: grey;
 }
 
+.sortBar li {
+  cursor: pointer;
+}
+
 .productList {
   padding: 30px 0;
   display: grid;
