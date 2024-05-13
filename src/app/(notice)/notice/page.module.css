@@ -21,7 +21,9 @@
 
 .noticeSection{
 
-	width: 1500px;
+	width: 1300px;
+
+
 	
 }
 
@@ -31,9 +33,6 @@
 	display: flex;
 	justify-content: space-between;
 }
-
-
-
 
 
 .noticeQ{
@@ -48,10 +47,31 @@
 	border-radius: 30px
 
 }
-.noticeContent{
+.noticeTitle{
 	align-content: center;
 	text-align: left;
 	width: 60%;
+}
+
+.noticeContent{
+	margin-left: 40px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	display: flex;
+	justify-content: space-between;
+}
+
+.noticeContentDetail{
+	margin: 5px 10px;
+	line-height: 1.5;
+	color: rgb(0, 106, 219);
+	
+}
+
+.noticeIc{
+	margin-right: 5px;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
 }
 
 .noticeSysdate{
@@ -69,11 +89,14 @@
 }
 
 .noticePage li{
-	color: rgb(35, 98, 176);
+	
 	margin-top: 30px;
 	padding: 0.3rem 0.6rem;
-	border: 0.8px solid rgb(8, 115, 228,0.3);
-	border-radius: 2px;
-	font-weight: 400;
+	
+
+	
 }
 
+.noticePageUpDownBlock{
+	background-color: rgb(104, 104, 104);
+}
