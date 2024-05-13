@@ -74,12 +74,9 @@ export default function Notice() {
 				<h3 className={styles.noticeNotice}>고객센터</h3>
 				<br />
 
-				<li><a href="/notice/">공지사항</a></li>
-				<li><a href="/notice/">자주 묻는 질문</a></li>
-
-				<li><a href="/">공지사항</a></li>
+				<li><a href="/notice">공지사항</a></li>
 				<li><a href="/notice/faq">자주 묻는 질문</a></li>
-				<li><a href="/notice/">1:1문의</a></li>
+				<li><a href="/qna/">1:1문의</a></li>
 			</aside>
 
 			<section className={styles.noticeSection}>
