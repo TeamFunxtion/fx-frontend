@@ -4,7 +4,8 @@ import styles from "./header.module.css";
 import { BsSearch, BsBell, BsBagPlus, BsChatDots, BsPerson } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import HeaderTop from "./header-top";
 
 export default function Header() {
 	return (
