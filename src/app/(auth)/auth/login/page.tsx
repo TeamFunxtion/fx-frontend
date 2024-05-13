@@ -31,6 +31,12 @@ export default function LoginPage() {
 	const router = useRouter();
 	const setUserInfoState = useSetRecoilState(userInfoState);
 
+	const onClickKakaoLogin = () => {
+		const clientId = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID; // 앱 키 중 JavaScript 키
+		const redirectUri = process.env.NEXT_PUBLIC_KAKAO_CALLBACK_URI; // 등록한 Redirect URI
+		location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
+	}
+
 	return (
 		<div>
 			<h1>Login😄</h1>
@@ -46,6 +52,7 @@ export default function LoginPage() {
 				<img
 					src="/images/oauth/kakao_login_large_wide.png"
 					alt="kakao_login"
+					onClick={onClickKakaoLogin}
 				/>
 			</div>
 		</div >

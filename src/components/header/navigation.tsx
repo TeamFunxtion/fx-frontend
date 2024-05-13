@@ -69,7 +69,11 @@ export default function Navigation() {
 							<li><Link href="/auth/join">회원가입</Link></li>
 						</>
 						: <>
-							<li onClick={logout}><Link href="">로그아웃</Link></li>
+							<li className={styles.userInfoContainer}>
+								<img className={styles.profileImg} src={user.profileImageUrl} alt="" />
+								{user.nickname || user.email}
+							</li>
+							<li className={styles.logoutContainer} onClick={logout}><Link href="">로그아웃</Link></li>
 						</>
 				}
 			</ul>

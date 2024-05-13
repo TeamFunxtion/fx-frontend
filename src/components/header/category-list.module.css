@@ -1,7 +1,7 @@
 .categoryList {
   width: 170px;
   position: absolute;
-  top: 165px;
+  top: 164px;
   display: flex;
   flex-direction: column;
   background-color: white;

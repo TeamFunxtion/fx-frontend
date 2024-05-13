@@ -5,7 +5,7 @@ export default function HeaderTop() {
 	return (
 		<ul className={styles.container}>
 			<li>
-				<Link href="/">고객센터 &gt;</Link>
+				<Link href="/notice">고객센터 &gt;</Link>
 			</li>
 		</ul>
 	)
