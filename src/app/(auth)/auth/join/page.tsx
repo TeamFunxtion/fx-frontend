@@ -1,10 +1,8 @@
 'use client'
-import styles from "../login/page.module.css";
 import api from "@/utils/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { BsKeyFill, BsPersonCircle } from "react-icons/bs";
 import { useRef } from "react";
 
 interface FormValues {
@@ -21,9 +19,9 @@ export default function JoinPage() {
 	passwordRef.current = watch("password")
 
 	const onSubmitHandler: SubmitHandler<FormValues> = async (values) => {
-		console.log(values)
+		// console.log(values)
 		const res = await api.post('/members/join', values);
-		console.log(res);
+		// console.log(res);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			toast.success(msg || '회원가입 성공!');
@@ -35,16 +33,13 @@ export default function JoinPage() {
 	const router = useRouter();
 
 	return (
-		<div className={styles.formContainer}>
-			<h1>회원가입</h1>
+		<div>
+			<h1>Join😄</h1>
 			<form onSubmit={handleSubmit(onSubmitHandler)}>
-				<label className={styles.label}><BsPersonCircle /></label>
-				<input className={styles.input} {...register("email", { required: true, pattern: /^\S+@\S+$/i })} type="email" placeholder="이메일" />
-				<label className={styles.label}><BsKeyFill /></label>
-				<input className={styles.input} {...register("password", { required: true, minLength: 4 })} type="password" placeholder="비밀번호" />
-				<label className={styles.label}><BsKeyFill /></label>
-				<input className={styles.input} {...register("passwordConfirm", { required: true, validate: (value) => value === passwordRef.current })} type="password" placeholder="비밀번호 확인" />
-				<button className={styles.submit} type="submit">회원가입</button>
+				<input {...register("email", { required: true, pattern: /^\S+@\S+$/i })} type="email" placeholder="Email" maxLength={30} />
+				<input {...register("password", { required: true, minLength: 4 })} type="password" placeholder="Password" maxLength={30} />
+				<input {...register("passwordConfirm", { required: true, validate: (value) => value === passwordRef.current })} type="password" placeholder="Password Confirm" maxLength={30} />
+				<button type="submit">회원가입</button>
 			</form>
 		</div >
 	)
