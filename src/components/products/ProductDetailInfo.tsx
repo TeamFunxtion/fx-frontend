@@ -82,10 +82,30 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		console.log(modal)
 	}
 
+
+	// 채팅방 추가 or 이미 존재할 경우 해당 상품으로 변경
+	const updateChatRoom = async () => {
+		const res = await api.post(`/chats`, { customerId: userInfo.id, storeId: productDetail.seller.id, productId: productDetail.id });
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			console.log(data);
+
+			toast.success(msg || `채팅방 추가 | 변경 성공`);
+			if (data) {
+				router.push("/chats/" + data);
+			}
+
+		}
+	}
+
 	const clickChatting = () => {
 		if (!userInfo.id) {
 			router.push(LOGIN_URL);
+		} else {
+			updateChatRoom();
 		}
+
+
 	}
 
 	const clickFastPurchase = () => {
