@@ -17,6 +17,9 @@ import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 import BidHistoryModal from "../modal/BidHistoryModal";
 import { API_URL } from "@/app/constants";
 import ProductReportModal from "../modal/ProductReportModal";
+import AuctionWinnerModal from "../modal/AuctionWinnerModal";
+import Confetti from 'react-confetti'
+
 
 export async function getProductDetail(id: string, userId: string) {
 	// await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -59,12 +62,13 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		point: false,
 		history: false,
 		report: false,
+		winner: false,
 	});
 
 	const router = useRouter();
 	const userInfo = useRecoilValue(userInfoState);
-
 	const LOGIN_URL = "/auth/login";
+	const [showAnimation, setShowAnimation] = useState(false);
 
 	const toggleModal = (name: string) => {
 		if ((name === 'bid' || name === 'report') && !userInfo.id) {
@@ -146,12 +150,26 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			const { data: { resultCode, msg, data } } = response;
 			if (resultCode === "200") {
 				toast.success(msg);
-				toggleModal('bid');
 				init();
+
+				if (data.winnerYn) { // 낙찰자로 정해졌으면
+					callWinnerAnimation()
+					setModal({ ...modal, bid: false, winner: true });
+				} else {
+					toggleModal('bid');
+				}
+
 			} else {
 				toast.error(msg);
 			}
 		}
+	}
+
+	const callWinnerAnimation = () => {
+		setShowAnimation(true);
+		setTimeout(() => {
+			setShowAnimation(false);
+		}, 10000)
 	}
 
 	const onClickLike = async () => {
@@ -185,6 +203,8 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 	return (
 		<section className={styles.section} >
+			{showAnimation && <Confetti />}
+			{modal.winner && <AuctionWinnerModal clickModal={() => toggleModal('winner')} />}
 			{modal.report && <ProductReportModal clickModal={() => toggleModal('report')} ok={handleReport} />}
 			{modal.history && <BidHistoryModal clickModal={() => toggleModal('history')} bidList={[...bids]} />}
 			{modal.point && <PointNotEnoughModal clickModal={() => toggleModal('point')} />}
