@@ -2,7 +2,6 @@
 import { BsCardImage, BsX } from "react-icons/bs"
 import styles from "./ProductsNewForm.module.css"
 import { useForm, SubmitHandler } from "react-hook-form"
-import api from "@/utils/api"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -10,6 +9,8 @@ import { categories } from "@/app/constants"
 import { useRecoilValue } from "recoil"
 import { userInfoState } from "@/store/atoms"
 import MRadio, { TRadioGroup } from "../atom/MRadio"
+import axios, { AxiosInstance } from "axios"
+import api, { fileApi } from "@/utils/api"
 
 interface FormValues {
 	storeId: string,
@@ -23,6 +24,8 @@ interface FormValues {
 	coolPrice: string,
 	endDays: number,
 }
+
+const FILE_MAX_COUNT = 3;
 
 export default function ProductsNewForm() {
 	const { register, getValues, control, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<FormValues>({
@@ -39,16 +42,46 @@ export default function ProductsNewForm() {
 			endDays: 1,
 		}
 	});
+
 	const router = useRouter();
 	const [categoryId, setCategoryId] = useState("CA01");
 	const { id } = useRecoilValue(userInfoState)
 
 	const { salesTypeId } = watch();
 
+	const [imgBase64, setImgBase64] = useState([]);
+	const [imgFile, setImgFile] = useState([]);
+
 	const onSubmitHandler: SubmitHandler<FormValues> = async (values) => {
-		console.log(values)
+		// console.log(values)
+
+		// const fd = new FormData();
+		// for (let i = 0; i < imgFile.length; i++) {
+		// 	fd.append("file", imgFile[i]);
+		// }
+
+		// fd.append("productRequestDto", JSON.stringify({ ...values, storeId: id, categoryId }));
+
+		// // custom hook
+		// await fileApi({
+		// 	method: 'POST',
+		// 	url: '/products/uploadFiles',
+		// 	data: fd
+		// })
+		// 	.then((response) => {
+		// 		if (response.data) {
+		// 			setImgFile(null);
+		// 			setImgBase64([]);
+		// 			alert("업로드 완료!");
+		// 		}
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error)
+		// 		alert("실패!");
+		// 	})
+
 		const res = await api.post('/products', { ...values, storeId: id, categoryId });
-		console.log(res);
+		// console.log(res);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			toast.success(msg || '상품이 등록되었습니다!');
@@ -58,17 +91,69 @@ export default function ProductsNewForm() {
 		}
 	}
 
+	const handleChangeFile = (event: any) => {
+		console.log(imgFile.length);
+		console.log(event.target.files.length);
+		if (imgFile.length + event.target.files.length > FILE_MAX_COUNT) {
+			toast.error(`사진 첨부는 최대 ${FILE_MAX_COUNT}장까지 가능합니다.`);
+			return false;
+		}
+
+		console.log(event.target.files);
+		setImgFile(imgFile => [...imgFile, ...event.target.files]);
+		for (let i = 0; i < event.target.files.length; i++) {
+			if (event.target.files[i]) {
+				let reader = new FileReader();
+				reader.readAsDataURL(event.target.files[i]);
+				reader.onloadend = () => {
+					const base64 = reader.result; // 비트맵 데이터 리턴, 이 데이터를 통해 파일 미리보기가 가능함
+					console.log(base64)
+					if (base64) {
+						let base64Sub = base64.toString()
+						setImgBase64(imgBase64 => [...imgBase64, base64Sub]);
+					}
+				}
+			}
+		}
+	}
+
+
+	const removeImg = (index) => {
+		const newImgFile = [...imgFile];
+		const newImgBase64 = [...imgBase64];
+		newImgFile.splice(index, 1);
+		newImgBase64.splice(index, 1);
+		setImgFile(newImgFile);
+		setImgBase64(newImgBase64);
+	}
+
 	return (
 		<section className={styles.section}>
 			<form onSubmit={handleSubmit(onSubmitHandler)}>
 				<ul className={styles.list}>
 					<h2 className={styles.listTitle}>상품 정보</h2>
 					<li className={styles.listRow}>
-						<div className={styles.rowLabel}>상품 이미지</div>
+						<div className={styles.rowLabel}>상품 이미지({imgFile.length}/{FILE_MAX_COUNT})</div>
 						<div className={styles.rowContent}>
 							<ul className={styles.images}>
-								<li><BsCardImage /><br />이미지 업로드</li>
-								<li className={styles.imgBox}>
+								<label htmlFor="file">
+									<li><BsCardImage /><br />이미지 업로드</li>
+								</label>
+								<input type="file" id="file" onChange={handleChangeFile} multiple style={{ display: 'none' }} />
+								{imgBase64.map((item, index) => {
+									return (
+										<li className={styles.imgBox}>
+											<img className={styles.img} src={item} alt="" />
+											<div className={styles.imgDelBtn} onClick={() => removeImg(index)}>
+												<BsX />
+											</div>
+										</li>
+									)
+								})}
+
+								<img src="C:funxtionUpload/17155902444087925.jpg" alt="" />
+
+								{/* <li className={styles.imgBox}>
 									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
 									<div className={styles.imgDelBtn}>
 										<BsX />
@@ -115,7 +200,7 @@ export default function ProductsNewForm() {
 									<div className={styles.imgDelBtn}>
 										<BsX />
 									</div>
-								</li>
+								</li> */}
 							</ul>
 						</div>
 					</li>
