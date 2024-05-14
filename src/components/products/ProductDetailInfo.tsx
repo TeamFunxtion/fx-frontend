@@ -16,6 +16,7 @@ import { userInfoState } from "@/store/atoms";
 import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 import BidHistoryModal from "../modal/BidHistoryModal";
 import { API_URL } from "@/app/constants";
+import ProductReportModal from "../modal/ProductReportModal";
 
 export async function getProductDetail(id: string, userId: string) {
 	// await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -53,29 +54,28 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		}
 	});
 	const { seller, bids } = productDetail;
-	const [showModalBid, setShowModalBid] = useState(false)
-	const [showModalPoint, setShowModalPoint] = useState(false)
-	const [showModalHistory, setShowModalHistory] = useState(false)
+	const [modal, setModal] = useState({
+		bid: false,
+		point: false,
+		history: false,
+		report: false,
+	});
 
 	const router = useRouter();
 	const userInfo = useRecoilValue(userInfoState);
 
 	const LOGIN_URL = "/auth/login";
 
-	const clickHistoryModal = () => {
-		setShowModalHistory(!showModalHistory);
-	}
-
-	const clickPointModal = () => {
-		setShowModalPoint(!showModalPoint);
-	}
-
-	const clickBidModal = () => {
-		if (!userInfo.id) {
+	const toggleModal = (name: string) => {
+		if ((name === 'bid' || name === 'report') && !userInfo.id) {
 			router.push(LOGIN_URL);
-		} else {
-			setShowModalBid(!showModalBid);
 		}
+
+		setModal({
+			...modal,
+			[name]: !modal[name],
+		});
+		console.log(modal)
 	}
 
 	const clickChatting = () => {
@@ -130,8 +130,12 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 		const hasMoney = await checkUserHasMoney(bidPrice);
 		if (!hasMoney) {
-			setShowModalBid(false);
-			setShowModalPoint(true);
+			setModal({
+				...modal,
+				bid: false,
+				point: true,
+			});
+
 			return;
 		} else {
 			const response = await api.post(`/products/bid`, {
@@ -142,7 +146,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			const { data: { resultCode, msg, data } } = response;
 			if (resultCode === "200") {
 				toast.success(msg);
-				setShowModalBid(false);
+				toggleModal('bid');
 				router.refresh();
 			} else {
 				toast.error(msg);
@@ -161,12 +165,31 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		}
 	}
 
+	const handleReport = async (code: string) => {
+		if (!code) {
+			return;
+		}
+
+		const result = await api.post("/products/reports", {
+			userId: id,
+			productId: productDetail.id,
+			reportTypeCode: code,
+		});
+		const { data: { resultCode, msg } } = result;
+		if (resultCode === '200') {
+			toast.success(msg || '신고 접수 성공!');
+		} else {
+			toast.error(msg || '신고 접수 실패!');
+		}
+	}
+
 	return (
 		<section className={styles.section} >
-			{showModalHistory && <BidHistoryModal clickModal={clickHistoryModal} bidList={[...bids]} />}
-			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
-			{showModalBid && <BidModal
-				clickModal={clickBidModal}
+			{modal.report && <ProductReportModal clickModal={() => toggleModal('report')} ok={handleReport} />}
+			{modal.history && <BidHistoryModal clickModal={() => toggleModal('history')} bidList={[...bids]} />}
+			{modal.point && <PointNotEnoughModal clickModal={() => toggleModal('point')} />}
+			{modal.bid && <BidModal
+				clickModal={() => toggleModal('bid')}
 				handleOk={createNewBid}
 				productDetail={productDetail}
 			/>}
@@ -200,7 +223,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						<ul className={styles.etcIcon}>
 							{userInfo.id && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
 							<li onClick={() => copyClipboard(location.href)}><BsShare /></li>
-							<li><BsRobot /></li>
+							<li onClick={() => toggleModal('report')}><BsRobot /></li>
 						</ul>
 					</div>
 					<h3 className={styles.priceTxt}>{productDetail.salesTypeId !== "SA02" ? `${numberFormatter(productDetail.currentPrice)}원` : '?'}
@@ -212,7 +235,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 									<div className={styles.label}>입찰</div>
 									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;
 										{
-											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span>
+											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={() => toggleModal('history')}>입찰내역</span>
 										}
 									</div>
 								</li>
@@ -247,7 +270,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 					</div>
 					<div className={styles.btnContainer}>
 						<button className={styles.btnChat} onClick={clickChatting}>💬1:1채팅</button>
-						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBidModal} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={() => toggleModal('bid')} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
 						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
 					</div>
 				</div>
@@ -273,7 +296,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 					<button className={styles.followBtn}>+ 팔로우</button>
 				</div>
 			</div>
-		</section>
+		</section >
 	)
 
 }
