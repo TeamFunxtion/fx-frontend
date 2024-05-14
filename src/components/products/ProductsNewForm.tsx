@@ -27,24 +27,29 @@ interface FormValues {
 
 const FILE_MAX_COUNT = 3;
 
-export default function ProductsNewForm() {
+export default function ProductsNewForm({ product }) {
+	const productId = product && product.id;
+	const isNew = productId === undefined || productId === null;
+
 	const { register, getValues, control, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<FormValues>({
 		defaultValues: {
 			storeId: '',
-			productTitle: "",
-			categoryId: "",
-			productPrice: "",
-			productDesc: "",
-			qualityTypeId: "QU01",
-			salesTypeId: "SA01",
-			location: "",
-			coolPrice: "",
-			endDays: 1,
+			productTitle: product && product.productTitle || "",
+			categoryId: product && product.categoryId || "",
+			productPrice: product && product.productPrice || "",
+			productDesc: product && product.productDesc || "",
+			qualityTypeId: product && product.qualityTypeId || "QU01",
+			salesTypeId: product && product.salesTypeId || "SA01",
+			location: product && product.location || "",
+			coolPrice: product && product.coolPrice || "",
+			endDays: isNew ? 1 : 0,
 		}
 	});
 
+	const saveDisabled = !isNew && product.statusTypeId === "ST01" && product.bids.length > 0;
+
 	const router = useRouter();
-	const [categoryId, setCategoryId] = useState("CA01");
+	const [categoryId, setCategoryId] = useState((product && product.categoryId) || "CA01");
 	const { id } = useRecoilValue(userInfoState)
 
 	const { salesTypeId } = watch();
@@ -80,14 +85,30 @@ export default function ProductsNewForm() {
 		// 		alert("실패!");
 		// 	})
 
-		const res = await api.post('/products', { ...values, storeId: id, categoryId });
-		// console.log(res);
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			toast.success(msg || '상품이 등록되었습니다!');
-			router.push(`/products/${data.id}`);
-		} else {
-			toast.error(msg || '상품 등록을 실패했습니다!');
+
+		const requestbody = { ...values, storeId: id, categoryId };
+
+		if (isNew) { // 생성 
+			const res = await api.post('/products', requestbody);
+			// console.log(res);
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || '상품 등록 성공!');
+				router.push(`/products/${data.id}`);
+			} else {
+				toast.error(msg || '상품 등록 실패!');
+			}
+
+		} else { // 수정
+			const res = await api.patch('/products/1', requestbody);
+			// console.log(res);
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || '상품 수정 성공!');
+				router.push(`/products/${data.id}`);
+			} else {
+				toast.error(msg || '상품 수정 실패!');
+			}
 		}
 	}
 
@@ -150,57 +171,6 @@ export default function ProductsNewForm() {
 										</li>
 									)
 								})}
-
-								<img src="C:funxtionUpload/17155902444087925.jpg" alt="" />
-
-								{/* <li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li>
-								<li className={styles.imgBox}>
-									<img className={styles.img} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" />
-									<div className={styles.imgDelBtn}>
-										<BsX />
-									</div>
-								</li> */}
 							</ul>
 						</div>
 					</li>
@@ -288,7 +258,12 @@ export default function ProductsNewForm() {
 					</ul>
 				}
 				<footer className={styles.footer}>
-					<button disabled={isSubmitting}>등록하기</button>
+					{
+						saveDisabled && <div style={{ display: 'flex', alignItems: 'center', marginRight: '15px', color: 'red' }}>
+							해당 상품은 경매가 진행중으로 정보 수정이 제한됩니다.
+						</div>
+					}
+					<button className={(isSubmitting || saveDisabled) ? 'disabled' : ''} disabled={isSubmitting || saveDisabled}>{isNew ? '등록하기' : '수정하기'}</button>
 				</footer>
 			</form>
 		</section>
@@ -302,9 +277,9 @@ const qualityTypeRadioGroup: TRadioGroup[] = [
 
 
 const salesTypeRadioGroup: TRadioGroup[] = [
-	{ label: "일반 경매", value: "SA01" },
+	{ label: "경매", value: "SA01" },
 	{ label: "블라인드 경매", value: "SA02" },
-	{ label: "일반 판매", value: "SA03" },
+	{ label: "대화 거래", value: "SA03" },
 ];
 
 const endDaysRadioGroup: TRadioGroup[] = [
