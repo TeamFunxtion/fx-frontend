@@ -30,6 +30,7 @@ export default function Chats() {
 		getChatRoomList();
 	}, []);
 
+
 	return (
 		<>
 			<div className={styles.roomList}>
@@ -68,7 +69,7 @@ export default function Chats() {
 											<div className={styles.shortcut}>
 												<div className={styles.name}>{item.store.nickname}</div>
 												<div className={styles.msgArea}>
-													<div className={styles.lastMsg}>{item.chatMessages[0].message}</div>
+													<div className={styles.lastMsg}>{item.chatMessages.length != 0 ? item.chatMessages[0].message : ""}</div>
 													<div className={styles.lastMsgDate}> {month + "/" + date}</div>
 												</div>
 											</div>
