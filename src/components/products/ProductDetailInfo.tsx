@@ -16,6 +16,7 @@ import { userInfoState } from "@/store/atoms";
 import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 import BidHistoryModal from "../modal/BidHistoryModal";
 import { API_URL } from "@/app/constants";
+import ProductReportModal from "../modal/ProductReportModal";
 
 export async function getProductDetail(id: string, userId: string) {
 	// await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -56,6 +57,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const [showModalBid, setShowModalBid] = useState(false)
 	const [showModalPoint, setShowModalPoint] = useState(false)
 	const [showModalHistory, setShowModalHistory] = useState(false)
+	const [showModalReport, setShowModalReport] = useState(false)
 
 	const router = useRouter();
 	const userInfo = useRecoilValue(userInfoState);
@@ -75,6 +77,14 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			router.push(LOGIN_URL);
 		} else {
 			setShowModalBid(!showModalBid);
+		}
+	}
+
+	const clickReportModal = () => {
+		if (!userInfo.id) {
+			router.push(LOGIN_URL);
+		} else {
+			setShowModalReport(!showModalReport);
 		}
 	}
 
@@ -161,8 +171,27 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		}
 	}
 
+	const handleReport = async (code: string) => {
+		if (!code) {
+			return;
+		}
+
+		const result = await api.post("/products/reports", {
+			userId: id,
+			productId: productDetail.id,
+			reportTypeCode: code,
+		});
+		const { data: { resultCode, msg } } = result;
+		if (resultCode === '200') {
+			toast.success(msg || '신고 접수 성공!');
+		} else {
+			toast.error(msg || '신고 접수 실패!');
+		}
+	}
+
 	return (
 		<section className={styles.section} >
+			{showModalReport && <ProductReportModal clickModal={clickReportModal} ok={handleReport} />}
 			{showModalHistory && <BidHistoryModal clickModal={clickHistoryModal} bidList={[...bids]} />}
 			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
 			{showModalBid && <BidModal
@@ -200,7 +229,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						<ul className={styles.etcIcon}>
 							{userInfo.id && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
 							<li onClick={() => copyClipboard(location.href)}><BsShare /></li>
-							<li><BsRobot /></li>
+							<li onClick={clickReportModal}><BsRobot /></li>
 						</ul>
 					</div>
 					<h3 className={styles.priceTxt}>{productDetail.salesTypeId !== "SA02" ? `${numberFormatter(productDetail.currentPrice)}원` : '?'}
