@@ -97,8 +97,10 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const clickChatting = () => {
 		if (!userInfo.id) {
 			router.push(LOGIN_URL);
+		} else {
+			updateChatRoom();
 		}
-		updateChatRoom();
+
 
 	}
 
