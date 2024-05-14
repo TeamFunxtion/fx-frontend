@@ -147,7 +147,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			if (resultCode === "200") {
 				toast.success(msg);
 				toggleModal('bid');
-				router.refresh();
+				init();
 			} else {
 				toast.error(msg);
 			}
