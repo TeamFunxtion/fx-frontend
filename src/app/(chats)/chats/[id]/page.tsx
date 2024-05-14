@@ -1,6 +1,6 @@
 "use client"
 import styles from "./page.module.css"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
@@ -8,17 +8,18 @@ import { useRecoilValue } from "recoil";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useWebSocket from 'react-use-websocket';
-
-
-
-
+import { AiOutlineSafety } from "react-icons/ai";
 
 export default function User() {
 
 	const router = useRouter();
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
+	const [chat, setChat] = useState('');
+	const chats = useRef('');
+	const [bool, setBool] = useState(false);
 	const userId = userInfoValue.id;
+	const [safePay, setSafePay] = useState(false);
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
@@ -28,6 +29,7 @@ export default function User() {
 		if (resultCode == '200') {
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
+
 		}
 	}
 
@@ -44,15 +46,16 @@ export default function User() {
 
 
 	let today = new Date();
-	const insertMsg = () => {
+	const insertMsg = (chat, safety) => {
+
 		sendMessage(JSON.stringify({
 			type: 'message',
 			roomNumber: id,
 			sessionId: sessionId,
 			userId: userId,
 			msg: chat,
-			createDate: today
-
+			createDate: today,
+			safe: safety
 		}))
 	}
 
@@ -97,20 +100,38 @@ export default function User() {
 	useEffect(() => {
 		updateMsg();
 		getChatRoomInfo();
-
-
 	}, [])
 
+	const safeTrade = () => {
+		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까? 안전 거래를 요청하시면 판매자가 안전 거래 여부를 선택할 때까지 채팅을 입력하실 수 없습니다.')
+		if (result) {
+			const title = "상품의 안전거래가 요청되었습니다.";
+			const safety = true;
+			insertMsg(title, safety);
+			setBool(!bool);
+		}
 
-	const [chat, setChat] = useState('');
+	}
+
 	return (
-
 		<div className={styles.chatRoom}>
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
 					<img src="https://cdn.pixabay.com/photo/2016/10/10/14/13/dog-1728494_1280.png"
 						className={styles.profileImg} />
 					<div className={styles.chatName}>{chatRoomInfo == null ? '' : chatRoomInfo.store.nickname}</div>
+				</div>
+				<div className={styles.safeTradeDiv}>
+					{chatRoomInfo != null && chatRoomInfo.customerId == userId ?
+						<button className={styles.safeTradeBtn} onClick={safeTrade} disabled={bool}>
+							<span className={styles.safeIcon}><AiOutlineSafety /></span>
+							<span>안전거래</span>
+						</button> : ""}
+					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?
+						<div>
+							<button onClick={() => { setBool(!bool) }}>안전거래 수락</button>
+							<button onClick={() => { setBool(!bool) }}>안전거래 거절</button>
+						</div> : ""}
 				</div>
 				<div className={styles.chatProduct}>
 					<div className={styles.connectProduct}>연결된 상품</div>
@@ -236,15 +257,27 @@ export default function User() {
 				</div>
 
 				<div className={styles.chatInput}>
-					<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
-						onChange={(e) => {
-							setChat(e.target.value)
-						}} onKeyPress={(e) => {
-							if (e.key == 'Enter') {
-
-								insertMsg();
-							}
-						}} />
+					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?
+						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat} disabled={true}
+							onChange={(e) => {
+								setChat(e.target.value)
+							}} onKeyPress={(e) => {
+								if (e.key == 'Enter') {
+									const safety = false;
+									insertMsg(e.target.value, safety);
+									setChat('');
+								}
+							}} /> :
+						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat} disabled={bool}
+							onChange={(e) => {
+								setChat(e.target.value)
+							}} onKeyPress={(e) => {
+								if (e.key == 'Enter') {
+									const safety = false;
+									insertMsg(e.target.value, safety);
+									setChat('');
+								}
+							}} />}
 				</div>
 			</div>
 		</div>
