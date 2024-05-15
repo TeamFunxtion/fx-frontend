@@ -20,6 +20,9 @@ export default function User() {
 	const [bool, setBool] = useState(false);
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
+	useEffect(() => {
+		console.log(safePay)
+	}, [safePay])
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
@@ -103,15 +106,28 @@ export default function User() {
 	}, [])
 
 	const safeTrade = () => {
+
 		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까? 안전 거래를 요청하시면 판매자가 안전 거래 여부를 선택할 때까지 채팅을 입력하실 수 없습니다.')
 		if (result) {
 			const title = "상품의 안전거래가 요청되었습니다.";
 			const safety = true;
-			insertMsg(title, safety);
-			setBool(!bool);
+			setSafePay(true);
+			setTimeout(() => {
+
+				insertMsg(title, safety);
+				setBool(!bool);
+				changeSafePay();
+			}, 5000);
+
 		}
 
 	}
+
+	const changeSafePay = () => {
+		console.log(safePay);
+	}
+
+
 
 	return (
 		<div className={styles.chatRoom}>
@@ -123,11 +139,12 @@ export default function User() {
 				</div>
 				<div className={styles.safeTradeDiv}>
 					{chatRoomInfo != null && chatRoomInfo.customerId == userId ?
-						<button className={styles.safeTradeBtn} onClick={safeTrade} disabled={bool}>
+						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span>안전거래</span>
 						</button> : ""}
-					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?
+					{/* {chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?	 */}
+					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && safePay == true ?
 						<div>
 							<button onClick={() => { setBool(!bool) }}>안전거래 수락</button>
 							<button onClick={() => { setBool(!bool) }}>안전거래 거절</button>
@@ -257,8 +274,8 @@ export default function User() {
 				</div>
 
 				<div className={styles.chatInput}>
-					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?
-						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat} disabled={true}
+					{chatRoomInfo != null && chatRoomInfo.customerId != userId && safePay == true ?
+						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
 							onChange={(e) => {
 								setChat(e.target.value)
 							}} onKeyPress={(e) => {
@@ -268,7 +285,7 @@ export default function User() {
 									setChat('');
 								}
 							}} /> :
-						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat} disabled={bool}
+						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
 							onChange={(e) => {
 								setChat(e.target.value)
 							}} onKeyPress={(e) => {
