@@ -5,6 +5,7 @@ import api from "@/utils/api";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";;
 import { useSearchParams, useRouter } from "next/navigation";
 import Pagination from '@mui/material/Pagination';
+import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
 
 export default function Notice() {
 
@@ -30,6 +31,7 @@ export default function Notice() {
 			}
 		});
 		setList(result.data.content);
+
 		setPageInfo({
 			totalPages: result.data.totalPages,
 			totalElements: result.data.totalElements,
@@ -73,7 +75,7 @@ export default function Notice() {
 
 				<li><a href="/">공지사항</a></li>
 				<li><a href="/notice/faq">자주 묻는 질문</a></li>
-				<li><a href="/notice/">1:1문의</a></li>
+				<li><a href="/qna/">1:1문의</a></li>
 			</aside>
 
 			<section className={styles.noticeSection}>
@@ -88,7 +90,7 @@ export default function Notice() {
 								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
 									<div className={styles.noticeQ}>Q</div>
 									<div className={styles.noticeTitle} >{notice.title}</div>
-									<div className={styles.noticeSysdate}>{notice.createDate}</div>
+									<div className={styles.noticeSysdate}>{dateFormatterYYYYMMDDHHmm(notice.createDate)}</div>
 									<div className={styles.noticeIc}>
 										{notice.id === idcode ?
 											<IoIosArrowUp /> : <IoIosArrowDown />

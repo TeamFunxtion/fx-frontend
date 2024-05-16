@@ -1,0 +1,248 @@
+.qnaMain{
+	display: flex;
+	margin-top: 50px;
+}
+
+.qnaAside{
+	width: 130px;
+}
+
+.qnaNotice{
+	font-weight: bold;
+	font-size: 20px;
+
+}
+
+.qnaAside li{
+	margin-top: 15px;
+	list-style: none;
+	font-size: 15px;
+}
+
+
+.qnaSection{
+	width: 70%;
+	margin: 0 auto;
+}
+
+.qnaInquiryDiv{
+	display: flex;
+}
+
+.qnaInquiryHistoryOn{
+	text-align : center;
+	align-content:center;
+	float: left;
+	width: 50%;
+	height: 60px;
+	border: 1px solid rgb(60, 135, 216);
+	border-bottom: 0;
+	color: rgb(60, 135, 216);
+	font-weight: 600;
+}
+
+.qnaInquiryHistoryOff{
+	text-align : center;
+	align-content:center;
+	float: left;
+	width: 50%;
+	height: 60px;
+	border-bottom: 1px solid rgb(60, 135, 216);
+	
+}
+
+
+.qnaInquiryOn{
+	text-align : center;
+	align-content:center;
+	float: left;
+	width: 50%;
+	height: 60px;
+	border: 1px solid rgb(60, 135, 216);
+	border-bottom: 0;
+	color: rgb(60, 135, 216);
+	font-weight: 600;
+}
+
+
+.qnaInquiryOff{
+	text-align : center;
+	align-content:center;
+	float: left;
+	width: 50%;
+	height: 60px;
+	border-bottom: 1px solid rgb(60, 135, 216);
+}
+
+.qnaHistoryDiv{
+	border: 2px solid rgba(121, 121, 121, 0.3);
+}
+
+.qnaHistoryTag{
+	margin: 20px 0 0 15px;
+	font-size: 15px;
+	font-weight: 500;
+	color: rgba(121, 121, 121, 0.6);
+}
+
+.qnaHistoryContnt{
+	margin: 15px 0 0 15px;
+	font-weight: 600;
+	color: rgb(95, 95, 95);
+}
+
+.qnaHistortAnswer{
+	text-align : right;
+	font-size: 15px;
+	margin: 0 15px 10px 0;
+}
+
+.qnaAnswer{
+	margin-top: 15px;
+	display: flex;
+	font-size: 17px;
+	font-weight: 600;
+	color: rgb(95, 95, 95,0.7);
+}
+
+.qnaAnswerName{
+	margin-left: 15px;
+
+	
+}
+.qnaAnsWerMail{
+	margin-left: 15px;
+}
+
+.qnaAnswerContent{
+	margin: 15px 0 0 15px;
+	font-weight: 700;
+	color: rgb(95, 95, 95);
+}
+
+.qnaAnswerD{
+	margin-top: 15px;
+	display: flex;
+	border-top: 2px solid rgba(121, 121, 121, 0.3);
+}
+
+.qnaAnswerAswer{
+	text-align : center;
+	align-content:center;
+	width: 80px;
+	height: 60px;
+	background-color: rgb(223, 223, 223);
+	font-weight: 600;
+}
+
+.qnaAswerAswerContent{
+	margin-left: 15px;
+	align-content:center;
+	
+}
+.qnaInquirtTop{
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+}
+
+.qnaInquirt{
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	border-top: 0px;
+}
+
+.qnaInquirtName{
+	align-content: center;
+	height: 80px;
+	width: 150px;
+	background-color: rgb(223, 223, 223);
+}
+.qnaInquirtName > div {
+	margin-left: 20%;
+}
+.qnaInquirtNameInput{
+	margin: auto;
+	width: 75%;
+	height: 40px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+
+	font-size: 18px;
+
+	word-break:keep-all;
+}
+
+.qnaInquirtCategory{
+	margin: auto;
+	width: 76%;
+	height: 50px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	color: rgb(95, 95, 95);
+	font-size: 18px;
+	
+}
+.qnaIpquirtContent{
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	border-top: 0;
+	height: 160px;
+
+}
+
+
+.qnaIpquirtContentInput{
+	font-family: 'Raleway', sans-serif;
+	font-size: 18px;
+	margin: auto;
+	width: 85%;	
+	height: 100px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	
+}
+
+.qnaInquirtButton{
+	margin-top: 15px;
+	text-align : center;
+	align-content:center;
+}
+.qnaInquirtButtonInquirt{
+	margin: 0 5px 0 5px;
+	background-color: rgb(14, 187, 255);
+	color: white;
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+.qnaInquirtButtonMenu{
+	border: 2px solid rgba(121, 121, 121, 0.3); 
+	background-color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.qnaPage{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	
+}
+
+.qnaInquirtButtonInquirtOff{
+	margin: 0 5px 0 5px;
+
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+
+}
