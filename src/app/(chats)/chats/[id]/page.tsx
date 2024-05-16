@@ -20,9 +20,10 @@ export default function User() {
 	const [bool, setBool] = useState(false);
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
-	useEffect(() => {
-		console.log(safePay)
-	}, [safePay])
+	const [safePaymentInfo, setSafePaymentInfo] = useState(null);
+	// useEffect(() => {
+	// 	console.log(safePay)
+	// }, [safePay])
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
@@ -32,6 +33,10 @@ export default function User() {
 		if (resultCode == '200') {
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
+
+			if (data != null) {
+				getSafePaymentInfo(data);
+			}
 
 		}
 	}
@@ -49,7 +54,7 @@ export default function User() {
 
 
 	let today = new Date();
-	const insertMsg = (chat, safety) => {
+	const insertMsg = (chat, safety, safePayAccept) => {
 
 		sendMessage(JSON.stringify({
 			type: 'message',
@@ -57,8 +62,12 @@ export default function User() {
 			sessionId: sessionId,
 			userId: userId,
 			msg: chat,
+			productId: chatRoomInfo.product.id,
+			sellerId: chatRoomInfo.store.id,
+			buyerId: chatRoomInfo.customerId,
 			createDate: today,
-			safe: safety
+			safe: safety,
+			safePayAccept: safePayAccept
 		}))
 	}
 
@@ -71,7 +80,7 @@ export default function User() {
 
 	const [messageHistory, setMessageHistory] = useState([]);
 	const [msgList, setMsgList] = useState([]);
-
+	const [safePayAcception, setSafePayAcception] = useState(0);
 	useEffect(() => {
 		if (lastMessage !== null) {
 			setMessageHistory((prev) => {  //기존 메시지에 데이터를 추가합니다.
@@ -83,6 +92,18 @@ export default function User() {
 						setSessionId(object.sessionId);
 					} else if (object.type === "message") {
 						setMsgList((prev) => [...prev, object]);
+						if (object.safe === true) {
+							setSafePay(true);
+						} else {
+							if (object.safePayAccept === true) {
+								setSafePay(true);
+								setSafePayAcception(1);
+								console.log(object.safePayAccept);
+							} else {
+								setSafePay(false);
+							}
+
+						}
 					}
 				}
 				return prev.concat(lastMessage)
@@ -111,22 +132,57 @@ export default function User() {
 		if (result) {
 			const title = "상품의 안전거래가 요청되었습니다.";
 			const safety = true;
+			const safePayAccept = false;
 			setSafePay(true);
-			setTimeout(() => {
-
-				insertMsg(title, safety);
-				setBool(!bool);
-				changeSafePay();
-			}, 5000);
-
+			insertMsg(title, safety, safePayAccept);
+			setBool(!bool);
 		}
 
 	}
 
-	const changeSafePay = () => {
+	// 안전거래 수락
+	const acceptSafePay = () => {
+		const title = "상품의 안전거래가 수락되었습니다.";
+		const safety = false;
+		const safePayAccept = true;
+		setSafePay(false);
+		setSafePayAcception(1);
+		setSafePaymentInfo((prevState) => {
+			return { ...prevState, startYn: "Y" }
+		});
+		insertMsg(title, safety, safePayAccept);
+
+		console.log(safePay);
+	}
+	// 안전거래 거절
+	const refuseSafePay = () => {
+		const title = "상품의 안전거래가 거절되었습니다.";
+		const safety = false;
+		const safePayAccept = false;
+		setSafePay(false);
+		setSafePayAcception(0);
+		insertMsg(title, safety, safePayAccept);
 		console.log(safePay);
 	}
 
+
+	// DB연동 안전거래 시작 여부 조회
+	const getSafePaymentInfo = async (data2) => {
+		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customerId}`)
+		let { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			console.log(data);
+			setSafePaymentInfo(data);
+			setSafePayAcception(1);
+			setSafePay(true);
+			toast.success(msg || `${id}방 안전거래 여부 조회 성공!`);
+		}
+	}
+
+	if (safePaymentInfo != null) {
+		console.log(safePaymentInfo.startYn);
+		console.log(safePayAcception);
+	}
 
 
 	return (
@@ -138,16 +194,15 @@ export default function User() {
 					<div className={styles.chatName}>{chatRoomInfo == null ? '' : chatRoomInfo.store.nickname}</div>
 				</div>
 				<div className={styles.safeTradeDiv}>
-					{chatRoomInfo != null && chatRoomInfo.customerId == userId ?
+					{(chatRoomInfo != null && chatRoomInfo.customerId == userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customerId == userId && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span>안전거래</span>
 						</button> : ""}
-					{/* {chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && msgList[msgList.length - 1].safe == true ?	 */}
-					{chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && safePay == true ?
-						<div>
-							<button onClick={() => { setBool(!bool) }}>안전거래 수락</button>
-							<button onClick={() => { setBool(!bool) }}>안전거래 거절</button>
+					{(chatRoomInfo != null && chatRoomInfo.customerId != userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
+						<div className={styles.safeTradeSeller}>
+							<button className={styles.safeTradeBtnAccept} onClick={acceptSafePay}>안전거래 수락</button>
+							<button className={styles.safeTradeBtnRefuse} onClick={refuseSafePay}>안전거래 거절</button>
 						</div> : ""}
 				</div>
 				<div className={styles.chatProduct}>
@@ -274,27 +329,17 @@ export default function User() {
 				</div>
 
 				<div className={styles.chatInput}>
-					{chatRoomInfo != null && chatRoomInfo.customerId != userId && safePay == true ?
-						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
-							onChange={(e) => {
-								setChat(e.target.value)
-							}} onKeyPress={(e) => {
-								if (e.key == 'Enter') {
-									const safety = false;
-									insertMsg(e.target.value, safety);
-									setChat('');
-								}
-							}} /> :
-						<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
-							onChange={(e) => {
-								setChat(e.target.value)
-							}} onKeyPress={(e) => {
-								if (e.key == 'Enter') {
-									const safety = false;
-									insertMsg(e.target.value, safety);
-									setChat('');
-								}
-							}} />}
+					<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
+						onChange={(e) => {
+							setChat(e.target.value)
+						}} onKeyPress={(e) => {
+							if (e.key == 'Enter') {
+								const safety = false;
+								const safePayAccept = false;
+								insertMsg(e.target.value, safety, safePayAccept);
+								setChat('');
+							}
+						}} />
 				</div>
 			</div>
 		</div>
