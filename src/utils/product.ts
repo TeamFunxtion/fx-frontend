@@ -1,4 +1,5 @@
 import { categories } from "@/app/constants";
+import { qnaCategories} from "@/app/constants";
 import _ from "lodash";
 
 export const getProductQualityNameKR = (typeId: string) => {
@@ -23,6 +24,10 @@ export const getProductSalesNameKR = (typeId: string) => {
     default:
       return typeId;
   }
+};
+
+export const getQnaCategoryNameKR = categoryId => {
+  return _.find(qnaCategories, { categoryId }).categoryName;
 };
 
 export const getCategoryNameKR = categoryId => {

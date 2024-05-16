@@ -26,3 +26,9 @@ export const categories = [
   { categoryId: "CA23", categoryName: "반려동물" },
   { categoryId: "CA24", categoryName: "무료나눔" },
 ];
+
+export const qnaCategories = [
+  { categoryId: "QNA01", categoryName: "개인정보/회원계정"},
+  { categoryId: "QNA02", categoryName: "오류"},
+  { categoryId: "QNA03", categoryName: "기타"}
+]

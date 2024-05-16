@@ -111,7 +111,7 @@
 	
 }
 .qnaAnsWerMail{
-	margin-left: 30px;
+	margin-left: 15px;
 }
 
 .qnaAnswerContent{
@@ -162,13 +162,14 @@
 }
 .qnaInquirtNameInput{
 	margin: auto;
-	
 	width: 75%;
 	height: 40px;
 	border-radius: 5px;
 	border: 2px solid rgba(121, 121, 121, 0.3);
 
 	font-size: 18px;
+
+	word-break:keep-all;
 }
 
 .qnaInquirtCategory{
@@ -186,8 +187,12 @@
 	border: 2px solid rgba(121, 121, 121, 0.3);
 	border-top: 0;
 	height: 160px;
+
 }
+
+
 .qnaIpquirtContentInput{
+	font-family: 'Raleway', sans-serif;
 	font-size: 18px;
 	margin: auto;
 	width: 85%;	
@@ -221,4 +226,12 @@
 	width: 100px;
 	height: 50px;
 	border-radius: 5px;
+}
+
+.qnaPage{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	
 }
