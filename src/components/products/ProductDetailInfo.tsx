@@ -79,7 +79,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			...modal,
 			[name]: !modal[name],
 		});
-		console.log(modal)
+		// console.log(modal)
 	}
 
 
@@ -88,7 +88,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		const res = await api.post(`/chats`, { customerId: userInfo.id, storeId: productDetail.seller.id, productId: productDetail.id });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			console.log(data);
+			// console.log(data);
 
 			toast.success(msg || `채팅방 추가 | 변경 성공`);
 			if (data) {
@@ -123,7 +123,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 	const init = async () => {
 		const response = await getProductDetail(id, userInfo.id);
-		console.log(response);
+		// console.log(response);
 		setProductDetail(response.data);
 	}
 
@@ -197,7 +197,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			userId: userInfo.id,
 			productId: id,
 		});
-		console.log(result);
+		// console.log(result);
 		if (result.data.resultCode === "200") {
 			init();
 		}
