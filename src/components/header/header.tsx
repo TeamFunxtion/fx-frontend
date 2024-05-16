@@ -1,11 +1,13 @@
 "use client"
 import Navigation from "./navigation";
 import styles from "./header.module.css";
-import { BsSearch, BsBell, BsBagPlus, BsChatDots, BsPerson } from "react-icons/bs";
+import { BsSearch, BsBell, BsBagPlus, BsChatDots, BsPerson, BsCurrencyDollar } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import HeaderTop from "./header-top";
+import PaymentModal from "../modal/PaymentModal";
+import useModal from "@/hooks/useModal";
 
 export default function Header() {
 	return (
@@ -20,6 +22,7 @@ export default function Header() {
 function HeaderMain() {
 	const [keyword, setKeyword] = useState("");
 	const router = useRouter();
+	const { modal, showModal, toggleModal } = useModal();
 
 	const onKeyEnter = (e) => {
 		if (e.key === 'Enter') {
@@ -33,6 +36,7 @@ function HeaderMain() {
 
 	return (
 		<div className={styles.headerMain}>
+			{modal.payment && <PaymentModal clickModal={() => toggleModal('payment')} />}
 			<div className={styles.mainLeft}>
 				<Link href="/"><img src="/logo.png" /></Link>
 				<div className={styles.inputContainer}>
@@ -68,6 +72,12 @@ function HeaderMain() {
 					<Link href="/shop">
 						<BsPerson />
 						<span>마이</span>
+					</Link>
+				</div>
+				<div className={styles.iconContainer}>
+					<Link href="" onClick={() => showModal('payment')}>
+						<BsCurrencyDollar />
+						<span>충전하기</span>
 					</Link>
 				</div>
 			</div>

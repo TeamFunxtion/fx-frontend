@@ -9,6 +9,7 @@ import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import LogoutModal from "../modal/LogoutModal";
+import { numberFormatter } from "@/utils/common";
 
 export default function Navigation() {
 	const user = useRecoilValue(userInfoState);
@@ -77,9 +78,13 @@ export default function Navigation() {
 							<li><Link href="/auth/join">회원가입</Link></li>
 						</>
 						: <>
+
 							<li className={styles.userInfoContainer}>
 								<img className={styles.profileImg} src={user.profileImageUrl} alt="" />
 								{user.nickname || user.email}
+							</li>
+							<li className={styles.userInfoContainer}>
+								🅿️ <span style={{ fontSize: '1rem' }}>{numberFormatter(user.point)}</span>
 							</li>
 							<li className={styles.logoutContainer} onClick={onClickLogout}><Link href="">로그아웃</Link></li>
 						</>
