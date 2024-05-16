@@ -29,7 +29,9 @@ export default function Chats() {
 	useEffect(() => {
 		getChatRoomList();
 	}, []);
-
+	if (chatRoomList != null) {
+		console.log(chatRoomList);
+	}
 
 	return (
 		<>
@@ -67,7 +69,9 @@ export default function Chats() {
 												className={styles.profileImg} />
 
 											<div className={styles.shortcut}>
-												<div className={styles.roomName}>{item.store.nickname}</div>
+												{userInfoValue.id != item.store.id ?
+													<div className={styles.roomName}>{item.store.nickname}</div> :
+													<div className={styles.roomName}>{item.customer.nickname}</div>}
 												<div className={styles.msgArea}>
 													<div className={styles.lastMsg}>{item.chatMessages.length != 0 ? item.chatMessages[0].message : ""}</div>
 													<div className={styles.lastMsgDate}>{month + "/" + date}</div>
