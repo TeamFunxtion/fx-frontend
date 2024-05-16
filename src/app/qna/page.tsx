@@ -28,8 +28,6 @@ export default function Qna() {
 	const qnaContentlist = (id) => {
 		setQnaContentCh(id);
 	};
-	console.log(userEmail);
-
 	const router = useRouter();
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -42,6 +40,7 @@ export default function Qna() {
 				page: pageNo || 1,
 			}
 		}
+
 
 		);
 		setList(result.data.content);
@@ -76,7 +75,6 @@ export default function Qna() {
 		}
 
 	}
-
 
 
 
@@ -189,7 +187,12 @@ export default function Qna() {
 					/>
 				</div>
 				<div className={styles.qnaInquirtButton}>
-					<button className={styles.qnaInquirtButtonInquirt} onClick={createQna}>문의하기</button>
+					{
+						userInfoValue.email != "" &&
+
+
+						<button className={styles.qnaInquirtButtonInquirt} onClick={createQna}>문의하기</button>
+					}
 					<button className={styles.qnaInquirtButtonMenu}>목록가기</button>
 				</div>
 			</div >
@@ -213,7 +216,11 @@ export default function Qna() {
 
 			<section className={styles.qnaSection}>
 				<div className={styles.qnaInquiryDiv}>
+
+
 					<div className={qnaContentCh === 1 ? styles.qnaInquiryHistoryOn : styles.qnaInquiryHistoryOff} onClick={() => qnaContentlist(1)}>문의/안내 내역</div>
+
+
 					<div className={qnaContentCh === 2 ? styles.qnaInquiryOn : styles.qnaInquiryOff} onClick={() => qnaContentlist(2)}>문의하기</div>
 				</div>
 				<br />
