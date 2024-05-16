@@ -37,10 +37,10 @@ export default function Chats() {
 
 	return (
 		<>
-			<div className={styles.roomList}>
-				<h1 className={styles.roomCount}>전체 대화({chatRoomList.length})</h1>
-				<div className={styles.height}>
-					{chatRoomList.length == 0 ?
+			<div className={styles.chatsContainer}>
+				<h1 className={styles.chatsTitle}>전체 대화</h1>
+				{
+					chatRoomList.length == 0 ?
 						<div className={styles.noChatRoom}>
 							<div className={styles.noRoom}>
 								<div className={styles.chatIcon}>
@@ -72,11 +72,11 @@ export default function Chats() {
 
 											<div className={styles.shortcut}>
 												{userInfoValue.id != item.store.id ?
-													<div className={styles.name}>{item.store.nickname}</div> :
-													<div className={styles.name}>{item.customer.nickname}</div>}
+													<div className={styles.roomName}>{item.store.nickname}</div> :
+													<div className={styles.roomName}>{item.customer.nickname}</div>}
 												<div className={styles.msgArea}>
 													<div className={styles.lastMsg}>{item.chatMessages.length != 0 ? item.chatMessages[0].message : ""}</div>
-													<div className={styles.lastMsgDate}> {month + "/" + date}</div>
+													<div className={styles.lastMsgDate}>{month + "/" + date}</div>
 												</div>
 											</div>
 											<img src="https://cdn.pixabay.com/photo/2016/03/31/20/13/chair-1295604_1280.png"
@@ -86,7 +86,6 @@ export default function Chats() {
 								)
 							})}
 						</div>}
-				</div>
 			</div>
 			{path !== "/chats" ? <></> :
 				<div className={styles.chatRoom}>

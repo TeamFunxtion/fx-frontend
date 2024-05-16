@@ -1,142 +1,123 @@
-.container {
+.rootContainer {
+  padding: 0 10%;
+  height: 100%;
+}
+
+.mainContainer {
   display: flex;
   justify-content: center;
   height: 100%;
-	
+  border: 1px solid rgb(240, 240, 240);
 }
 
-.formContainer {
-  width: 100%;
-	height: 100%;
-  border: 1px solid rgb(223, 223, 223);
-	
+.chatsContainer {
+  width: 45%;
+  padding-top: 30px;
+  overflow: auto;
+  border-right: 1px solid rgb(240, 240, 240);
 }
 
-.container2 {
-	height: 100%;
-	display:flex;
-	
-}
-.roomList {
-	width: 35%;
-	padding-top: 30px;
-	max-height: 100%;
-	overflow: auto;
-	border-right: 1px solid lightgray;
-}
-.roomCount {
-
-	font-size: larger;
-	font-weight: bold;
-	padding-bottom: 30px;
-	padding-left: 20px;
-	border-bottom: 1px solid lightgray;
+.chatsTitle {
+  font-weight: 600;
+  padding-bottom: 30px;
+  padding-left: 30px;
 }
 .list {
-	display: flex;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	padding-right: 5px;
-	padding-left: 5px;
-	
+  display: flex;
+  padding: 15px 20px;
 }
 .list:hover {
-	background-color: rgb(220, 220, 220);
+  background-color: rgb(240, 240, 240);
 }
 
 .profileImg {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .productImg {
-	width: 35px;
-	height: 35px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
-	
-	
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .shortcut {
-	width: 100%;
-	padding-left: 7px;
-	padding-top: 3px;		
+  width: 100%;
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.name {
-	font-weight: bold;
-	padding-bottom: 5px;
+.roomName {
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding-bottom: 5px;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .msgArea {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: flex-start;
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lastMsg {
-	font-size: small;
-	color: gray;
-	width: 150px;
-	overflow: hidden;
+  font-size: small;
+  color: gray;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
-	
+  margin-right: 10px;
 }
 
-
 .lastMsgDate {
-	font-size: small;
-	color: gray;
-	width: 40px;
-	text-align:right;
-	padding-right: 3px;
-	
+  font-size: small;
+  color: gray;
+  width: 40px;
+  text-align: right;
+  padding-right: 3px;
 }
 
 .chatRoom {
-	padding-top: 20px;
-	max-height: 100%;
-	width: 65%;
-	overflow: auto;
-	
+  padding-top: 20px;
+  width: 65%;
+  overflow: auto;
 }
 
 .noChatRoom {
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	
-}
-
-.height {
-	height: 90%
+  height: calc(100% - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .noRoom svg {
-	font-size: 75px;
+  font-size: 75px;
 }
 
 .noChat svg {
-	font-size: 75px;
+  font-size: 75px;
 }
 
 .noChatFont {
-	font-size: larger;
-	text-align: center;
-	font-weight: bold;
+  font-size: larger;
+  text-align: center;
+  font-weight: bold;
 }
 
 .chatIcon {
-	display: flex;
-	justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .noChatFontSmall {
-	font-size: medium;
-	text-align: center;
+  font-size: medium;
+  text-align: center;
 }

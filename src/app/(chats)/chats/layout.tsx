@@ -7,12 +7,10 @@ export default function ChatsLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className={styles.container2}>
-			<div className={styles.formContainer}>
-				<div className={styles.container}>
-					<Chats />
-					{children}
-				</div>
+		<div className={styles.rootContainer}>
+			<div className={styles.mainContainer}>
+				<Chats />
+				{children}
 			</div>
 		</div>
 	)
