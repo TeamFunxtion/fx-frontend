@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useWebSocket from 'react-use-websocket';
 import { AiOutlineSafety } from "react-icons/ai";
+import Link from "next/link";
+import { MdOutlinePayment } from "react-icons/md";
 
 export default function User() {
 
@@ -16,14 +18,10 @@ export default function User() {
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chat, setChat] = useState('');
-	const chats = useRef('');
-	const [bool, setBool] = useState(false);
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
 	const [safePaymentInfo, setSafePaymentInfo] = useState(null);
-	// useEffect(() => {
-	// 	console.log(safePay)
-	// }, [safePay])
+
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
@@ -31,6 +29,7 @@ export default function User() {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
+			console.log(data);
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
 
@@ -39,6 +38,9 @@ export default function User() {
 			}
 
 		}
+	}
+	if (chatRoomInfo != null) {
+		console.log(chatRoomInfo);
 	}
 
 
@@ -64,7 +66,7 @@ export default function User() {
 			msg: chat,
 			productId: chatRoomInfo.product.id,
 			sellerId: chatRoomInfo.store.id,
-			buyerId: chatRoomInfo.customerId,
+			// buyerId: chatRoomInfo.customer.id,
 			createDate: today,
 			safe: safety,
 			safePayAccept: safePayAccept
@@ -135,7 +137,7 @@ export default function User() {
 			const safePayAccept = false;
 			setSafePay(true);
 			insertMsg(title, safety, safePayAccept);
-			setBool(!bool);
+
 		}
 
 	}
@@ -168,7 +170,7 @@ export default function User() {
 
 	// DB연동 안전거래 시작 여부 조회
 	const getSafePaymentInfo = async (data2) => {
-		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customerId}`)
+		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			console.log(data);
@@ -191,19 +193,35 @@ export default function User() {
 				<div className={styles.chatProfile}>
 					<img src="https://cdn.pixabay.com/photo/2016/10/10/14/13/dog-1728494_1280.png"
 						className={styles.profileImg} />
-					<div className={styles.chatName}>{chatRoomInfo == null ? '' : chatRoomInfo.store.nickname}</div>
+					<div className={styles.chatName}>
+						{chatRoomInfo != null && chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : ""}
+						{chatRoomInfo != null && chatRoomInfo.customer.id != userId ? chatRoomInfo.customer.nickname : ""}
+					</div>
 				</div>
 				<div className={styles.safeTradeDiv}>
-					{(chatRoomInfo != null && chatRoomInfo.customerId == userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customerId == userId && safePay == false && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span>안전거래</span>
-						</button> : ""}
-					{(chatRoomInfo != null && chatRoomInfo.customerId != userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customerId != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
+						</button>
+						: ""}
+					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
 						<div className={styles.safeTradeSeller}>
 							<button className={styles.safeTradeBtnAccept} onClick={acceptSafePay}>안전거래 수락</button>
 							<button className={styles.safeTradeBtnRefuse} onClick={refuseSafePay}>안전거래 거절</button>
-						</div> : ""}
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.startYn == 'Y' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
+						<div className={styles.pay}>
+							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
+							<Link href={`https://www.google.com`} className={styles.payBtn}><MdOutlinePayment />결제하기</Link>
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.startYn == 'Y' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
+						<div className={styles.pay}>
+							<div className={styles.safeTrading2}>안전거래중인 상품입니다.</div>
+						</div>
+						: ""}
 				</div>
 				<div className={styles.chatProduct}>
 					<div className={styles.connectProduct}>연결된 상품</div>
