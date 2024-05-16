@@ -9,6 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { qnaCategories } from "@/app/constants"
 import Pagination from '@mui/material/Pagination';
 import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
+import { getQnaCategoryNameKR } from "@/utils/product";
 
 export default function Qna() {
 
@@ -67,32 +68,21 @@ export default function Qna() {
 	}, [searchParams])
 
 
-	const qnaAnswerConten = (id) => {
+	const qnaAnswerContent = (id) => {
 		if (Answer === id) {
 			setAnswer("");
 		} else {
 			setAnswer(id);
 		}
-
 	}
-
-
-
 
 	function QnaInquiryHistory() {
 		return (
-
-
 			list.length > 0 && list.map(function (qna) {
-
-
 				return (
 					<div>
-
-						<div className={styles.qnaHistoryDiv} onClick={() => qnaAnswerConten(qna.id)}>
-
-
-							<div className={styles.qnaHistoryTag}>{qna.categoryId}</div>
+						<div className={styles.qnaHistoryDiv} onClick={() => qnaAnswerContent(qna.id)}>
+							<div className={styles.qnaHistoryTag}>{getQnaCategoryNameKR(qna.categoryId)}</div>
 							<div className={styles.qnaHistoryContnt}>{qna.qnaTitle}</div>
 							<div className={styles.qnaHistortAnswer}>등록일:{dateFormatterYYYYMMDDHHmm(qna.createDate)}</div>
 						</div>
@@ -131,7 +121,7 @@ export default function Qna() {
 	function QnaInquiry() {
 		const [qnaContent, setQnaContent] = useState('');
 		const [qnaTitle, setQnaTitle] = useState('');
-		const [categoryId, setCategoryId] = useState('개인정보/회원정보');
+		const [categoryId, setCategoryId] = useState('QNA01');
 
 
 		const createQna = async () => {
@@ -157,7 +147,7 @@ export default function Qna() {
 
 							qnaCategories.map((category) => (
 
-								<option value={category.categoryName}>{category.categoryName}</option>
+								<option value={category.categoryId}>{category.categoryName}</option>
 							))
 
 
