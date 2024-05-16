@@ -35,7 +35,7 @@ export default function Qna() {
 		router.push(`/qna?&page=${value}`)
 	};
 	const getList = async (pageNo) => {
-		const result = await api.get(`/qnas/userId?id=${userId}`, {
+		const result = await api.get(`/qnas?id=${userId}`, {
 			params: {
 				page: pageNo || 1,
 			}
@@ -135,7 +135,7 @@ export default function Qna() {
 
 
 		const createQna = async () => {
-			const res = await api.post(`qnas/uplod`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
+			const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || ` `);
