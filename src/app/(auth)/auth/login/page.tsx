@@ -2,10 +2,11 @@
 import styles from "./page.module.css";
 import api from "@/utils/api";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect } from "react";
 
 interface FormValues {
 	email: string,
@@ -13,6 +14,7 @@ interface FormValues {
 }
 
 export default function LoginPage() {
+	const searchParams = useSearchParams();
 	const { register, handleSubmit, watch, formState: { errors } } = useForm<FormValues>()
 	const onSubmitHandler: SubmitHandler<FormValues> = async (values) => {
 		// console.log(values)
@@ -36,6 +38,18 @@ export default function LoginPage() {
 		const redirectUri = process.env.NEXT_PUBLIC_KAKAO_CALLBACK_URI; // 등록한 Redirect URI
 		location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}`;
 	}
+
+	const checkRedirectFromEmail = () => {
+		if (searchParams.get("auth") && searchParams.get("auth") == "success") {
+			setTimeout(() => {
+				toast.success("이메일 인증이 완료되었습니다!");
+			}, 1000);
+		}
+	}
+
+	useEffect(() => {
+		checkRedirectFromEmail();
+	}, [])
 
 	return (
 		<div>
