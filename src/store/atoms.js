@@ -24,11 +24,21 @@ export const persistAtomEffect = param => {
   param.getPromise(ssrCompletedState).then(() => persistAtom(param));
 };
 
+// 유저 정보
 export const userInfoState = atom({
-  key: "UserInfo", // unique ID (with respect to other atoms/selectors)
+  key: "UserInfo",
   default: {
     id: "",
     email: "",
-  }, // default value (aka initial value)
+    point: 0,
+  },
   effects_UNSTABLE: [persistAtomEffect],
+});
+
+// 글로벌 모달
+export const globalModalState = atom({
+  key: "globalModal",
+  default: {
+    payment: false,
+  },
 });
