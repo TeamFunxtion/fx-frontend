@@ -2,7 +2,7 @@ import styles from "./layout.module.css"
 import Chats from "@/components/chats/Chats";
 
 export default function ChatsLayout({
-	children,
+	children
 }: Readonly<{
 	children: React.ReactNode;
 }>) {

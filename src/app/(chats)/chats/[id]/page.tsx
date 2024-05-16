@@ -12,7 +12,7 @@ import { AiOutlineSafety } from "react-icons/ai";
 import Link from "next/link";
 import { MdOutlinePayment } from "react-icons/md";
 
-export default function User() {
+export default function User(p) {
 
 	const router = useRouter();
 	const id = usePathname().substring(7);
@@ -124,6 +124,8 @@ export default function User() {
 
 
 	useEffect(() => {
+		console.log(p);
+
 		updateMsg();
 		getChatRoomInfo();
 	}, [])

@@ -20,8 +20,8 @@ export default function Chats() {
 		const res = await api.get('/chats?id=' + userInfoValue.id);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			const newList = [...chatRoomList, ...data];
-			setChatRoomList(newList);
+			// const newList = [...chatRoomList, ...data];
+			setChatRoomList(data);
 			toast.success(msg || '채팅방 조회 성공!');
 		}
 	}
@@ -32,6 +32,8 @@ export default function Chats() {
 	if (chatRoomList != null) {
 		console.log(chatRoomList);
 	}
+
+
 
 	return (
 		<>
