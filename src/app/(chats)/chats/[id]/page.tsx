@@ -29,7 +29,7 @@ export default function User(p) {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			console.log(data);
+			// console.log(data);
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
 
@@ -39,10 +39,6 @@ export default function User(p) {
 
 		}
 	}
-	if (chatRoomInfo != null) {
-		console.log(chatRoomInfo);
-	}
-
 
 	// DB연동 (채팅 읽음 처리)
 	const updateMsg = async () => {
@@ -66,7 +62,7 @@ export default function User(p) {
 			msg: chat,
 			productId: chatRoomInfo.product.id,
 			sellerId: chatRoomInfo.store.id,
-			// buyerId: chatRoomInfo.customer.id,
+			buyerId: chatRoomInfo.customer.id,
 			createDate: today,
 			safe: safety,
 			safePayAccept: safePayAccept
@@ -100,7 +96,7 @@ export default function User(p) {
 							if (object.safePayAccept === true) {
 								setSafePay(true);
 								setSafePayAcception(1);
-								console.log(object.safePayAccept);
+								// console.log(object.safePayAccept);
 							} else {
 								setSafePay(false);
 							}
@@ -122,26 +118,21 @@ export default function User(p) {
 		}
 	}
 
-
 	useEffect(() => {
-		console.log(p);
-
 		updateMsg();
 		getChatRoomInfo();
 	}, [])
 
 	const safeTrade = () => {
 
-		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까? 안전 거래를 요청하시면 판매자가 안전 거래 여부를 선택할 때까지 채팅을 입력하실 수 없습니다.')
+		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까?')
 		if (result) {
 			const title = "상품의 안전거래가 요청되었습니다.";
 			const safety = true;
 			const safePayAccept = false;
 			setSafePay(true);
 			insertMsg(title, safety, safePayAccept);
-
 		}
-
 	}
 
 	// 안전거래 수락
@@ -156,7 +147,7 @@ export default function User(p) {
 		});
 		insertMsg(title, safety, safePayAccept);
 
-		console.log(safePay);
+		// console.log(safePay);
 	}
 	// 안전거래 거절
 	const refuseSafePay = () => {
@@ -166,7 +157,7 @@ export default function User(p) {
 		setSafePay(false);
 		setSafePayAcception(0);
 		insertMsg(title, safety, safePayAccept);
-		console.log(safePay);
+		// console.log(safePay);
 	}
 
 
@@ -175,19 +166,13 @@ export default function User(p) {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			console.log(data);
+			// console.log(data);
 			setSafePaymentInfo(data);
 			setSafePayAcception(1);
 			setSafePay(true);
 			toast.success(msg || `${id}방 안전거래 여부 조회 성공!`);
 		}
 	}
-
-	if (safePaymentInfo != null) {
-		console.log(safePaymentInfo.startYn);
-		console.log(safePayAcception);
-	}
-
 
 	return (
 		<div className={styles.chatRoom}>
@@ -291,7 +276,6 @@ export default function User(p) {
 						})}
 						<div>
 							{msgList.map(function (msg, index) {
-								console.log(msgList);
 								let month = (new Date(msg.createDate).getMonth() + 1).toString();
 								if (Number(month) < 10) {
 									month = "0" + month;
