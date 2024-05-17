@@ -7,6 +7,9 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
+  images: {
+    domains: ["blog.kakaocdn.net"],
+  },
 };
 
 export default nextConfig;

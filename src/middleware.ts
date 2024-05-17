@@ -8,8 +8,6 @@ export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
   const { pathname } = request.nextUrl;
 
-  console.log("여기!!");
-
   // 로그인 페이지 접근 시, 이미 로그인 되어 있다면 메인 페이지로 리다이렉트
   if (pathname === LOGIN_PATH) {
     if (accessToken) {
