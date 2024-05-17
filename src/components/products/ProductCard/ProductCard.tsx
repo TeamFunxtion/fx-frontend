@@ -3,6 +3,7 @@ import styles from "./ProductCard.module.css"
 import { elapsedTime, numberFormatter } from "@/utils/common"
 import { useRouter } from "next/navigation"
 import CardLabel from "./CardLabel";
+import Image from "next/image";
 
 export default function ProductCard({ product }) {
 	const router = useRouter();
@@ -15,7 +16,14 @@ export default function ProductCard({ product }) {
 	return (
 		<li className={styles.productCard} onClick={onClickCard}>
 			<div className={styles.cardThumbnail}>
-				<img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" />
+				<Image
+					src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg"
+					width={200}
+					height={200}
+					layout="responsive"
+					alt={product.productTitle}
+				/>
+				{/* <img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" /> */}
 			</div>
 			<div className={styles.cardBody}>
 				<div>
