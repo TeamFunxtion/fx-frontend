@@ -26,9 +26,9 @@
 .productTitle {
   font-size: 1rem;
   margin: 10px 0;
-  width: 95%;
+  max-width: 200px;
   overflow: hidden;
-  /* white-space: nowrap; */
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
@@ -42,4 +42,8 @@
 .footer h1 {
   font-size: 1.2rem;
   font-weight: 600;
+}
+
+.createDate {
+  color: rgb(151, 151, 151);
 }

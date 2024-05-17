@@ -6,15 +6,14 @@ import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import useWebSocket from 'react-use-websocket';
 import { AiOutlineSafety } from "react-icons/ai";
 import Link from "next/link";
 import { MdOutlinePayment } from "react-icons/md";
 
-export default function User(p) {
+export default function User() {
 
-	const router = useRouter();
+
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chat, setChat] = useState('');

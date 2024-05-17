@@ -6,7 +6,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";;
 import { useSearchParams, useRouter } from "next/navigation";
 import Pagination from '@mui/material/Pagination';
 import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
-
+import Etcsidebar from "@/components/etc/etcsidebar";
 export default function Notice() {
 
 
@@ -69,14 +69,7 @@ export default function Notice() {
 
 	return (
 		<div className={styles.noticeMain}>
-			<aside className={styles.noticeAside}>
-				<h3 className={styles.noticeNotice}>고객센터</h3>
-				<br />
-
-				<li><a href="/">공지사항</a></li>
-				<li><a href="/notice/faq">자주 묻는 질문</a></li>
-				<li><a href="/qna/">1:1문의</a></li>
-			</aside>
+			<Etcsidebar />
 
 			<section className={styles.noticeSection}>
 

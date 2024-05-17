@@ -16,7 +16,13 @@ export default function Chats() {
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chatRoomList, setChatRoomList] = useState([]);
+
 	const getChatRoomList = async () => {
+		if (!userInfoValue.id) {
+			router.push("/auth/login");
+			return false;
+		}
+
 		const res = await api.get('/chats?id=' + userInfoValue.id);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
@@ -29,10 +35,6 @@ export default function Chats() {
 	useEffect(() => {
 		getChatRoomList();
 	}, []);
-	if (chatRoomList != null) {
-		console.log(chatRoomList);
-	}
-
 
 
 	return (
