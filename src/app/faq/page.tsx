@@ -4,6 +4,7 @@ import styles from './page.module.css';
 import api from '@/utils/api';
 import Pagination from '@mui/material/Pagination';
 import { useSearchParams, useRouter } from "next/navigation";
+import { dateFormatterYYYYMMDDHHmm } from '@/utils/common'
 
 // FAQPage 컴포넌트
 export default function FAQPage() {
@@ -23,26 +24,23 @@ export default function FAQPage() {
 		// getList(value);
 	};
 
-
 	const getList = async (pageNo) => {
-
 		const result = await api.get("/faqs", {
 			params: {
 				page: pageNo || 1,
-
 			}
 		});
-	
+
 		setFaqList(result.data.content);
 		setPageInfo({
 			totalPages: result.data.totalPages,
 			totalElements: result.data.totalElements,
 		})
 	}
-	
+
 	useEffect(() => {
 		getList(currentPage);
-	}, [])
+	}, [currentPage])
 
 	const toggleAccordion = (index) => {
 		setOpenIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -55,8 +53,12 @@ export default function FAQPage() {
 		} else {
 			getList(currentPage);
 		}
-
 	}, [searchParams])
+	const handleNewPostClick = () => {
+		// Handle the click event here, such as redirecting to the new post page
+		// For example:
+		router.push('/new-post');
+	}
 
 	return (
 		<div>
@@ -67,6 +69,7 @@ export default function FAQPage() {
 					<li><a href="/">공지사항</a></li>
 					<li><a href="/notice/faq">자주 묻는 질문</a></li>
 					<li><a href="/notice/">1:1문의</a></li>
+					<li><button onClick={handleNewPostClick}>새 글 등록</button></li>
 				</aside>
 				<div className={styles.container}>
 					<section className={styles.noticeSection}>
@@ -81,27 +84,28 @@ export default function FAQPage() {
 									isOpen={openIndex === index}
 									toggleAccordion={toggleAccordion}
 									createdate={faq.createDate}
+									dateFormatterYYYYMMDDHHmm={dateFormatterYYYYMMDDHHmm} // dateFormatterYYYYMMDDHHmm 함수를 props로 전달
 								/>
 							))}
 						</div>
 						{
-					faqList.length == 0 && <div className={styles.noResult}>
-						😝 조회된 결과가 없습니다.
-					</div>
-				}
+							faqList.length == 0 && <div className={styles.noResult}>
+								😝 조회된 결과가 없습니다.
+							</div>
+						}
 
-				{
-					faqList.length > 0 && <div className={styles.paginationBar}>
-						<Pagination
-							count={pageInfo.totalPages}
-							page={currentPage}
-							onChange={handleChange}
-							showFirstButton={true}
-							showLastButton={true}
-							size='large'
-						/>
-					</div>
-				}
+						{
+							faqList.length > 0 && <div className={styles.paginationBar}>
+								<Pagination
+									count={pageInfo.totalPages}
+									page={currentPage}
+									onChange={handleChange}
+									showFirstButton={true}
+									showLastButton={true}
+									size='large'
+								/>
+							</div>
+						}
 					</section>
 				</div>
 			</div>
@@ -110,14 +114,14 @@ export default function FAQPage() {
 }
 
 // AccordionItem 컴포넌트
-function AccordionItem({ index, question, answer, isOpen, toggleAccordion, createdate, updatedate, id }) {
+function AccordionItem({ index, question, answer, isOpen, toggleAccordion, createdate, updatedate, id, dateFormatterYYYYMMDDHHmm }) {
 	return (
 		<div className={styles.noticeDiv} onClick={() => toggleAccordion(index)}>
 			<div className={styles.noticeisOpen}>
 				<div className={styles.noticeQ}>Q</div>
 				<h3 className={styles.noticeContent}>{question}</h3>
 				<div className={styles.noticeContent}>작성자:{id}</div>
-				<div className={styles.noticeSysdate}>{createdate}</div>
+				<div className={styles.noticeSysdate}>{dateFormatterYYYYMMDDHHmm(createdate)}</div>
 				<div className={styles.noticeSysdate}>{updatedate}</div>
 				{isOpen ? '-' : '+'}
 			</div>

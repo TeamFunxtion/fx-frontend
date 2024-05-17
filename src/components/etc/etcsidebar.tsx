@@ -8,7 +8,7 @@ export default function Etcsidebar() {
 			<br />
 
 			<li className={styles.etcAsideLi}><a href="/notice">공지사항</a></li>
-			<li className={styles.etcAsideLi}><a href="/notice/faq">자주 묻는 질문</a></li>
+			<li className={styles.etcAsideLi}><a href="/faq">자주 묻는 질문</a></li>
 			<li className={styles.etcAsideLi}><a href="/qna">1:1문의</a></li>
 		</aside>
 	)
