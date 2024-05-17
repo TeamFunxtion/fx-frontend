@@ -266,7 +266,12 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							<li onClick={() => toggleModal('report')}><BsRobot /></li>
 						</ul>
 					</div>
-					<h3 className={styles.priceTxt}>{productDetail.salesTypeId !== "SA02" ? `${numberFormatter(productDetail.currentPrice)}원` : '?'}
+					<h3 className={styles.priceTxt}>
+						{
+							productDetail.salesTypeId !== "SA02" ?
+								`${numberFormatter(productDetail.currentPrice)}원` :
+								productDetail.currentPrice === productDetail.productPrice ? `${numberFormatter(productDetail.currentPrice)}원` : '🤫 ???'
+						}
 					</h3>
 					{
 						productDetail.salesTypeId !== "SA03" && <div className={styles.infoContainer}>
@@ -304,7 +309,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							</li>
 							<li className={styles.infoCol}>
 								<div className={styles.label}>거래 희망 지역</div>
-								<div className={styles.content}>{productDetail.location || "서울시 강남구"}</div>
+								<div className={styles.content}>{productDetail.location || '전국'}</div>
 							</li>
 						</ul>
 					</div>
