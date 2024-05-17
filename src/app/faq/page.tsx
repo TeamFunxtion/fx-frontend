@@ -35,8 +35,8 @@ export default function FAQPage() {
 		setPageInfo({
 			totalPages: result.data.totalPages,
 			totalElements: result.data.totalElements,
-		})
-	}
+		});
+	};
 
 	useEffect(() => {
 		getList(currentPage);
@@ -55,10 +55,9 @@ export default function FAQPage() {
 		}
 	}, [searchParams])
 	const handleNewPostClick = () => {
-		// Handle the click event here, such as redirecting to the new post page
-		// For example:
-		router.push('/new-post');
-	}
+		// 새글 등록 버튼 클릭 시 NewFAQ 페이지로 이동
+		router.push('/faq/newfaq');
+	};
 
 	return (
 		<div>
@@ -67,10 +66,10 @@ export default function FAQPage() {
 					<h3 className={styles.noticeNotice}>고객센터</h3>
 					<br />
 					<li><a href="/">공지사항</a></li>
-					<li><a href="/notice/faq">자주 묻는 질문</a></li>
+					<li><a href="/faq">자주 묻는 질문</a></li>
 					<li><a href="/notice/">1:1문의</a></li>
-					<li><button onClick={handleNewPostClick}>새 글 등록</button></li>
 				</aside>
+				<button onClick={handleNewPostClick}>새 글 등록</button>
 				<div className={styles.container}>
 					<section className={styles.noticeSection}>
 						<div className={styles.noticeDiv}>
