@@ -160,7 +160,7 @@ export default function ProductsNewForm({ product }) {
 	useEffect(() => {
 		if (!id) {
 			router.push("/auth/login");
-		} else if (id !== product.seller.id) {
+		} else if (!isNew && id !== product.seller.id) {
 			router.push("/");
 		}
 	}, [])
