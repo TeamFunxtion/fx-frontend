@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
 				<h3 className={styles.productTitle}>{product.productTitle}</h3>
 				<div className={styles.footer}>
 					<h1>{numberFormatter(product.currentPrice)}원</h1>
-					<p>{elapsedTime(product.createDate)}</p>
+					<p className={styles.createDate}>{elapsedTime(product.createDate)}</p>
 				</div>
 			</div>
 		</li >
