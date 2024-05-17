@@ -28,4 +28,53 @@
 	place-items: center;
 	grid-row-gap: 20px
 }
+.profiles {
+	display: flex;
+	padding-top: 20px;
+	max-width: 553.78px;
+}
+.followProfile {
+	text-align: center;
+	
+}
+.profileImg {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+  object-fit: cover;
+	padding-bottom: 10px;
+}
+
+.nickName {
+	font-weight: 600;
+	padding-bottom: 5px;
+}
+
+.rating {
+	color: rgb(255, 217, 0);
+	padding-bottom: 5px;
+	font-size: x-large;
+}
+
+.btn {
+	margin-top: 10px;
+	width: 125px;
+	height: 30px;
+	border-radius: 0;
+	border : 1px solid white;
+	font-size: medium;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.following {
+	background-color: var(--primary-color);
+	color: white;
+}
+
+.follower {
+	background-color: white;
+	color: var(--primary-color);
+	border : 1px solid var(--primary-color);
+}
 

@@ -1,23 +1,50 @@
 "use client"
-import FollowCard from "@/components/shop/followCard";
 import styles from "./page.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { userInfoState } from "@/store/atoms";
+import api from "@/utils/api";
+import { useRecoilValue } from "recoil";
+import toast from "react-hot-toast";
+
 export default function Following() {
-	const [followList, setFollowList] = useState([{
-		image: "https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg",
-		nickName: "연우사랑단건위",
-		ratings: "★★★★☆",
-		products: "상품0",
-		follows: "팔로우0",
-		isFollow: true
-	}, {
-		image: "https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_1280.jpg",
-		nickName: "연우시러단건위",
-		ratings: "★★★★★",
-		products: "상품20",
-		follows: "팔로우30",
-		isFollow: false
-	}]);
+	const userInfoValue = useRecoilValue(userInfoState);
+	const userId = userInfoValue.id;
+	const [followList, setFollowList] = useState([]);
+
+	const getFollowingList = async () => {
+
+		const res = await api.get(`/follow/following?userId=${userId}`)
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			setFollowList(data);
+			toast.success(msg || `팔로잉 목록 조회 성공!`);
+		}
+	}
+
+	const changeFollowState = async (toId) => {
+		const res = await api.post(`/follow/follower`, { toId: toId, fromId: userId })
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			toast.success(msg || '팔로우 상태 변경 성공!');
+		}
+	}
+	const followState = (i) => {
+		let newList = [...followList];
+		newList[i].following = !newList[i].following;
+		if (newList[i].following == true) {
+			newList[i].followerCnt = newList[i].followerCnt + 1;
+		} else {
+			newList[i].followerCnt = newList[i].followerCnt - 1;
+		}
+
+		setFollowList(newList);
+	}
+
+	useEffect(() => {
+		getFollowingList();
+	}, []);
+
+
 	return (
 		<>
 			<h3 className={styles.title}>팔로잉</h3>
@@ -30,9 +57,22 @@ export default function Following() {
 				</div> :
 				<div className={styles.grid}>
 					{
-						followList.map(function (item) {
+						followList.map(function (item, index) {
 							return (
-								<FollowCard item={item} followList={followList} setFollowList={setFollowList} />
+								<div key={index} className={styles.profiles}>
+									<div className={styles.followProfile}>
+										<img className={styles.profileImg} src={item.toMember.profileImageUrl} alt={item.toMember.nickname} />
+										<div className={styles.nickName}>{item.toMember.nickname}</div>
+										<div className={styles.rating}>★★★★★</div>
+										<div>상품 {item.prCnt} | 팔로우 {item.followerCnt}</div>
+										<button
+											className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+											onClick={() => { followState(index); changeFollowState(item.toMember.id); }}
+										>
+											{item.following == true ? '팔로잉' : '팔로우'}
+										</button>
+									</div>
+								</div>
 							)
 						})
 					}
