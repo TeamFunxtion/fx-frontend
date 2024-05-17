@@ -94,6 +94,7 @@ export default function ProductsNewForm({ product }) {
 
 		const requestbody = {
 			...values,
+			productId,
 			storeId: id,
 			categoryId,
 			productPrice: values.productPrice.replace(/[^0-9]+/g, ""),
@@ -101,7 +102,6 @@ export default function ProductsNewForm({ product }) {
 
 		if (isNew) { // 생성 
 			const res = await api.post('/products', requestbody);
-			// console.log(res);
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || '상품 등록 성공!');
@@ -111,8 +111,7 @@ export default function ProductsNewForm({ product }) {
 			}
 
 		} else { // 수정
-			const res = await api.patch('/products/1', requestbody);
-			// console.log(res);
+			const res = await api.patch('/products', requestbody);
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || '상품 수정 성공!');
@@ -161,6 +160,8 @@ export default function ProductsNewForm({ product }) {
 	useEffect(() => {
 		if (!id) {
 			router.push("/auth/login");
+		} else if (id !== product.seller.id) {
+			router.push("/");
 		}
 	}, [])
 
