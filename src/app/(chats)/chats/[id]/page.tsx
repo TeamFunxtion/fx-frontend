@@ -15,7 +15,6 @@ export default function User() {
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
-
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
 	const getChatRoomInfo = async () => {

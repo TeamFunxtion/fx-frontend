@@ -16,7 +16,6 @@ export default function QnaInquiry() {
 
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
-	const userEmail = userInfoValue.email;
 
 	const createQna = async () => {
 		const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });

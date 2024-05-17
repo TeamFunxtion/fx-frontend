@@ -32,7 +32,6 @@ export default function Notice() {
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
 		router.push(`/notice?keyword=${searchParams.get("keyword") || ''}&page=${value}`)
-		// getList(value);
 	};
 	const getList = async (pageNo) => {
 		const result = await api.get("/notices", {
@@ -41,6 +40,8 @@ export default function Notice() {
 			}
 		});
 		setList(result.data.content);
+
+
 
 		setPageInfo({
 			totalPages: result.data.totalPages,
@@ -65,17 +66,21 @@ export default function Notice() {
 	}, [searchParams])
 
 	const accordion = (id: string) => {
-		console.log(id);
 		if (idcode === id) {
 			setIdcode("")
-			console.log(idcode);
 		} else {
 			setIdcode(id)
-			console.log(idcode);
 		}
 
 	};
 
+	const newMove = () => {
+		router.push(`/notice/new`);
+	}
+
+	const updateMove = (noticeId) => {
+		router.push(`/notice/${noticeId}/edit`);
+	}
 
 	return (
 		<div className={styles.noticeMain}>
@@ -85,7 +90,9 @@ export default function Notice() {
 
 				{
 					userRoleId === 2 &&
-					<div><a href="/notice/noticeinsert">글등록</a></div>
+					<div className={styles.noticeMove}>
+						<button onClick={() => newMove()} className={styles.noticeMoveButton}>공지등록</button>
+					</div>
 				}
 
 				{
@@ -95,7 +102,7 @@ export default function Notice() {
 							<div className="container">
 								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
 									<div className={styles.noticeQ}>Q</div>
-									<div className={styles.noticeTitle} >{notice.title}</div>
+									<div className={styles.noticeTitle} >{notice.noticeTitle}</div>
 									<div className={styles.noticeSysdate}>{dateFormatterYYYYMMDDHHmm(notice.createDate)}</div>
 									<div className={styles.noticeIc}>
 										{notice.id === idcode ?
@@ -103,7 +110,15 @@ export default function Notice() {
 										}
 									</div>
 								</div>
-								{notice.id === idcode && <div className={styles.noticeContent}><p className={styles.noticeContentDetail}>{notice.content}</p></div>}
+								{notice.id === idcode && <div className={styles.noticeContent}><p className={styles.noticeContentDetail}>{notice.noticeContent}</p>
+									{userRoleId === 2 &&
+										<div>
+											<button onClick={() => updateMove(notice.id)}>수정</button>
+											<button>삭제</button>
+										</div>
+									}
+								</div>
+								}
 							</div>
 						);
 					})}
@@ -126,10 +141,11 @@ export default function Notice() {
 						}
 					</ul>
 				</div>
-			</section>
+
+			</section >
 
 
-		</div>
+		</div >
 
 
 	);
