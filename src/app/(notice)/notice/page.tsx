@@ -3,10 +3,13 @@ import styles from "./page.module.css";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";;
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/atoms";
 import { useSearchParams, useRouter } from "next/navigation";
 import Pagination from '@mui/material/Pagination';
 import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
 import Etcsidebar from "@/components/etc/etcsidebar";
+
 export default function Notice() {
 
 
@@ -18,6 +21,13 @@ export default function Notice() {
 		totalPages: 1,
 		totalElements: 1,
 	});
+
+	const userInfoValue = useRecoilValue(userInfoState);
+
+
+	const userRoleId = userInfoValue.roleId;
+
+
 	const router = useRouter();
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
@@ -73,7 +83,10 @@ export default function Notice() {
 
 			<section className={styles.noticeSection}>
 
-
+				{
+					userRoleId === 2 &&
+					<div><a href="/notice/noticeinsert">글등록</a></div>
+				}
 
 				{
 					list.length > 0 && list.map(function (notice) {
