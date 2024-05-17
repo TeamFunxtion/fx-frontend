@@ -5,6 +5,7 @@ import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
 import toast from "react-hot-toast";
+import FollowCard from "@/components/shop/followCard";
 
 export default function Follower() {
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -17,7 +18,7 @@ export default function Follower() {
 		if (resultCode == '200') {
 
 			setFollowList(data);
-			toast.success(msg || `팔로워 목록 조회 성공!`);
+
 
 		}
 	}
@@ -59,20 +60,7 @@ export default function Follower() {
 					{
 						followList.map(function (item, index) {
 							return (
-								<div key={index} className={styles.profiles}>
-									<div className={styles.followProfile}>
-										<img className={styles.profileImg} src={item.fromMember.profileImageUrl} alt={item.fromMember.nickname} />
-										<div className={styles.nickName}>{item.fromMember.nickname}</div>
-										<div className={styles.rating}>★★★★★</div>
-										<div>상품 {item.prCnt} | 팔로우 {item.followerCnt}</div>
-										<button
-											className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
-											onClick={() => { followState(index); changeFollowState(item.fromMember.id); }}
-										>
-											{item.following == true ? '팔로잉' : '팔로우'}
-										</button>
-									</div>
-								</div>
+								<FollowCard item={item} index={index} followState={followState} changeFollowState={changeFollowState} />
 							)
 						})
 					}
