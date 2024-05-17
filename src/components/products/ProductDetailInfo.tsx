@@ -69,6 +69,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const userInfo = useRecoilValue(userInfoState);
 	const LOGIN_URL = "/auth/login";
 	const [showAnimation, setShowAnimation] = useState(false);
+	const isSeller = userInfo.id === productDetail.seller.id; // 판매자 여부
 
 	const toggleModal = (name: string) => {
 		if ((name === 'bid' || name === 'report') && !userInfo.id) {
@@ -257,9 +258,9 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							}
 						</ul>
 						<ul className={styles.etcIcon}>
-							{userInfo.id && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
+							{(!isSeller && userInfo.id) && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
 							<li onClick={() => copyClipboard(location.href)}><BsShare /></li>
-							<li onClick={() => toggleModal('report')}><BsRobot /></li>
+							{(!isSeller && userInfo.id) && <li onClick={() => toggleModal('report')}><BsRobot /></li>}
 						</ul>
 					</div>
 					<h3 className={styles.priceTxt}>
@@ -309,11 +310,14 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							</li>
 						</ul>
 					</div>
-					<div className={styles.btnContainer}>
-						<button className={styles.btnChat} onClick={clickChatting}>💬1:1채팅</button>
-						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={() => toggleModal('bid')} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
-						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
-					</div>
+					{
+						!isSeller &&
+						<div className={styles.btnContainer}>
+							<button className={styles.btnChat} onClick={clickChatting} disabled={isSeller}>💬1:1채팅</button>
+							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={() => toggleModal('bid')} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
+						</div>
+					}
 				</div>
 			</div>
 			<div className={styles.sectionBottom}>
@@ -334,7 +338,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							{seller.intro}
 						</div>
 					</Link>
-					<button className={styles.followBtn}>+ 팔로우</button>
+					{(!isSeller && userInfo.id) && <button className={styles.followBtn}>+ 팔로우</button>}
 				</div>
 			</div>
 		</section >
