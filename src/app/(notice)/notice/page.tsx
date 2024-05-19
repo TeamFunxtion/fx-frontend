@@ -9,7 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Pagination from '@mui/material/Pagination';
 import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
 import Etcsidebar from "@/components/etc/etcsidebar";
-
+import toast from "react-hot-toast";
 export default function Notice() {
 
 
@@ -82,6 +82,16 @@ export default function Notice() {
 		router.push(`/notice/${noticeId}/edit`);
 	}
 
+
+	const deleteMove = async (id) => {
+		const res = await api.delete(`/notices/${id}`);
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			toast.success(msg || ` `);
+			getList(currentPage);
+		}
+	}
+
 	return (
 		<div className={styles.noticeMain}>
 			<Etcsidebar />
@@ -114,7 +124,7 @@ export default function Notice() {
 									{userRoleId === 2 &&
 										<div>
 											<button onClick={() => updateMove(notice.id)}>수정</button>
-											<button>삭제</button>
+											<button onClick={() => deleteMove(notice.id)}>삭제</button>
 										</div>
 									}
 								</div>
