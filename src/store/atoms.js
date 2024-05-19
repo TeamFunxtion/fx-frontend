@@ -30,6 +30,7 @@ export const userInfoState = atom({
   default: {
     id: "",
     email: "",
+    roleId: 0,
     point: 0,
   },
   effects_UNSTABLE: [persistAtomEffect],

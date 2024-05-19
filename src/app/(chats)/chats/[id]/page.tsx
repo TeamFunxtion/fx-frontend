@@ -20,8 +20,7 @@ export default function User() {
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
 	const [safePaymentInfo, setSafePaymentInfo] = useState(null);
-
-
+  
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
 	const getChatRoomInfo = async () => {

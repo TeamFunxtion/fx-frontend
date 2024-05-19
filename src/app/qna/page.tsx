@@ -1,7 +1,6 @@
 "use client"
 import styles from "./page.module.css";
 import React, { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import Etcsidebar from "@/components/etc/etcsidebar";
 import QnaInquiry from "./qnainquiry/qnainquiry"
 import QnaInquiryHistory from "./qnainquiry/qnainquiryhistory";
