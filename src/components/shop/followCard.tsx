@@ -1,32 +1,75 @@
-import styles from './followCart.module.css';
-import React from 'react';
+// import styles from './followCard.module.css';
+// import React from 'react';
 
-export default function FollowCard({ item, followList, setFollowList }) {
-	const followBtnToggle = () => {
-		const updatedFollowList = followList.map(followItem => {
-			if (followItem.nickName === item.nickName) {
-				return { ...followItem, isFollow: !item.isFollow };
-			}
-			return followItem;
-		});
-		setFollowList(updatedFollowList);
-	};
+// export default function FollowCard({ item, index, followState, changeFollowState }) {
 
+// 	return (
+// 		<>
+// 			<div key={index} className={styles.profiles}>
+// 				<div className={styles.followProfile}>
+// 					{item.fromMember != null ?
+// 						<>
+// 							<img className={styles.profileImg} src={item.fromMember.profileImageUrl} alt={item.fromMember.nickname} />
+// 							<div className={styles.nickName}>{item.fromMember.nickname}</div> </> :
+// 						<>
+// 							<img className={styles.profileImg} src={item.toMember.profileImageUrl} alt={item.toMember.nickname} />
+// 							<div className={styles.nickName}>{item.toMember.nickname}</div>
+// 						</>}
+// 					<div className={styles.rating}>★★★★★</div>
+// 					<div>상품 {item.prCnt} | 팔로우 {item.followerCnt}</div>
+// 					{item.fromMember != null ?
+// 						<button
+// 							className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+// 							onClick={() => { followState(index); changeFollowState(item.fromMember.id); }}
+// 						>
+// 							{item.following == true ? '팔로잉' : '팔로우'}
+// 						</button> :
+// 						<button
+// 							className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+// 							onClick={() => { followState(index); changeFollowState(item.toMember.id); }}
+// 						>
+// 							{item.following == true ? '팔로잉' : '팔로우'}
+// 						</button>}
+// 				</div>
+// 			</div>
+// 		</>
+// 	)
+// }
+import styles from './followCard.module.css';
+import React, { forwardRef } from 'react';
+
+const FollowCard = forwardRef(({ item, index, followState, changeFollowState }) => {
 	return (
-		<>
-			<div className={styles.profiles}>
-				<div className={styles.followProfile}>
-					<img className={styles.profileImg} src={item.image} alt={item.nickName} />
-					<div className={styles.nickName}>{item.nickName}</div>
-					<div className={styles.rating}>{item.ratings}</div>
-					<div>{item.products} | {item.follows}</div>
+		<div key={index} className={styles.profiles}>
+			<div className={styles.followProfile}>
+				{item.fromMember != null ?
+					<>
+						<img className={styles.profileImg} src={item.fromMember.profileImageUrl} alt={item.fromMember.nickname} />
+						<div className={styles.nickName}>{item.fromMember.nickname}</div>
+					</> :
+					<>
+						<img className={styles.profileImg} src={item.toMember.profileImageUrl} alt={item.toMember.nickname} />
+						<div className={styles.nickName}>{item.toMember.nickname}</div>
+					</>
+				}
+				<div className={styles.rating}>★★★★★</div>
+				<div>상품 {item.prCnt} | 팔로우 {item.followerCnt}</div>
+				{item.fromMember != null ?
 					<button
-						className={`${styles.btn} ${item.isFollow ? styles.following : styles.follower}`}
-						onClick={followBtnToggle}>
-						{item.isFollow ? '팔로잉' : '팔로우'}
-					</button>
-				</div>
+						className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+						onClick={() => { followState(index); changeFollowState(item.fromMember.id); }}
+					>
+						{item.following == true ? '팔로잉' : '팔로우'}
+					</button> :
+					<button
+						className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+						onClick={() => { followState(index); changeFollowState(item.toMember.id); }}
+					>
+						{item.following == true ? '팔로잉' : '팔로우'}
+					</button>}
 			</div>
-		</>
-	);
-}
+		</div>
+	)
+});
+
+export default FollowCard;

@@ -16,7 +16,7 @@ export default function ShopMenubar() {
 
 			<ul className={styles.listContainer}>
 				<h3 className={styles.listTitle}>내 정보</h3>
-				<li><Link href="/shop/update">회원정보 수정</Link></li>
+				<li><Link href="/shop/profile">회원정보 수정</Link></li>
 				<li><Link href="/shop">관심 상품</Link></li>
 				<li><Link href="/shop/following">팔로잉</Link></li>
 				<li><Link href="/shop/follower">팔로워</Link></li>
@@ -24,10 +24,8 @@ export default function ShopMenubar() {
 			</ul>
 
 			<ul className={styles.listContainer}>
-				<h3 className={styles.listTitle}>포인트 충전</h3>
-				<li><Link href="/shop">충전하기</Link></li>
-				<li><Link href="/shop">충전 내역</Link></li>
-				<li><Link href="/shop">사용 내역</Link></li>
+				<h3 className={styles.listTitle}>결제 정보</h3>
+				<li><Link href="/shop/payments">결제 내역</Link></li>
 			</ul>
 		</div>
 	)

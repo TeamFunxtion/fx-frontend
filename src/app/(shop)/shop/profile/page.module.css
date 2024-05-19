@@ -1,0 +1,50 @@
+.updateButton {
+  color: white;
+  height: 50px;
+  background-color: var(--primary-color) !important;
+  width: 100px;
+}
+.buttondiv {
+  display: flex;
+  justify-content: center;
+  padding: 50px 50px 50px 50px;
+}
+.outButton {
+  background-color: orange;
+  color: white;
+  width: 100px;
+}
+
+.input {
+  align-items: center;
+  margin: 7px;
+  justify-content: flex-start;
+  width: 500px;
+  border: none;
+  border-bottom: solid 1px #ccc;
+  padding: 5px;
+}
+.inputTextarea {
+  flex-direction: column;
+  align-items: center;
+  margin: 7px;
+  justify-content: center;
+  width: 50%;
+  vertical-align: top;
+  width: 500px;
+  height: 200px;
+}
+
+.form {
+  text-align: left;
+
+  vertical-align: top;
+  margin-left: 15%;
+  border-collapse: separate;
+  border-spacing: 10px 10px;
+}
+.image {
+  width: 100px;
+  height: 100px;
+  padding-left: 450px;
+}

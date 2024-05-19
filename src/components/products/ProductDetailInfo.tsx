@@ -16,6 +16,10 @@ import { userInfoState } from "@/store/atoms";
 import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 import BidHistoryModal from "../modal/BidHistoryModal";
 import { API_URL } from "@/app/constants";
+import ProductReportModal from "../modal/ProductReportModal";
+import AuctionWinnerModal from "../modal/AuctionWinnerModal";
+import Confetti from 'react-confetti'
+
 
 export async function getProductDetail(id: string, userId: string) {
 	// await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -53,34 +57,51 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		}
 	});
 	const { seller, bids } = productDetail;
-	const [showModalBid, setShowModalBid] = useState(false)
-	const [showModalPoint, setShowModalPoint] = useState(false)
-	const [showModalHistory, setShowModalHistory] = useState(false)
+	const [modal, setModal] = useState({
+		bid: false,
+		point: false,
+		history: false,
+		report: false,
+		winner: false,
+	});
 
 	const router = useRouter();
 	const userInfo = useRecoilValue(userInfoState);
-
 	const LOGIN_URL = "/auth/login";
+	const [showAnimation, setShowAnimation] = useState(false);
+	const isSeller = userInfo.id === productDetail.seller.id; // 판매자 여부
 
-	const clickHistoryModal = () => {
-		setShowModalHistory(!showModalHistory);
-	}
-
-	const clickPointModal = () => {
-		setShowModalPoint(!showModalPoint);
-	}
-
-	const clickBidModal = () => {
-		if (!userInfo.id) {
+	const toggleModal = (name: string) => {
+		if ((name === 'bid' || name === 'report') && !userInfo.id) {
 			router.push(LOGIN_URL);
-		} else {
-			setShowModalBid(!showModalBid);
+		}
+
+		setModal({
+			...modal,
+			[name]: !modal[name],
+		});
+		// console.log(modal)
+	}
+
+
+	// 채팅방 추가 or 이미 존재할 경우 해당 상품으로 변경
+	const updateChatRoom = async () => {
+		const res = await api.post(`/chats`, { customerId: userInfo.id, storeId: productDetail.seller.id, productId: productDetail.id });
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			// console.log(data);
+			toast.success(msg || `채팅방 추가 | 변경 성공`);
+			if (data) {
+				router.push("/chats/" + data);
+			}
 		}
 	}
 
 	const clickChatting = () => {
 		if (!userInfo.id) {
 			router.push(LOGIN_URL);
+		} else {
+			updateChatRoom();
 		}
 	}
 
@@ -99,7 +120,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 	const init = async () => {
 		const response = await getProductDetail(id, userInfo.id);
-		console.log(response);
+		// console.log(response);
 		setProductDetail(response.data);
 	}
 
@@ -130,8 +151,12 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 		const hasMoney = await checkUserHasMoney(bidPrice);
 		if (!hasMoney) {
-			setShowModalBid(false);
-			setShowModalPoint(true);
+			setModal({
+				...modal,
+				bid: false,
+				point: true,
+			});
+
 			return;
 		} else {
 			const response = await api.post(`/products/bid`, {
@@ -142,12 +167,26 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			const { data: { resultCode, msg, data } } = response;
 			if (resultCode === "200") {
 				toast.success(msg);
-				setShowModalBid(false);
-				router.refresh();
+				init();
+
+				if (data.winnerYn) { // 낙찰자로 정해졌으면
+					callWinnerAnimation()
+					setModal({ ...modal, bid: false, winner: true });
+				} else {
+					toggleModal('bid');
+				}
+
 			} else {
 				toast.error(msg);
 			}
 		}
+	}
+
+	const callWinnerAnimation = () => {
+		setShowAnimation(true);
+		setTimeout(() => {
+			setShowAnimation(false);
+		}, 10000)
 	}
 
 	const onClickLike = async () => {
@@ -155,18 +194,39 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			userId: userInfo.id,
 			productId: id,
 		});
-		console.log(result);
+		// console.log(result);
 		if (result.data.resultCode === "200") {
 			init();
 		}
 	}
 
+	const handleReport = async (code: string) => {
+		if (!code) {
+			return;
+		}
+
+		const result = await api.post("/products/reports", {
+			userId: userInfo.id,
+			productId: productDetail.id,
+			reportTypeCode: code,
+		});
+		const { data: { resultCode, msg } } = result;
+		if (resultCode === '200') {
+			toast.success(msg || '신고 접수 성공!');
+		} else {
+			toast.error(msg || '신고 접수 실패!');
+		}
+	}
+
 	return (
 		<section className={styles.section} >
-			{showModalHistory && <BidHistoryModal clickModal={clickHistoryModal} bidList={[...bids]} />}
-			{showModalPoint && <PointNotEnoughModal clickModal={clickPointModal} />}
-			{showModalBid && <BidModal
-				clickModal={clickBidModal}
+			{showAnimation && <Confetti />}
+			{modal.winner && <AuctionWinnerModal clickModal={() => toggleModal('winner')} />}
+			{modal.report && <ProductReportModal clickModal={() => toggleModal('report')} ok={handleReport} />}
+			{modal.history && <BidHistoryModal clickModal={() => toggleModal('history')} bidList={[...bids]} />}
+			{modal.point && <PointNotEnoughModal clickModal={() => toggleModal('point')} />}
+			{modal.bid && <BidModal
+				clickModal={() => toggleModal('bid')}
 				handleOk={createNewBid}
 				productDetail={productDetail}
 			/>}
@@ -198,12 +258,17 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							}
 						</ul>
 						<ul className={styles.etcIcon}>
-							{userInfo.id && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
+							{(!isSeller && userInfo.id) && <li onClick={onClickLike}>{productDetail.favorite ? <BsHeartFill color="red" /> : <BsHeart />}</li>}
 							<li onClick={() => copyClipboard(location.href)}><BsShare /></li>
-							<li><BsRobot /></li>
+							{(!isSeller && userInfo.id) && <li onClick={() => toggleModal('report')}><BsRobot /></li>}
 						</ul>
 					</div>
-					<h3 className={styles.priceTxt}>{productDetail.salesTypeId !== "SA02" ? `${numberFormatter(productDetail.currentPrice)}원` : '?'}
+					<h3 className={styles.priceTxt}>
+						{
+							productDetail.salesTypeId !== "SA02" ?
+								`${numberFormatter(productDetail.currentPrice)}원` :
+								productDetail.currentPrice === productDetail.productPrice ? `${numberFormatter(productDetail.currentPrice)}원` : '🤫 ???'
+						}
 					</h3>
 					{
 						productDetail.salesTypeId !== "SA03" && <div className={styles.infoContainer}>
@@ -212,7 +277,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 									<div className={styles.label}>입찰</div>
 									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;
 										{
-											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={clickHistoryModal}>입찰내역</span>
+											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={() => toggleModal('history')}>입찰내역</span>
 										}
 									</div>
 								</li>
@@ -241,15 +306,18 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							</li>
 							<li className={styles.infoCol}>
 								<div className={styles.label}>거래 희망 지역</div>
-								<div className={styles.content}>{productDetail.location || "서울시 강남구"}</div>
+								<div className={styles.content}>{productDetail.location || '전국'}</div>
 							</li>
 						</ul>
 					</div>
-					<div className={styles.btnContainer}>
-						<button className={styles.btnChat} onClick={clickChatting}>💬1:1채팅</button>
-						{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBidModal} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
-						{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
-					</div>
+					{
+						!isSeller &&
+						<div className={styles.btnContainer}>
+							<button className={styles.btnChat} onClick={clickChatting} disabled={isSeller}>💬1:1채팅</button>
+							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={() => toggleModal('bid')} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
+						</div>
+					}
 				</div>
 			</div>
 			<div className={styles.sectionBottom}>
@@ -270,10 +338,10 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							{seller.intro}
 						</div>
 					</Link>
-					<button className={styles.followBtn}>+ 팔로우</button>
+					{(!isSeller && userInfo.id) && <button className={styles.followBtn}>+ 팔로우</button>}
 				</div>
 			</div>
-		</section>
+		</section >
 	)
 
 }

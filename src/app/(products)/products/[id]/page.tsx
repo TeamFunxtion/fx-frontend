@@ -7,9 +7,9 @@ interface IParams {
 }
 
 export async function generateMetadata({ params: { id } }: IParams) {
-	const { data } = await getProductDetail(id);
+	const result = await getProductDetail(id);
 	return {
-		title: data.productTitle
+		title: result.data.productTitle
 	}
 }
 

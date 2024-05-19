@@ -1,49 +1,51 @@
 .chatRoomHeader {
-	display: flex;
-	border-bottom: 1px solid lightgray;
-	height: 61px;
-	padding-left: 20px;
-	justify-content: space-between;
-	align-items: center;
+  display: flex;
+  border-bottom: 1px solid lightgray;
+  height: 61px;
+  padding-left: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .chatProfile {
-	display: flex;
-	padding-bottom: 10px;
-	
+  display: flex;
+  padding-bottom: 10px;
 }
 .chatName {
-	padding-top: 9px;
-	padding-left: 18px;
-	font-weight: bold;
-	font-size: larger;
-	
+  padding-top: 9px;
+  padding-left: 18px;
+  font-weight: 600;
+  font-size: 1.3rem;
+  max-width: 350px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .chatProduct {
-	padding-right: 10px;
-	padding-bottom: 10px;
+  width: 250px;
+  padding-right: 10px;
+  padding-bottom: 10px;
 }
 
 .connectProduct {
-	padding-bottom: 3px;
-	font-size: medium;
+  padding-bottom: 3px;
+  font-size: 0.8rem;
 }
 
 .chatProductInfo {
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .price {
-	font-weight: bold;
+  font-weight: bold;
+  font-size: 1rem;
 }
 
 .chatProductTitle {
-	text-align: center;
-	color: gray;
-	font-size: medium;
-	overflow: hidden;
+  color: gray;
+  font-size: 0.8rem;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
@@ -60,113 +62,197 @@
 	
 } */
 .chatView {
-	padding-top: 30px;
-	padding-left: 30px;
-	padding-right: 30px;
-	height: 600px;
-	border-bottom: 1px solid lightgray;
-	overflow: auto;
-	/* flex-direction: column; */ /* 해당 줄 주석 처리 또는 삭제 */
-	display: flex; /* 세로로 배치되도록 변경 */
-	flex-direction:column-reverse;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  height: 600px;
+  border-bottom: 1px solid lightgray;
+  overflow: auto;
+  /* flex-direction: column; */ /* 해당 줄 주석 처리 또는 삭제 */
+  display: flex; /* 세로로 배치되도록 변경 */
+  flex-direction: column-reverse;
+  font-size: 0.9rem;
 }
 
-
-
-
 .opponent {
-	display: flex;
-	align-items:end;
-	margin-bottom: 10px;
-	justify-content: flex-start
+  display: flex;
+  align-items: end;
+  margin-bottom: 10px;
+  justify-content: flex-start;
 }
 
 .opponentMsg {
-	border: 1px solid lightgray;
-	border-radius: 30px;
-	padding : 15px 15px 15px 15px
+  border: 1px solid lightgray;
+  border-radius: 30px;
+  padding: 10px;
+  max-width: 500px;
+  word-break: break-all;
 }
 
 .opponentTime {
-	font-size: smaller;
-	color: lightgray;
-	padding-left: 10px;
+  font-size: smaller;
+  color: lightgray;
+  padding-left: 10px;
 }
 
 .me {
-	display: flex;
-	align-items:end;
-	margin-bottom: 10px;
-	justify-content: flex-end;
+  display: flex;
+  align-items: end;
+  margin-bottom: 10px;
+  justify-content: flex-end;
 }
 
 .readMsg {
-	text-align: right;
-	padding-right: 10px;
-	font-size: medium;
-	color: var(--primary-color);
-	padding-bottom: 3px;
+  text-align: right;
+  padding-right: 10px;
+  font-size: medium;
+  color: var(--primary-color);
+  padding-bottom: 3px;
 }
 
 .meMsg {
-	border: 1px solid lightgray;
-	color: white;
-	background-color: var(--primary-color);
-	border-radius: 30px;
-	padding : 15px 15px 15px 15px;
-	
+  border: 1px solid lightgray;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 30px;
+  padding: 15px 15px 15px 15px;
+  max-width: 500px;
+  word-break: break-all;
 }
 
 .meTime {
-	font-size: smaller;
-	color: lightgray;
-	padding-right: 10px;
+  font-size: smaller;
+  color: lightgray;
+  padding-right: 10px;
 }
 
 .chatInput {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 69px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 69px;
 }
 
 .inputMsg {
-	width: 80%;
-	border-radius: 30px;
-	height: 50%;
-	background-color: rgb(245, 245, 245);
-	border: 0;
-	padding-left: 10px;
-	overflow: auto;
+  width: 80%;
+  border-radius: 30px;
+  height: 50%;
+  background-color: rgb(245, 245, 245);
+  border: 0;
+  padding: 10px 20px;
+  overflow: auto;
+  outline: none;
+  border: none;
 }
 
 .inputMsg::placeholder {
-	color: rgb(200, 200, 200);
-}
-
-.inputMsg:focus {
-	outline: 1px solid lightgray;
+  color: rgb(200, 200, 200);
 }
 
 .profileImg {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .productImg {
-	width: 35px;
-	height: 35px;
-	border-radius: 50%;
-	border: 1px solid lightgray;
-	
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .chatRoom {
-	padding-top: 20px;
-	max-height: 100%;
-	width: 65%;
-	overflow: auto;
-	
+  padding-top: 20px;
+  max-height: 100%;
+  width: 65%;
+  overflow: auto;
+}
+
+.safeTradeDiv {
+  display: flex;
+  justify-content: end;
+  width: 590px;
+}
+
+.safeTradeBtn {
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--primary-color);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.safeIcon {
+  padding-top: 4px;
+  color: rgb(47, 255, 5);
+  font-size: larger;
+}
+.safeTradeSeller {
+  display: flex;
+}
+.safeTradeBtnAccept {
+  border: 2px solid var(--primary-color);
+  border-radius: 30px;
+  height: 50px;
+  font-size: 17px;
+  font-weight: 900;
+  color: white;
+  background-color: var(--primary-color);
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-right: 5px;
+}
+.safeTradeBtnRefuse {
+  border: 2px solid red;
+  border-radius: 30px;
+  height: 50px;
+  font-size: 17px;
+  font-weight: 900;
+  color: white;
+  background-color: red;
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-right: 5px;
+}
+.pay {
+  display: flex;
+  justify-content: space-between;
+}
+.safeTrading {
+  color: var(--primary-color);
+  margin-right: 110px;
+  font-size: 30px;
+  font-weight: bold;
+}
+.safeTrading2 {
+  color: var(--primary-color);
+  margin-right: 160px;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 35px;
+}
+.payBtn {
+  border: 2px solid black;
+  border-radius: 30px;
+  height: 50px;
+  font-size: 17px;
+  font-weight: 600;
+  color: rgb(158, 255, 47);
+  background-color: black;
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-right: 20px;
+  width: 80px;
 }

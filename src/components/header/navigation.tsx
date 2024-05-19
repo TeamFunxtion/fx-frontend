@@ -9,6 +9,9 @@ import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import LogoutModal from "../modal/LogoutModal";
+import { numberFormatter } from "@/utils/common";
+import useModal from "@/hooks/useModal";
+import PaymentModal from "../modal/PaymentModal";
 
 export default function Navigation() {
 	const user = useRecoilValue(userInfoState);
@@ -17,6 +20,7 @@ export default function Navigation() {
 	const [showCategoryList, setShowCategoryList] = useState(false);
 	const timer: any = useRef(null);
 	const [showModalLogout, setShowModalLogout] = useState(false);
+	const { modal, showModal, toggleModal } = useModal();
 
 	const setSsrCompleted = useSsrComplectedState();
 	useEffect(setSsrCompleted, [setSsrCompleted]);
@@ -51,6 +55,7 @@ export default function Navigation() {
 
 	return (
 		<nav className={styles.navigation}>
+			{modal.payment && <PaymentModal clickModal={() => toggleModal('payment')} />}
 			{showModalLogout && <LogoutModal clickModal={onClickLogout} logout={logout} />}
 			<div className={styles.left}>
 				<div className={styles.categoryIcon} onMouseEnter={() => handleShowCategory(true, false)} onMouseLeave={() => handleShowCategory(false, true)}>
@@ -80,6 +85,10 @@ export default function Navigation() {
 							<li className={styles.userInfoContainer}>
 								<img className={styles.profileImg} src={user.profileImageUrl} alt="" />
 								{user.nickname || user.email}
+							</li>
+							<li className={styles.userInfoContainer}>
+								🅿️ <span style={{ fontSize: '0.9rem' }}>{numberFormatter(user.point)}</span>
+								<span className={styles.paymentBtn} onClick={() => showModal('payment')} >충전</span>
 							</li>
 							<li className={styles.logoutContainer} onClick={onClickLogout}><Link href="">로그아웃</Link></li>
 						</>

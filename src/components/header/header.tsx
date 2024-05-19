@@ -1,11 +1,13 @@
 "use client"
 import Navigation from "./navigation";
 import styles from "./header.module.css";
-import { BsSearch, BsBell, BsBagPlus, BsChatDots, BsPerson } from "react-icons/bs";
+import { BsSearch, BsBell, BsBagPlus, BsChatDots, BsPerson, BsCurrencyDollar } from "react-icons/bs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import HeaderTop from "./header-top";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/atoms";
 
 export default function Header() {
 	return (
