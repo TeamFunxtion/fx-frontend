@@ -1,6 +1,5 @@
-import ProductCard from "@/components/products/ProductCard/ProductCard";
 import { API_URL } from "./constants";
-import styles from "./page.module.css"
+import Home from "@/components/Home";
 
 export async function getAllProducts() {
   const response = await fetch(`${API_URL}/products`, { cache: 'no-store' });
@@ -9,19 +8,8 @@ export async function getAllProducts() {
 
 export default async function AppPage() {
   const result = await getAllProducts();
-  console.log(result);
   const products = result.content;
-
   return (
-    <div>
-      <div className={styles.mainBanner}></div>
-      <ul className={styles.productList}>
-        {
-          products && products.map((product, index) => (
-            <ProductCard product={product} />
-          ))
-        }
-      </ul>
-    </div>
+    <Home products={products} />
   );
 }

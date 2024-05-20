@@ -3,15 +3,18 @@ import styles from "./layout.module.css";
 import ShopInfo from "@/components/shop/shop-info";
 
 export default function ShopLayout({
-	children
+	children,
+	params
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	// console.log(params);
+
 	return (
 		<div className={styles.container}>
-			<ShopMenubar />
+			<ShopMenubar params={params} />
 			<div className={styles.shopMainContainer}>
-				<ShopInfo />
+				<ShopInfo params={params} />
 				<div className={styles.shpMainPageBody}>
 					{children}
 				</div>
