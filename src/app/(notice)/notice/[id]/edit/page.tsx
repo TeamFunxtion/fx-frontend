@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 export default function NoticeNewPage() {
 
 
-	const [list, setList] = useState([]);
+	const [noticeDetail, setNoticeDetail] = useState([]);
 	const [notcieContent, setNoticeContent] = useState('');
 	const [noticeTitle, setNoticeTitle] = useState('');
 	const router = useRouter();
@@ -33,24 +33,24 @@ export default function NoticeNewPage() {
 	}
 	}
 
-	const getList = async () => {
+	const getNoticeDetail = async () => {
 		const result = await api.get(`/notices/${id}`);
 		console.log(result.data.data);
-		setList(result.data.data);
+		setNoticeDetail(result.data.data);
 	}
 	useEffect(() => {
-		getList();
+		getNoticeDetail();
 
 	}, [])
 
 	useEffect(() => {
-        if (list.noticeTitle) {
-            setNoticeTitle(list.noticeTitle);
+        if (noticeDetail.noticeTitle) {
+            setNoticeTitle(noticeDetail.noticeTitle);
         }
-        if (list.noticeContent) {
-            setNoticeContent(list.noticeContent);
+        if (noticeDetail.noticeContent) {
+            setNoticeContent(noticeDetail.noticeContent);
         }
-    }, [list]);
+    }, [noticeDetail]);
 
 	const noticeMove = () => {
 		router.push(`/notice`);
@@ -58,7 +58,7 @@ export default function NoticeNewPage() {
 
 	
 
-	console.log(list,11)
+	console.log(noticeDetail,11)
 	return (
 
 		<div className={styles.noticeInsertMain}>
