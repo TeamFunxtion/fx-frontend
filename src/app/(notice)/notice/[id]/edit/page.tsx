@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 export default function NoticeNewPage() {
 
 
-	const [list, setList] = useState([]);
+	const [noticeDetail, setNoticeDetail] = useState([]);
 	const [notcieContent, setNoticeContent] = useState('');
 	const [noticeTitle, setNoticeTitle] = useState('');
 	const router = useRouter();
@@ -18,6 +18,12 @@ export default function NoticeNewPage() {
 	
 
 	const updateNotice = async () => {
+
+		if(noticeTitle === ''){
+			toast.error("타이틀을 입력해 주세요");
+		}if(notcieContent === ''){
+			toast.error("내용을 입력해 주세요");
+		}else{
 		const res = await api.patch(`/notices`, { noticeId: Number(id), noticeTitle: noticeTitle, noticeContent: notcieContent });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
@@ -25,20 +31,34 @@ export default function NoticeNewPage() {
 			router.push(`/notice`);
 		}
 	}
+	}
 
-	const getList = async () => {
+	const getNoticeDetail = async () => {
 		const result = await api.get(`/notices/${id}`);
 		console.log(result.data.data);
-		setList(result.data.data);
+		setNoticeDetail(result.data.data);
 	}
 	useEffect(() => {
-		getList();
+		getNoticeDetail();
 
 	}, [])
 
+	useEffect(() => {
+        if (noticeDetail.noticeTitle) {
+            setNoticeTitle(noticeDetail.noticeTitle);
+        }
+        if (noticeDetail.noticeContent) {
+            setNoticeContent(noticeDetail.noticeContent);
+        }
+    }, [noticeDetail]);
+
+	const noticeMove = () => {
+		router.push(`/notice`);
+	}
+
 	
 
-	console.log(list,11)
+	console.log(noticeDetail,11)
 	return (
 
 		<div className={styles.noticeInsertMain}>
@@ -53,20 +73,20 @@ export default function NoticeNewPage() {
 			
 				<div className={styles.noticeInquirt}>
 					<div className={styles.noticeInquirtName}><div>*제목</div></div>
-					<input type="text" className={styles.noticeInquirtNameInput} placeholder={list.noticeTitle}
+					<input type="text" className={styles.noticeInquirtNameInput} placeholder="제목을 입력하세요"
 						value={noticeTitle}
 						onChange={(e) => {
 							setNoticeTitle(e.target.value)
 						}}
-					></input>
+					/>
 				</div>
 
 				<div className={styles.noticeIpquirtContent} >
-					<textarea className={styles.noticeIpquirtContentInput} placeholder={list.noticeContent}
+					<textarea className={styles.noticeIpquirtContentInput} placeholder="내용을 입력하세요"
 						value={notcieContent}
 						onChange={(e) => {
 							setNoticeContent(e.target.value)
-						}}>{list.noticeContent}</textarea>
+						}}/>
 				</div>
 				
 				
@@ -75,7 +95,7 @@ export default function NoticeNewPage() {
 				<div className={styles.noticeInquirtButton}>
 
 					<button className={styles.noticeInquirtButtonInquirt} onClick={updateNotice}>공지수정</button>
-					<button className={styles.noticeInquirtButtonMenu}>목록가기</button>
+					<button className={styles.noticeInquirtButtonMenu} onClick={noticeMove}>목록가기</button>
 				</div>
 			</section>
 		</div>

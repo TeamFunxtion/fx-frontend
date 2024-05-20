@@ -118,3 +118,10 @@
 	height: 50px;
 	border-radius: 5px;
 }
+.nullNotice{
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	font-size: 30px;
+	background-color: rgb(203, 202, 202);
+}
