@@ -43,7 +43,7 @@ a {
 }
 
 .active {
-  color: var(--primary-color);
+  color: var(--primary-color) !important;
 }
 
 html,
@@ -74,4 +74,25 @@ button:hover {
 .disabled {
   opacity: 0.6;
   cursor: not-allowed !important;
+}
+
+.noResult {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.6rem;
+  color: rgb(53, 53, 53);
+  padding-top: 50px;
+}
+
+.paginationBar {
+  display: flex;
+  justify-content: center;
+  padding: 55px 0;
+}
+
+.Mui-selected {
+  background-color: dodgerblue !important;
+  color: white !important;
+  outline: none;
+  border: none;
 }

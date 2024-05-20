@@ -1,0 +1,31 @@
+.container {
+  padding-bottom: 150px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 35px 0 15px 0;
+  font-size: 1rem;
+}
+
+.totalCount {
+  font-weight: 600;
+}
+
+.sort {
+  display: flex;
+}
+
+.sort li {
+  margin-right: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: grey;
+}
+
+.ul {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}

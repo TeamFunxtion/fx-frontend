@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Pagination from '@mui/material/Pagination';
 import { useSearchParams, useRouter } from "next/navigation";
 import { getCategoryNameKR } from "@/utils/product";
+import FxPagination from "@/components/FxPagination";
+import NoResult from "@/components/NoResult";
 
 export default function ProductsSearchPage() {
 	const searchParams = useSearchParams();
@@ -91,23 +93,13 @@ export default function ProductsSearchPage() {
 				</ul>
 
 				{
-					list.length == 0 && <div className={styles.noResult}>
-						😝 조회된 결과가 없습니다.
-					</div>
+					list.length == 0 ? <NoResult /> : <FxPagination
+						count={pageInfo.totalPages}
+						page={currentPage}
+						onChange={handleChange}
+					/>
 				}
 
-				{
-					list.length > 0 && <div className={styles.paginationBar}>
-						<Pagination
-							count={pageInfo.totalPages}
-							page={currentPage}
-							onChange={handleChange}
-							showFirstButton={true}
-							showLastButton={true}
-							size='large'
-						/>
-					</div>
-				}
 			</div>
 		</section>
 	)

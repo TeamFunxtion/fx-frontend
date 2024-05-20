@@ -1,0 +1,18 @@
+.tabList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.tabItem {
+  text-align: center;
+  cursor: pointer;
+  padding: 17px 0;
+  border-bottom: 1px solid #fafafa;
+  font-size: 1rem;
+}
+
+.active {
+  border-bottom: 2px solid dodgerblue;
+  color: dodgerblue;
+  font-weight: 600;
+}
