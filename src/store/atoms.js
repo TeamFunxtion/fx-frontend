@@ -30,6 +30,7 @@ export const userInfoState = atom({
   default: {
     id: "",
     email: "",
+    roleId: 0,
     point: 0,
   },
   effects_UNSTABLE: [persistAtomEffect],
@@ -41,4 +42,10 @@ export const globalModalState = atom({
   default: {
     payment: false,
   },
+});
+
+// 채팅방
+export const chatState = atom({
+  key: 'chatState', 
+  default: [], 
 });

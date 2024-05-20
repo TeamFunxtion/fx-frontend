@@ -100,3 +100,28 @@
 .noticePageUpDownBlock{
 	background-color: rgb(104, 104, 104);
 }
+
+.noticeMove{
+	margin-left: 35px;
+	margin-bottom: 35px;
+}
+
+
+.noticeMoveButton{
+
+	margin: 0 5px 0 5px;
+	background-color: rgb(14, 187, 255);
+	color: white;
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+.nullNotice{
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	font-size: 30px;
+	background-color: rgb(203, 202, 202);
+}
