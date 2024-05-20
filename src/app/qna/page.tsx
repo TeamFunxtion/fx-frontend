@@ -4,11 +4,14 @@ import React, { useState } from "react";
 import Etcsidebar from "@/components/etc/etcsidebar";
 import QnaInquiry from "./qnainquiry/qnainquiry"
 import QnaInquiryHistory from "./qnainquiry/qnainquiryhistory";
-
+import QnaManagerHistory from "./qnainquiry/qnamanagerhistory"
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/atoms";
 
 export default function Qna() {
 
-
+	const userInfoValue = useRecoilValue(userInfoState);
+	const useRole = userInfoValue.roleId;
 	const [qnaContentCh, setQnaContentCh] = useState(Number(1));
 	const qnaContentlist = (id) => {
 		setQnaContentCh(id);
@@ -34,7 +37,13 @@ export default function Qna() {
 				<div className={styles.qnaContent}>
 					{
 						qnaContentCh === 1 ?
+						
+						
+							useRole === 2 ? 
+							<QnaManagerHistory/>
+							:
 							<QnaInquiryHistory />
+							
 							: <QnaInquiry />
 					}
 				</div>
