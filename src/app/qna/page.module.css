@@ -122,6 +122,7 @@
 }
 
 .qnaAswerAswerContent{
+	margin-top: 15px;
 	margin-left: 15px;
 	align-content:center;
 	
@@ -231,4 +232,40 @@
 	height: 50px;
 	border-radius: 5px;
 
+}
+
+.nullQna{
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	font-size: 30px;
+	background-color: rgb(203, 202, 202);
+}
+
+.qnaAnswerDiv{
+
+	border-top: 3px solid rgba(121, 121, 121, 0.3);
+	display: flex;
+	margin-top: 15px;
+}
+.qnaManagerAnswer{
+	margin: 15px 0 15px 15px;
+	font-size: 20px;
+	font-weight: 550;
+	color: rgb(95, 95, 95);
+}
+
+.qnaManagerAnswerContent{
+	font-family: 'Raleway', sans-serif;
+	font-size: 18px;
+	
+	margin: 5px auto 5px auto;
+	width: 70%;	
+	height: 60px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+}
+.qnaManagerButton{
+	font-weight: 650;
+	color: rgb(95, 95, 95);
 }

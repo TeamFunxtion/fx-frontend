@@ -16,7 +16,6 @@ export default function QnaInquiryHistory() {
 	const [list, setList] = useState([]);
 	const [currentPage, setCurrentPage] = useState(Number(1));
 	const searchParams = useSearchParams();
-	const [qnaAnswerUpdate , setqnaAnswerUpdate] = useState(''); 
 	const [Answer, setAnswer] = useState("");
 	const [pageInfo, setPageInfo] = useState({
 		totalPages: 1,
@@ -26,9 +25,9 @@ export default function QnaInquiryHistory() {
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
 	const userEmail = userInfoValue.email;
-	const userRoleId = userInfoValue.roleId;
+	const useRole = userInfoValue.roleId;
 	const router = useRouter();
-
+	
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
 		router.push(`/qna?&page=${value}`)
@@ -66,6 +65,9 @@ export default function QnaInquiryHistory() {
 	}, [searchParams])
 
 
+	
+
+
 	const qnaAnswerContent = (id) => {
 		if (Answer === id) {
 			setAnswer("");
@@ -74,27 +76,28 @@ export default function QnaInquiryHistory() {
 		}
 	}
 
-	const qnaUpdateAnswer = async () => {
-		const res = await api.patch(`/qnas`,{qnaAnswer : qnaAnswerUpdate})
-	}
-
 
 
 	function QnaInquiryHistoryBack() {
 		return (
-			list.length > 0 && list.map(function (qna) {
+
+			
+			list.length > 0 ? list.map(function (qna) {
 				return (
+					
 					<div>
+							
+							
 						<div className={styles.qnaHistoryDiv} onClick={() => qnaAnswerContent(qna.id)}>
 							<div className={styles.qnaHistoryTag}>{getQnaCategoryNameKR(qna.categoryId)}</div>
 							<div className={styles.qnaHistoryContnt}>{qna.qnaTitle}</div>
 							<div className={styles.qnaHistortAnswer}>등록일:{dateFormatterYYYYMMDDHHmm(qna.createDate)}</div>
 						</div>
+						
 						{
 							Answer === qna.id &&
 							<div className={styles.qnaHistoryDiv}>
 								<div className={styles.qnaAnswer}>
-									{/* <div className={styles.qnaAnswerName}>작성자 : {userId}</div> */}
 									<div className={styles.qnaAnsWerMail}>이메일 : {userEmail}</div>
 								</div>
 								<div className={styles.qnaAnswerContent}>내용: {qna.qnaContent}</div>
@@ -102,52 +105,39 @@ export default function QnaInquiryHistory() {
 
 								{
 									qna.qnaAnswer === null ?
-										
-										<div className={styles.qnaAnswerD}>
+										<div>
+											<div className={styles.qnaAnswerD}>
 											<div className={styles.qnaAswerAswerContent}>아직 답변이 등록되지 않았습니다</div>
-											{userRoleId === 2 &&
-												<div>
-													<div>답변:</div>
-												<textarea placeholder="답변 입력"
-												value={qnaAnswerUpdate}
-													onChange={(e) => {
-														setqnaAnswerUpdate(e.target.value)
-													}}
-												/>
-													
-												
-
-												<button onClick={qnaUpdateAnswer}>등록</button>
-												</div>
-											}
+											</div>
 										</div>
-											
-										
+
 										:
 										<div className={styles.qnaAnswerD}>
 											<div className={styles.qnaAnswerAswer}>답변 </div>
 											<div className={styles.qnaAswerAswerContent}>{qna.qnaAnswer}</div>
-										</div>
-										
-										}
+										</div>}
 
-									
 
 							</div>}
-					</div>
+								
+								</div>
 				);
 			})
-
+			:
+			<div className={styles.nullQna}>입력된 1:1 문의가 없습니다.</div>
 		)
 	}
 
 	return (
 		<div>
+			<div>
 			<QnaInquiryHistoryBack />
 			<div>
+				{
 				<ul className={styles.qnaPage}>
 
-					{
+					{  
+						
 						list.length > 0 && <div className={styles.paginationBar}>
 							<Pagination
 								count={pageInfo.totalPages}
@@ -160,6 +150,7 @@ export default function QnaInquiryHistory() {
 						</div>
 					}
 				</ul>
+		}</div>
 			</div>
 		</div>
 

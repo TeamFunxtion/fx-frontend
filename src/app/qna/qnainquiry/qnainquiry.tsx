@@ -17,7 +17,13 @@ export default function QnaInquiry() {
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
 
+	
 	const createQna = async () => {
+		if(qnaTitle == ''){
+			toast.error("제목을 입력하세요");
+		}else if(qnaContent == ''){
+			toast.error("내용을 입력하세요");
+		}else{
 		const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
@@ -25,7 +31,7 @@ export default function QnaInquiry() {
 
 		}
 	}
-
+	}
 
 	return (
 		<div >
@@ -62,7 +68,7 @@ export default function QnaInquiry() {
 			</div>
 
 			<div className={styles.qnaIpquirtContent} >
-				<textarea className={styles.qnaIpquirtContentInput} placeholder="내용 입력" value={qnaContent}
+				<textarea className={styles.qnaIpquirtContentInput} placeholder="내용을 입력해 주세요" value={qnaContent}
 					onChange={(e) => {
 						setQnaContent(e.target.value)
 					}}
@@ -76,7 +82,7 @@ export default function QnaInquiry() {
 
 					<button className={styles.qnaInquirtButtonInquirt} onClick={createQna}>문의하기</button>
 				}
-				<button className={styles.qnaInquirtButtonMenu}>목록가기</button>
+				
 			</div>
 		</div >
 	)
