@@ -4,15 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import toast from "react-hot-toast";
 import useWebSocket from 'react-use-websocket';
 import { AiOutlineSafety } from "react-icons/ai";
 import Link from "next/link";
 import { MdOutlinePayment } from "react-icons/md";
+import { chatState } from "@/store/atoms";
 
 export default function User() {
 
+	const [chats, setChats] = useRecoilState(chatState);
 
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -20,14 +22,14 @@ export default function User() {
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
 	const [safePaymentInfo, setSafePaymentInfo] = useState(null);
-  
+
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
 	const getChatRoomInfo = async () => {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			// console.log(data);
+
 			setChatRoomInfo(data);
 			toast.success(msg || `${id}방 조회 성공!`);
 
@@ -75,7 +77,7 @@ export default function User() {
 	const [sessionId, setSessionId] = useState(0);
 
 	const [messageHistory, setMessageHistory] = useState([]);
-	const [msgList, setMsgList] = useState([]);
+	let [msgList, setMsgList] = useState([]);
 	const [safePayAcception, setSafePayAcception] = useState(0);
 	useEffect(() => {
 		if (lastMessage !== null) {
@@ -94,7 +96,7 @@ export default function User() {
 							if (object.safePayAccept === true) {
 								setSafePay(true);
 								setSafePayAcception(1);
-								// console.log(object.safePayAccept);
+
 							} else {
 								setSafePay(false);
 							}
@@ -109,10 +111,9 @@ export default function User() {
 
 
 	if (msgList.length != 0) {
+		setChats(msgList);
 		if (msgList[msgList.length - 1].sessionLength >= 3) {
-			for (let i = 0; i < msgList.length; i++) {
-				msgList[i].sessionLength = 3;
-			}
+			msgList = msgList.map(msg => ({ ...msg, sessionLength: 3 }));
 		}
 	}
 
@@ -145,7 +146,7 @@ export default function User() {
 		});
 		insertMsg(title, safety, safePayAccept);
 
-		// console.log(safePay);
+
 	}
 	// 안전거래 거절
 	const refuseSafePay = () => {
@@ -164,7 +165,6 @@ export default function User() {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			// console.log(data);
 			setSafePaymentInfo(data);
 			setSafePayAcception(1);
 			setSafePay(true);

@@ -43,3 +43,9 @@ export const globalModalState = atom({
     payment: false,
   },
 });
+
+// 채팅방
+export const chatState = atom({
+  key: 'chatState', 
+  default: [], 
+});
