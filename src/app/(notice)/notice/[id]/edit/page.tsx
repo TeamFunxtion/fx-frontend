@@ -18,12 +18,19 @@ export default function NoticeNewPage() {
 	
 
 	const updateNotice = async () => {
+
+		if(noticeTitle === ''){
+			toast.error("타이틀을 입력해 주세요");
+		}if(notcieContent === ''){
+			toast.error("내용을 입력해 주세요");
+		}else{
 		const res = await api.patch(`/notices`, { noticeId: Number(id), noticeTitle: noticeTitle, noticeContent: notcieContent });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			toast.success(msg || ` `);
 			router.push(`/notice`);
 		}
+	}
 	}
 
 	const getList = async () => {
@@ -35,6 +42,19 @@ export default function NoticeNewPage() {
 		getList();
 
 	}, [])
+
+	useEffect(() => {
+        if (list.noticeTitle) {
+            setNoticeTitle(list.noticeTitle);
+        }
+        if (list.noticeContent) {
+            setNoticeContent(list.noticeContent);
+        }
+    }, [list]);
+
+	const noticeMove = () => {
+		router.push(`/notice`);
+	}
 
 	
 
@@ -53,20 +73,20 @@ export default function NoticeNewPage() {
 			
 				<div className={styles.noticeInquirt}>
 					<div className={styles.noticeInquirtName}><div>*제목</div></div>
-					<input type="text" className={styles.noticeInquirtNameInput} placeholder={list.noticeTitle}
+					<input type="text" className={styles.noticeInquirtNameInput} placeholder="제목을 입력하세요"
 						value={noticeTitle}
 						onChange={(e) => {
 							setNoticeTitle(e.target.value)
 						}}
-					></input>
+					/>
 				</div>
 
 				<div className={styles.noticeIpquirtContent} >
-					<textarea className={styles.noticeIpquirtContentInput} placeholder={list.noticeContent}
+					<textarea className={styles.noticeIpquirtContentInput} placeholder="내용을 입력하세요"
 						value={notcieContent}
 						onChange={(e) => {
 							setNoticeContent(e.target.value)
-						}}>{list.noticeContent}</textarea>
+						}}/>
 				</div>
 				
 				
@@ -75,7 +95,7 @@ export default function NoticeNewPage() {
 				<div className={styles.noticeInquirtButton}>
 
 					<button className={styles.noticeInquirtButtonInquirt} onClick={updateNotice}>공지수정</button>
-					<button className={styles.noticeInquirtButtonMenu}>목록가기</button>
+					<button className={styles.noticeInquirtButtonMenu} onClick={noticeMove}>목록가기</button>
 				</div>
 			</section>
 		</div>

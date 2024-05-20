@@ -11,12 +11,23 @@ export default function NoticeNewPage() {
 	const [noticeTitle, setNoticeTitle] = useState('');
 	const router = useRouter();
 	const createNotice = async () => {
+
+		if(noticeTitle === ''){
+			toast.error("타이틀을 입력해 주세요");
+		}if(notcieContent === ''){
+			toast.error("내용을 입력해 주세요");
+		}else{
 		const res = await api.post(`/notices`, { noticeTitle: noticeTitle, noticeContent: notcieContent });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
 			toast.success(msg || ` `);
 			router.push(`/notice`);
 		}
+	}
+	}
+
+	const noticeMove = () =>{
+		router.push(`/notice`);
 	}
 
 	return (
@@ -34,6 +45,7 @@ export default function NoticeNewPage() {
 						value={noticeTitle}
 						onChange={(e) => {
 							setNoticeTitle(e.target.value)
+							
 						}}
 					/>
 				</div>
@@ -49,7 +61,7 @@ export default function NoticeNewPage() {
 				<div className={styles.noticeInquirtButton}>
 
 					<button className={styles.noticeInquirtButtonInquirt} onClick={createNotice}>공지등록</button>
-					<button className={styles.noticeInquirtButtonMenu}>목록가기</button>
+					<button className={styles.noticeInquirtButtonMenu} onClick={noticeMove}>목록가기</button>
 				</div>
 			</section>
 		</div>

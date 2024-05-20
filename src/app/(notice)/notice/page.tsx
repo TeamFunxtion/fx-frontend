@@ -92,6 +92,7 @@ export default function Notice() {
 		}
 	}
 
+	
 	return (
 		<div className={styles.noticeMain}>
 			<Etcsidebar />
@@ -104,12 +105,15 @@ export default function Notice() {
 						<button onClick={() => newMove()} className={styles.noticeMoveButton}>공지등록</button>
 					</div>
 				}
-
+					{list.length <=0 &&
+						<div className={styles.nullNotice}>입력된 공지사항이 없습니다.</div>
+					}
 				{
 					list.length > 0 && list.map(function (notice) {
 						return (
-
+							
 							<div className="container">
+																							
 								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
 									<div className={styles.noticeQ}>Q</div>
 									<div className={styles.noticeTitle} >{notice.noticeTitle}</div>
@@ -120,6 +124,7 @@ export default function Notice() {
 										}
 									</div>
 								</div>
+					
 								{notice.id === idcode && <div className={styles.noticeContent}><p className={styles.noticeContentDetail}>{notice.noticeContent}</p>
 									{userRoleId === 2 &&
 										<div>
@@ -129,7 +134,9 @@ export default function Notice() {
 									}
 								</div>
 								}
+							
 							</div>
+							
 						);
 					})}
 
