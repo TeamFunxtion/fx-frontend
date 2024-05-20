@@ -9,8 +9,11 @@ import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { chatState } from "@/store/atoms";
 
 export default function Chats() {
+
+	const chats = useRecoilValue(chatState);
 
 	const path = usePathname();
 	// DB연동 (채팅방 리스트 조회)
@@ -26,7 +29,7 @@ export default function Chats() {
 		const res = await api.get('/chats?id=' + userInfoValue.id);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			// const newList = [...chatRoomList, ...data];
+
 			setChatRoomList(data);
 			toast.success(msg || '채팅방 조회 성공!');
 		}
@@ -36,6 +39,10 @@ export default function Chats() {
 		getChatRoomList();
 	}, []);
 
+	let lastMsgDate = "";
+	if (chats.length > 0) {
+		lastMsgDate = chats[chats.length - 1].createDate.substring(5, 7) + "/" + chats[chats.length - 1].createDate.substring(8, 10);
+	}
 
 	return (
 		<>
@@ -77,8 +84,8 @@ export default function Chats() {
 													<div className={styles.roomName}>{item.store.nickname}</div> :
 													<div className={styles.roomName}>{item.customer.nickname}</div>}
 												<div className={styles.msgArea}>
-													<div className={styles.lastMsg}>{item.chatMessages.length != 0 ? item.chatMessages[0].message : ""}</div>
-													<div className={styles.lastMsgDate}>{month + "/" + date}</div>
+													<div className={styles.lastMsg}>{chats.length > 0 ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
+													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>
 											<img src="https://cdn.pixabay.com/photo/2016/03/31/20/13/chair-1295604_1280.png"
