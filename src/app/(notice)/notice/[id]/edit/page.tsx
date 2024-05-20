@@ -14,23 +14,23 @@ export default function NoticeNewPage() {
 	const [notcieContent, setNoticeContent] = useState('');
 	const [noticeTitle, setNoticeTitle] = useState('');
 	const router = useRouter();
-	const  id = usePathname().substring(8).replace(/[^0-9]/g, "");
-	
+	const id = usePathname().substring(8).replace(/[^0-9]/g, "");
+
 
 	const updateNotice = async () => {
 
-		if(noticeTitle === ''){
+		if (noticeTitle === '') {
 			toast.error("타이틀을 입력해 주세요");
-		}if(notcieContent === ''){
+		} if (notcieContent === '') {
 			toast.error("내용을 입력해 주세요");
-		}else{
-		const res = await api.patch(`/notices`, { noticeId: Number(id), noticeTitle: noticeTitle, noticeContent: notcieContent });
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			toast.success(msg || ` `);
-			router.push(`/notice`);
+		} else {
+			const res = await api.patch(`/notices`, { noticeId: Number(id), noticeTitle: noticeTitle, noticeContent: notcieContent });
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || ` `);
+				router.push(`/notice`);
+			}
 		}
-	}
 	}
 
 	const getNoticeDetail = async () => {
@@ -44,33 +44,33 @@ export default function NoticeNewPage() {
 	}, [])
 
 	useEffect(() => {
-        if (noticeDetail.noticeTitle) {
-            setNoticeTitle(noticeDetail.noticeTitle);
-        }
-        if (noticeDetail.noticeContent) {
-            setNoticeContent(noticeDetail.noticeContent);
-        }
-    }, [noticeDetail]);
+		if (noticeDetail.noticeTitle) {
+			setNoticeTitle(noticeDetail.noticeTitle);
+		}
+		if (noticeDetail.noticeContent) {
+			setNoticeContent(noticeDetail.noticeContent);
+		}
+	}, [noticeDetail]);
 
 	const noticeMove = () => {
 		router.push(`/notice`);
 	}
 
-	
 
-	console.log(noticeDetail,11)
+
+	console.log(noticeDetail, 11)
 	return (
 
 		<div className={styles.noticeInsertMain}>
 			<Etcsidebar />
 
 			<section className={styles.noticeSection}>
-				
-				
 
-					
+
+
+
 				<div className={styles.noticeInquirtTop}></div>
-			
+
 				<div className={styles.noticeInquirt}>
 					<div className={styles.noticeInquirtName}><div>*제목</div></div>
 					<input type="text" className={styles.noticeInquirtNameInput} placeholder="제목을 입력하세요"
@@ -86,11 +86,11 @@ export default function NoticeNewPage() {
 						value={notcieContent}
 						onChange={(e) => {
 							setNoticeContent(e.target.value)
-						}}/>
+						}} />
 				</div>
-				
-				
-					
+
+
+
 
 				<div className={styles.noticeInquirtButton}>
 

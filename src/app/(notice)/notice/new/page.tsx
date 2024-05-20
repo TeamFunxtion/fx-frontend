@@ -12,21 +12,21 @@ export default function NoticeNewPage() {
 	const router = useRouter();
 	const createNotice = async () => {
 
-		if(noticeTitle === ''){
+		if (noticeTitle === '') {
 			toast.error("타이틀을 입력해 주세요");
-		}if(notcieContent === ''){
+		} if (notcieContent === '') {
 			toast.error("내용을 입력해 주세요");
-		}else{
-		const res = await api.post(`/notices`, { noticeTitle: noticeTitle, noticeContent: notcieContent });
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			toast.success(msg || ` `);
-			router.push(`/notice`);
+		} else {
+			const res = await api.post(`/notices`, { noticeTitle: noticeTitle, noticeContent: notcieContent });
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || ` `);
+				router.push(`/notice`);
+			}
 		}
 	}
-	}
 
-	const noticeMove = () =>{
+	const noticeMove = () => {
 		router.push(`/notice`);
 	}
 
@@ -45,7 +45,7 @@ export default function NoticeNewPage() {
 						value={noticeTitle}
 						onChange={(e) => {
 							setNoticeTitle(e.target.value)
-							
+
 						}}
 					/>
 				</div>
