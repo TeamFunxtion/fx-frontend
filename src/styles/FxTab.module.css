@@ -1,7 +1,7 @@
-.tabList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-}
+/* .tabList { */
+/* display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); */
+/* } */
 
 .tabItem {
   text-align: center;
