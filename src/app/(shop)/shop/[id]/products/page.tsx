@@ -9,6 +9,10 @@ import ProductCard from "@/components/products/ProductCard/ProductCard"
 import FxPagination from "@/components/FxPagination"
 import NoResult from "@/components/NoResult"
 import { productStatusTypes } from "@/app/constants"
+import { BsGearFill, BsXLg } from "react-icons/bs"
+import _ from "lodash";
+import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 
 export default function MyProductsPage({ }) {
 
@@ -19,6 +23,8 @@ export default function MyProductsPage({ }) {
 	const [totalElements, setTotalElements] = useState(1);
 	const statusTypeId = useRef('ST01');
 	const [sort, setSort] = useState('id');
+
+	const router = useRouter();
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
@@ -53,6 +59,39 @@ export default function MyProductsPage({ }) {
 		getList(1);
 	}
 
+	const handleClickSetting = (index) => {
+		let newList = [..._.map(list, (p, idx) => {
+			return {
+				...p,
+				showPopup1: index === idx ? !p.showPopup1 : false,
+				showPopup2: false,
+			}
+		})];
+		setList(newList);
+	}
+
+	const handleClickChangeStatus = (index) => {
+		let newList = [..._.map(list, (p, idx) => {
+			return { ...p, showPopup2: index === idx ? !p.showPopup2 : false }
+		})];
+		setList(newList);
+	}
+
+	const changeStatus = async (productId, statusType) => {
+		const result = await api.patch("/products", {
+			productId,
+			statusTypeId: statusType,
+		});
+		const { data: { resultCode, msg } } = result;
+
+		if (resultCode === '200') {
+			toast.success(msg || "상태가 변경되었습니다!");
+			getList(currentPage);
+		} else {
+			toast.error(msg || "상태변경을 실패했습니다!");
+		}
+	}
+
 	return (
 		<div className={styles.container}>
 			<FxTab items={productStatusTypes} onClick={onClickTab} />
@@ -69,7 +108,28 @@ export default function MyProductsPage({ }) {
 				<ul className={styles.ul}>
 					{
 						list && list.map((product, idx) => (
-							<ProductCard product={product} />
+							<div>
+								<ProductCard product={product} />
+								<div className={styles.settingBtn} onClick={() => handleClickSetting(idx)}>
+									{
+										product.showPopup1 ? <BsXLg /> : <BsGearFill />
+									}
+								</div>
+								{
+									product.showPopup1 && <ul className={styles.settingPopup}>
+										<li onClick={() => router.push(`/products/${product.id}/edit`)}>상품수정</li>
+										<li onClick={() => handleClickChangeStatus(idx)}>상태변경</li>
+										<li onClick={() => changeStatus(product.id, 'ST05')}>상품삭제</li>
+									</ul>
+								}
+								{
+									product.showPopup2 && <ul className={styles.settingPopup}>
+										<li onClick={() => changeStatus(product.id, 'ST01')}>판매중</li>
+										<li onClick={() => changeStatus(product.id, 'ST02')}>판매완료</li>
+										<li onClick={() => handleClickChangeStatus(idx)}>취소</li>
+									</ul>
+								}
+							</div>
 						))
 					}
 				</ul>

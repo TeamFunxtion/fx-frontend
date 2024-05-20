@@ -29,3 +29,33 @@
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
 }
+
+.ul > div {
+  position: relative;
+  cursor: pointer;
+}
+
+.settingBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 1.5rem;
+}
+
+.settingPopup {
+  position: absolute;
+  top: 40px;
+  right: 2px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.settingPopup li {
+  padding: 15px 30px;
+}
+
+.settingPopup li:hover {
+  background-color: aliceblue;
+  border-radius: 8px;
+}
