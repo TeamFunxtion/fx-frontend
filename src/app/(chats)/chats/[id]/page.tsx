@@ -105,6 +105,14 @@ export default function User() {
 								setSafePay(false);
 							}
 						}
+					} else if (object.type === "confirm") {
+						setSafePaymentInfo((prevState) => {
+							return { ...prevState, status: "SP03" }
+						})
+					} else if (object.type === "success") {
+						setSafePaymentInfo((prevState) => {
+							return { ...prevState, [object.target]: "Y" }
+						})
 					}
 				}
 				return prev.concat(lastMessage)
@@ -124,6 +132,20 @@ export default function User() {
 		updateMsg();
 		getChatRoomInfo();
 	}, [])
+
+	useEffect(() => {
+		if (safePaymentInfo && safePaymentInfo.status && safePaymentInfo.status !== "SP03" && sessionId) {
+			// sendMessage(JSON.stringify({
+			// 	type: "confirm",
+			// 	roomNumber: id,
+			// 	sessionId: sessionId
+			// }))
+		}
+
+		if (safePaymentInfo && safePaymentInfo.sellerOk === "Y" && safePaymentInfo.buyerOk === "Y" && safePaymentInfo.status !== "SP04") {
+			setSafePaymentInfo((prev) => { return { ...prev, status: "SP04" } });
+		}
+	}, [sessionId, safePaymentInfo])
 
 	const safeTrade = () => {
 
@@ -186,21 +208,40 @@ export default function User() {
 		setIsModalOpen(true);
 	};
 
-	const closeModal = () => {
+	const closeModal = (finished) => {
 		setIsModalOpen(false);
+
+		// console.log(finished);
+		if (finished) {
+
+			// 상대방
+			sendMessage(JSON.stringify({
+				type: "confirm",
+				roomNumber: id,
+				sessionId: sessionId
+			}))
+		}
+
 	};
 
 
 	// 판매자 판매 확정 버튼 클릭
 	const sellerConfirm = async () => {
+
 		if (chatRoomInfo != null) {
 			const res = await api.patch(`/safe/seller`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || `판매 확정 성공`);
-				getUserDetail();
+
 			}
-			window.location.reload();
+			sendMessage(JSON.stringify({
+				type: "success",
+				roomNumber: id,
+				sessionId: sessionId,
+				target: "sellerOk"
+			}))
+
 		}
 
 	}
@@ -213,8 +254,14 @@ export default function User() {
 			if (resultCode == '200') {
 				toast.success(msg || `판매 확정 성공`);
 				getUserDetail();
+				sendMessage(JSON.stringify({
+					type: "success",
+					roomNumber: id,
+					sessionId: sessionId,
+					target: 'buyerOk'
+				}))
 			}
-			window.location.reload();
+
 		}
 
 	}

@@ -23,10 +23,10 @@ export default function SafePayModal({ isModalOpen, onClose, product, customer, 
 		if (customer.point >= product.currentPrice) {
 			updateSafePayStatus();
 			alert('결제가 완료되었습니다.');
-			window.location.reload();
+			onClose(true);
 		} else {
 			alert('잔액이 부족합니다!');
-			onClose();
+			onClose(false);
 		}
 
 	};
@@ -36,7 +36,7 @@ export default function SafePayModal({ isModalOpen, onClose, product, customer, 
 			<div className={styles.modal}>
 				<div className={styles.modalHeader}>
 					<h2 className={styles.modalTitle}>안전결제</h2>
-					<button className={styles.modalCloseBtn} onClick={onClose}>X</button>
+					<button className={styles.modalCloseBtn} onClick={() => onClose(false)}>X</button>
 				</div>
 				<div className={styles.modalSeparator}></div>
 				<div className={styles.modalBody}>
@@ -44,7 +44,7 @@ export default function SafePayModal({ isModalOpen, onClose, product, customer, 
 				</div>
 				<div className={styles.modalSeparator}></div>
 				<div className={styles.modalButtons}>
-					<button className={styles.modalButtonCancel} onClick={onClose}>취소</button>
+					<button className={styles.modalButtonCancel} onClick={() => onClose(false)}>취소</button>
 					<button className={styles.modalButton} onClick={handlePayment}>결제</button>
 				</div>
 			</div>
