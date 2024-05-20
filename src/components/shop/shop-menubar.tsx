@@ -1,15 +1,20 @@
+'use client'
 import Link from "next/link"
 import styles from "./shop-menubar.module.css"
+import { useRecoilValue } from "recoil"
+import { userInfoState } from "@/store/atoms"
 
 export default function ShopMenubar() {
+	const user = useRecoilValue(userInfoState);
+	const baseUrl = `/shop/${user.id}`;
 	return (
 		<div className={styles.container}>
 			<h1 className={styles.pageTitle}>마이페이지</h1>
 			<ul className={styles.listContainer}>
 				<h3 className={styles.listTitle}>거래 정보</h3>
-				<li><Link href="/shop">내 상품</Link></li>
-				<li><Link href="/shop">진행중 경매</Link></li>
-				<li><Link href="/shop">참여중 경매</Link></li>
+				<li><Link href={`${baseUrl}/products`}>내 상품</Link></li>
+				<li><Link href={`${baseUrl}/auctions`}>진행중 경매</Link></li>
+				<li><Link href={`${baseUrl}/bids`}>참여중 경매</Link></li>
 				<li><Link href="/shop">판매 내역</Link></li>
 				<li><Link href="/shop">구매 내역</Link></li>
 			</ul>
@@ -27,6 +32,6 @@ export default function ShopMenubar() {
 				<h3 className={styles.listTitle}>결제 정보</h3>
 				<li><Link href="/shop/payments">결제 내역</Link></li>
 			</ul>
-		</div>
+		</div >
 	)
 }

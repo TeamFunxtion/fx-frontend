@@ -28,7 +28,15 @@ export const categories = [
 ];
 
 export const qnaCategories = [
-  { categoryId: "QNA01", categoryName: "개인정보/회원계정"},
-  { categoryId: "QNA02", categoryName: "오류"},
-  { categoryId: "QNA03", categoryName: "기타"}
-]
+  { categoryId: "QNA01", categoryName: "개인정보/회원계정" },
+  { categoryId: "QNA02", categoryName: "오류" },
+  { categoryId: "QNA03", categoryName: "기타" },
+];
+
+export const productStatusTypes = [
+  { label: "판매중", value: "ST01" },
+  { label: "판매완료", value: "ST02" },
+  { label: "판매대기", value: "ST03" },
+  { label: "거래중", value: "ST04" },
+  { label: "삭제", value: "ST05" },
+];
