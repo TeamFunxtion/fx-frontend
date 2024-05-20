@@ -8,12 +8,13 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import toast from "react-hot-toast";
 import useWebSocket from 'react-use-websocket';
 import { AiOutlineSafety } from "react-icons/ai";
-import Link from "next/link";
 import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
+import SafePayModal from "@/components/modal/SafePayModal";
+import useUserInfo from '@/hooks/useUserInfo';
 
 export default function User() {
-
+	const { getUserDetail } = useUserInfo();
 	const [chats, setChats] = useRecoilState(chatState);
 
 	const id = usePathname().substring(7);
@@ -67,6 +68,7 @@ export default function User() {
 			safe: safety,
 			safePayAccept: safePayAccept
 		}))
+
 	}
 
 
@@ -96,11 +98,12 @@ export default function User() {
 							if (object.safePayAccept === true) {
 								setSafePay(true);
 								setSafePayAcception(1);
-
+								setSafePaymentInfo((prevState) => {
+									return { ...prevState, status: "SP02" }
+								});
 							} else {
 								setSafePay(false);
 							}
-
 						}
 					}
 				}
@@ -136,17 +139,16 @@ export default function User() {
 
 	// 안전거래 수락
 	const acceptSafePay = () => {
+
 		const title = "상품의 안전거래가 수락되었습니다.";
 		const safety = false;
 		const safePayAccept = true;
-		setSafePay(false);
+		setSafePay(true);
 		setSafePayAcception(1);
-		setSafePaymentInfo((prevState) => {
-			return { ...prevState, startYn: "Y" }
-		});
 		insertMsg(title, safety, safePayAccept);
-
-
+		setSafePaymentInfo((prevState) => {
+			return { ...prevState, status: "SP02" }
+		});
 	}
 	// 안전거래 거절
 	const refuseSafePay = () => {
@@ -165,11 +167,60 @@ export default function User() {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			setSafePaymentInfo(data);
-			setSafePayAcception(1);
-			setSafePay(true);
+			console.log(data);
+			if (data != null) {
+				setSafePaymentInfo(data);
+				setSafePayAcception(1);
+				setSafePay(true);
+
+			}
 			toast.success(msg || `${id}방 안전거래 여부 조회 성공!`);
+
 		}
+	}
+
+	// 안전결제 모달 열기
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const openModal = () => {
+		setIsModalOpen(true);
+	};
+
+	const closeModal = () => {
+		setIsModalOpen(false);
+	};
+
+
+	// 판매자 판매 확정 버튼 클릭
+	const sellerConfirm = async () => {
+		if (chatRoomInfo != null) {
+			const res = await api.patch(`/safe/seller`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || `판매 확정 성공`);
+				getUserDetail();
+			}
+			window.location.reload();
+		}
+
+	}
+
+	// 구매자 구매 확정 버튼 클릭
+	const buyerConfirm = async () => {
+		if (chatRoomInfo != null) {
+			const res = await api.patch(`/safe/buyer`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || `판매 확정 성공`);
+				getUserDetail();
+			}
+			window.location.reload();
+		}
+
+	}
+
+	if (safePaymentInfo != null && safePaymentInfo.status == 'SP04') {
+		getUserDetail();
 	}
 
 	return (
@@ -184,27 +235,60 @@ export default function User() {
 					</div>
 				</div>
 				<div className={styles.safeTradeDiv}>
-					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span>안전거래</span>
 						</button>
 						: ""}
-					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.startYn == 'N' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
 						<div className={styles.safeTradeSeller}>
 							<button className={styles.safeTradeBtnAccept} onClick={acceptSafePay}>안전거래 수락</button>
 							<button className={styles.safeTradeBtnRefuse} onClick={refuseSafePay}>안전거래 거절</button>
 						</div>
 						: ""}
-					{safePaymentInfo != null && safePaymentInfo.startYn == 'Y' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
+					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
 						<div className={styles.pay}>
 							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
-							<Link href={`https://www.google.com`} className={styles.payBtn}><MdOutlinePayment />결제하기</Link>
+							<button onClick={openModal} className={styles.payBtn}><MdOutlinePayment />결제하기</button>
+							<SafePayModal isModalOpen={isModalOpen} onClose={closeModal} product={chatRoomInfo.product} customer={chatRoomInfo.customer} store={chatRoomInfo.store} />
 						</div>
 						: ""}
-					{safePaymentInfo != null && safePaymentInfo.startYn == 'Y' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
+					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
 						<div className={styles.pay}>
 							<div className={styles.safeTrading2}>안전거래중인 상품입니다.</div>
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.sellerOk != 'Y' && safePaymentInfo.status == 'SP03' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
+						<div className={styles.confirm}>
+							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
+							<button className={styles.confirmBtn} onClick={sellerConfirm}>판매 확정</button>
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.buyerOk != 'Y' && safePaymentInfo.status == 'SP03' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
+						<div className={styles.confirm}>
+							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
+							<button className={styles.confirmBtn} onClick={buyerConfirm}>구매 확정</button>
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.sellerOk == 'Y' && safePaymentInfo.status != 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
+						<div>
+							구매자의 거래 확정을 대기중입니다.
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.buyerOk == 'Y' && safePaymentInfo.status != 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
+						<div>
+							판매자의 거래 확정을 대기중입니다.
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.status == 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
+						<div>
+							완료된 거래입니다.
+						</div>
+						: ""}
+					{safePaymentInfo != null && safePaymentInfo.status == 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
+						<div>
+							완료된 거래입니다.
 						</div>
 						: ""}
 				</div>
@@ -213,7 +297,7 @@ export default function User() {
 					<div className={styles.chatProductInfo}>
 						<img src="https://cdn.pixabay.com/photo/2016/03/31/20/13/chair-1295604_1280.png"
 							className={styles.productImg} />
-						<div className={styles.price}>&nbsp;{chatRoomInfo == null ? '' : chatRoomInfo.product.productPrice}원</div>
+						<div className={styles.price}>&nbsp;{chatRoomInfo == null ? '' : chatRoomInfo.product.currentPrice}원</div>
 					</div>
 					<div className={styles.chatProductTitle}>{chatRoomInfo == null ? '' : chatRoomInfo.product.productTitle}</div>
 				</div>
