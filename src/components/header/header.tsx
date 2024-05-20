@@ -22,6 +22,7 @@ export default function Header() {
 function HeaderMain() {
 	const [keyword, setKeyword] = useState("");
 	const router = useRouter();
+	const user = useRecoilValue(userInfoState);
 
 	const onKeyEnter = (e) => {
 		if (e.key === 'Enter') {
@@ -31,6 +32,14 @@ function HeaderMain() {
 
 	const onChangeKeyword = (e) => {
 		setKeyword(e.target.value);
+	}
+
+	const onClickLink = (path) => {
+		if (!user.id) {
+			router.push("/auth/login");
+		} else {
+			router.push(path);
+		}
 	}
 
 	return (
@@ -48,26 +57,26 @@ function HeaderMain() {
 				</div>
 			</div>
 			<div className={styles.mainRight}>
-				<div className={styles.iconContainer}>
-					<Link href="/notify">
+				<div className={styles.iconContainer} onClick={() => onClickLink('/notify')}>
+					<Link href="">
 						<BsBell />
 						<span>알림</span>
 					</Link>
 				</div>
-				<div className={styles.iconContainer}>
-					<Link href="/products/new">
+				<div className={styles.iconContainer} onClick={() => onClickLink('/products/new')}>
+					<Link href="">
 						<BsBagPlus />
 						<span>판매하기</span>
 					</Link>
 				</div>
-				<div className={styles.iconContainer}>
-					<Link href="/chats">
+				<div className={styles.iconContainer} onClick={() => onClickLink('/chats')}>
+					<Link href="">
 						<BsChatDots />
 						<span>채팅</span>
 					</Link>
 				</div>
-				<div className={styles.iconContainer}>
-					<Link href="/shop">
+				<div className={styles.iconContainer} onClick={() => onClickLink(`/shop/${user.id}/products`)}>
+					<Link href="">
 						<BsPerson />
 						<span>마이</span>
 					</Link>
