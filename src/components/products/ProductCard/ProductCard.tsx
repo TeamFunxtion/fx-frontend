@@ -6,12 +6,18 @@ import CardLabel from "./CardLabel";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, hideDeleted }) {
 	const router = useRouter();
 	const [mounted, setMounted] = useState(false);
 
+	const isDeleted = product && product.statusTypeId === 'ST05';
+
 	const onClickCard = () => {
-		router.push(`/products/${product.id}`);
+		if (isDeleted) {
+			return;
+		} else {
+			router.push(`/products/${product.id}`);
+		}
 	}
 
 	useEffect(() => {
@@ -22,6 +28,7 @@ export default function ProductCard({ product }) {
 		<>
 			{
 				mounted && <li className={styles.productCard} onClick={onClickCard}>
+					{!hideDeleted && isDeleted && <div className={styles.deleted}>삭제됨</div>}
 					<div className={styles.cardThumbnail}>
 						<Image
 							src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg"
