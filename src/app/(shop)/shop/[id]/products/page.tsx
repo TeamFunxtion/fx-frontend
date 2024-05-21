@@ -109,7 +109,7 @@ export default function MyProductsPage({ }) {
 					{
 						list && list.map((product, idx) => (
 							<div>
-								<ProductCard product={product} />
+								<ProductCard product={product} hideDeleted={true} />
 								<div className={styles.settingBtn} onClick={() => handleClickSetting(idx)}>
 									{
 										product.showPopup1 ? <BsXLg /> : <BsGearFill />
