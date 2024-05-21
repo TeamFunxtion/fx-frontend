@@ -8,10 +8,11 @@ export default function Etcsidebar() {
 			<h3 className={styles.etcNotice}>고객센터</h3>
 			<br />
 
+
 			<li className={styles.etcAsideLi}><Link href="/notice">공지사항</Link></li>
-			<li className={styles.etcAsideLi}><Link href="/notice/faq">자주 묻는 질문</Link></li>
+			<li className={styles.etcAsideLi}><Link href="/faq">자주 묻는 질문</Link></li>
 			<li className={styles.etcAsideLi}><Link href="/qna">1:1문의</Link></li>
-		</aside>
+		</aside >
 	)
 
 }
