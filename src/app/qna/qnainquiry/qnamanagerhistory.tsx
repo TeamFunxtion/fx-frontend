@@ -149,9 +149,14 @@ function QnaInquiryHistoryBack({list, qnaAnswerContent ,setQnaManagerAnswer ,ins
                         
                         
                     <div className={styles.qnaHistoryDiv} onClick={() => qnaAnswerContent(qna.id)}>
-                        <div className={styles.qnaHistoryTag}>{getQnaCategoryNameKR(qna.categoryId)}</div>
-                        <div className={styles.qnaHistoryContnt}>{qna.qnaTitle}</div>
+                        	<div className={styles.qnaHistoryTag}>{getQnaCategoryNameKR(qna.categoryId)}</div>
+							{qna.qnaAnswer === null ?
+								<div className={styles.qnaHistorAnswerNot}>답변미등록</div>:
+								<div className={styles.qnaHistorAnswerOk}>답변완료</div>
+							}
+						<div className={styles.qnaHistoryContnt}>{qna.qnaTitle}</div>
                         <div className={styles.qnaHistortAnswer}>등록일:{dateFormatterYYYYMMDDHHmm(qna.createDate)}</div>
+						
                     </div>
                     
                     {
