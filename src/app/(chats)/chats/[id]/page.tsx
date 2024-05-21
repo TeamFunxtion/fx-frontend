@@ -133,14 +133,8 @@ export default function User() {
 		getChatRoomInfo();
 	}, [])
 
+	// 구매자 & 판매자 모두 거래 완료 버튼 클릭 시
 	useEffect(() => {
-		if (safePaymentInfo && safePaymentInfo.status && safePaymentInfo.status !== "SP03" && sessionId) {
-			// sendMessage(JSON.stringify({
-			// 	type: "confirm",
-			// 	roomNumber: id,
-			// 	sessionId: sessionId
-			// }))
-		}
 
 		if (safePaymentInfo && safePaymentInfo.sellerOk === "Y" && safePaymentInfo.buyerOk === "Y" && safePaymentInfo.status !== "SP04") {
 			setSafePaymentInfo((prev) => { return { ...prev, status: "SP04" } });
@@ -180,7 +174,7 @@ export default function User() {
 		setSafePay(false);
 		setSafePayAcception(0);
 		insertMsg(title, safety, safePayAccept);
-		// console.log(safePay);
+
 	}
 
 
@@ -189,7 +183,7 @@ export default function User() {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			console.log(data);
+
 			if (data != null) {
 				setSafePaymentInfo(data);
 				setSafePayAcception(1);
@@ -211,7 +205,7 @@ export default function User() {
 	const closeModal = (finished) => {
 		setIsModalOpen(false);
 
-		// console.log(finished);
+		// 결제 완료 됐을 때
 		if (finished) {
 
 			// 상대방
