@@ -1,5 +1,8 @@
 'use client'
+import MyProductsPage from "@/app/(shop)/shop/[id]/products/page"
 import FxTab from "../FxTab"
+import { useState } from "react"
+import NoResult from "../NoResult"
 
 const items = [
 	{ label: '상품', value: 0 },
@@ -8,13 +11,20 @@ const items = [
 	{ label: '상점후기', value: 3 },
 ]
 
-export default function ShopVisit() {
+export default function ShopVisit({ params }) {
+	const [idx, setIdx] = useState(0);
+
 	const onClickTab = (index) => {
+		setIdx(index);
 	}
 
 	return (
 		<div>
 			<FxTab items={items} fullWidth={true} onClick={onClickTab} />
+			{idx === 0 && <MyProductsPage guest={true} storeId={params.id} />}
+			{idx === 1 && <NoResult text="준비중입니다." />}
+			{idx === 2 && <NoResult text="준비중입니다." />}
+			{idx === 3 && <NoResult text="준비중입니다." />}
 		</div>
 	)
 }

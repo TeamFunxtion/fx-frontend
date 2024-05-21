@@ -14,7 +14,7 @@ import _ from "lodash";
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
-export default function MyProductsPage({ }) {
+export default function MyProductsPage({ guest, storeId }: { guest: boolean, storeId: string }) {
 
 	const [list, setList] = useState([]);
 	const user = useRecoilValue(userInfoState);
@@ -34,7 +34,7 @@ export default function MyProductsPage({ }) {
 	const getList = async (page) => {
 		const result = await api.get('/products/my', {
 			params: {
-				userId: user.id,
+				userId: !guest ? user.id : storeId,
 				status: statusTypeId.current || 'ST01',
 				sort: sort || 'id',
 				page: page || currentPage || 1,
@@ -94,7 +94,9 @@ export default function MyProductsPage({ }) {
 
 	return (
 		<div className={styles.container}>
-			<FxTab items={productStatusTypes} onClick={onClickTab} />
+			{!guest &&
+				<FxTab items={productStatusTypes} onClick={onClickTab} />
+			}
 			<div className={styles.main}>
 				<div className={styles.header}>
 					<p className={styles.totalCount}>총 {totalElements}개</p>
@@ -110,25 +112,30 @@ export default function MyProductsPage({ }) {
 						list && list.map((product, idx) => (
 							<div>
 								<ProductCard product={product} hideDeleted={true} />
-								<div className={styles.settingBtn} onClick={() => handleClickSetting(idx)}>
-									{
-										product.showPopup1 ? <BsXLg /> : <BsGearFill />
-									}
-								</div>
 								{
-									product.showPopup1 && <ul className={styles.settingPopup}>
-										<li onClick={() => router.push(`/products/${product.id}/edit`)}>상품수정</li>
-										<li onClick={() => handleClickChangeStatus(idx)}>상태변경</li>
-										<li onClick={() => changeStatus(product.id, 'ST05')}>상품삭제</li>
-									</ul>
+									!guest && <>
+										<div className={styles.settingBtn} onClick={() => handleClickSetting(idx)}>
+											{
+												product.showPopup1 ? <BsXLg /> : <BsGearFill />
+											}
+										</div>
+										{
+											product.showPopup1 && <ul className={styles.settingPopup}>
+												<li onClick={() => router.push(`/products/${product.id}/edit`)}>상품수정</li>
+												<li onClick={() => handleClickChangeStatus(idx)}>상태변경</li>
+												<li onClick={() => changeStatus(product.id, 'ST05')}>상품삭제</li>
+											</ul>
+										}
+										{
+											product.showPopup2 && <ul className={styles.settingPopup}>
+												<li onClick={() => changeStatus(product.id, 'ST01')}>판매중</li>
+												<li onClick={() => changeStatus(product.id, 'ST02')}>판매완료</li>
+												<li onClick={() => handleClickChangeStatus(idx)}>취소</li>
+											</ul>
+										}
+									</>
 								}
-								{
-									product.showPopup2 && <ul className={styles.settingPopup}>
-										<li onClick={() => changeStatus(product.id, 'ST01')}>판매중</li>
-										<li onClick={() => changeStatus(product.id, 'ST02')}>판매완료</li>
-										<li onClick={() => handleClickChangeStatus(idx)}>취소</li>
-									</ul>
-								}
+
 							</div>
 						))
 					}
