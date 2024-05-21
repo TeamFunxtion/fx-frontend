@@ -12,6 +12,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
+import { API_URL } from "@/app/constants";
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
@@ -50,8 +51,6 @@ export default function User() {
 		}
 	}
 
-
-
 	let today = new Date();
 	const insertMsg = (chat, safety, safePayAccept) => {
 
@@ -74,7 +73,7 @@ export default function User() {
 
 	// 웹소켓 구현 위치
 
-	const { sendMessage, lastMessage } = useWebSocket(`ws://localhost:8090/chat/${id}`);
+	const { sendMessage, lastMessage } = useWebSocket(`ws://${API_URL}/chat/${id}`);
 
 	const [sessionId, setSessionId] = useState(0);
 
@@ -204,10 +203,8 @@ export default function User() {
 
 	const closeModal = (finished) => {
 		setIsModalOpen(false);
-
 		// 결제 완료 됐을 때
 		if (finished) {
-
 			// 상대방
 			sendMessage(JSON.stringify({
 				type: "confirm",
@@ -215,15 +212,39 @@ export default function User() {
 				sessionId: sessionId
 			}))
 		}
-
 	};
+
+	// 안전결제 status SP03으로 변경
+	const updateSafePayStatus = async () => {
+		if (!(chatRoomInfo.customer.point >= chatRoomInfo.product.currentPrice)) {
+			toast.error("잔액이 부족합니다!");
+			return;
+		} else {
+			const res = await api.patch(`/safe`, {
+				productId: chatRoomInfo.product.id,
+				sellerId: chatRoomInfo.store.id,
+				buyerId: chatRoomInfo.customer.id,
+				status: 'buyerPayment'
+			});
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				toast.success(msg || `결제 성공`);
+				getUserDetail();
+			}
+		}
+		closeModal(true);
+	}
 
 
 	// 판매자 판매 확정 버튼 클릭
 	const sellerConfirm = async () => {
-
 		if (chatRoomInfo != null) {
-			const res = await api.patch(`/safe/seller`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+			const res = await api.patch(`/safe`, {
+				productId: chatRoomInfo.product.id,
+				sellerId: chatRoomInfo.store.id,
+				buyerId: chatRoomInfo.customer.id,
+				status: 'sellerOk'
+			});
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || `판매 확정 성공`);
@@ -235,15 +256,18 @@ export default function User() {
 				sessionId: sessionId,
 				target: "sellerOk"
 			}))
-
 		}
-
 	}
 
 	// 구매자 구매 확정 버튼 클릭
 	const buyerConfirm = async () => {
 		if (chatRoomInfo != null) {
-			const res = await api.patch(`/safe/buyer`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+			const res = await api.patch(`/safe`, {
+				productId: chatRoomInfo.product.id,
+				sellerId: chatRoomInfo.store.id,
+				buyerId: chatRoomInfo.customer.id,
+				status: 'buyerOk'
+			});
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || `판매 확정 성공`);
@@ -255,9 +279,7 @@ export default function User() {
 					target: 'buyerOk'
 				}))
 			}
-
 		}
-
 	}
 
 	if (safePaymentInfo != null && safePaymentInfo.status == 'SP04') {
@@ -292,7 +314,7 @@ export default function User() {
 						<div className={styles.pay}>
 							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
 							<button onClick={openModal} className={styles.payBtn}><MdOutlinePayment />결제하기</button>
-							<SafePayModal isModalOpen={isModalOpen} onClose={closeModal} product={chatRoomInfo.product} customer={chatRoomInfo.customer} store={chatRoomInfo.store} />
+							<SafePayModal isModalOpen={isModalOpen} onClose={closeModal} point={chatRoomInfo.product.currentPrice} ok={updateSafePayStatus} />
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
