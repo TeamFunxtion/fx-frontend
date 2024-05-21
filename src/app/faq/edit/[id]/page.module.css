@@ -1,0 +1,39 @@
+.faqDiv{
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	 /*display: flex;*/
+	 justify-content: space-between;
+	 margin-top: 30px;
+}
+
+
+.faqContent{
+	align-content: center;
+	text-align: left;
+	width: 60%;
+	margin-left: 20%;
+}
+.faqButtonArea{
+	display: flex;
+	justify-content: center;
+}
+
+.faqUpdateButton{
+	color: white;
+  height: 50px;
+  background-color: var(--primary-color) !important;
+  width: 100px;
+	text-align: center;
+}
+.faqUpdate{
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.faqUpdateTitle{
+	width: 60%;
+}
+.faqNewArea{
+	margin-top: 3%;
+}
+

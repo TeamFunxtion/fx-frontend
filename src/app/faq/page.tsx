@@ -6,21 +6,25 @@ import Pagination from '@mui/material/Pagination';
 import { useSearchParams, useRouter } from "next/navigation";
 import { dateFormatterYYYYMMDDHHmm } from '@/utils/common';
 import toast from 'react-hot-toast';
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store/atoms";
+import Etcsidebar from "@/components/etc/etcsidebar";
 
-// FAQPage 컴포넌트
 export default function FAQPage() {
 	const [faqList, setFaqList] = useState([]);
 	const [openIndex, setOpenIndex] = useState(null);
 	const searchParams = useSearchParams();
 	const router = useRouter();
-
 	const [currentPage, setCurrentPage] = useState(Number(searchParams.get("page")) || 1);
 	const [pageInfo, setPageInfo] = useState({
 		totalPages: 1,
 		totalElements: 1,
 	});
+	const userInfoValue = useRecoilValue(userInfoState);
 
-	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+	const userRoleId = userInfoValue.roleId;
+
+	const handleChange = (event, value) => {
 		setCurrentPage(value);
 		router.push(`/faq?keyword=${searchParams.get("keyword") || ''}&page=${value}`);
 	};
@@ -31,7 +35,6 @@ export default function FAQPage() {
 				page: pageNo || 1,
 			}
 		});
-
 		setFaqList(result.data.content);
 		setPageInfo({
 			totalPages: result.data.totalPages,
@@ -57,15 +60,26 @@ export default function FAQPage() {
 	}, [searchParams]);
 
 	const handleNewPostClick = () => {
-		router.push('/faq/newfaq');
+		if (userRoleId === 2) {
+			router.push('/faq/newfaq');
+		} else {
+			toast.error("접근 권한이 없습니다.");
+		}
 	};
 
-	// 수정 페이지로 이동하는 함수
 	const handleEditClick = (id) => {
-		router.push(`/faq/edit/${id}`);
+		if (userRoleId === 2) {
+			router.push(`/faq/edit/${id}`);
+		} else {
+			toast.error("접근 권한이 없습니다.");
+		}
 	};
 
 	const deleteFaq = async (id) => {
+		if (userRoleId !== 2) {
+			toast.error("접근 권한이 없습니다.");
+			return;
+		}
 		const res = await api.delete(`/faqs/${id}`);
 		const { resultCode, msg } = res.data;
 		if (resultCode === '200') {
@@ -80,13 +94,10 @@ export default function FAQPage() {
 		<div>
 			<div className={styles.noticeMain}>
 				<aside className={styles.noticeAside}>
-					<h3 className={styles.noticeNotice}>고객센터</h3>
 					<br />
-					<li><a href="/">공지사항</a></li>
-					<li><a href="/faq">자주 묻는 질문</a></li>
-					<li><a href="/notice/">1:1문의</a></li>
+					<Etcsidebar />
 				</aside>
-				<button onClick={handleNewPostClick}>새 글 등록</button>
+				{userRoleId === 2 && <button onClick={handleNewPostClick}>새 글 등록</button>}
 				<div className={styles.container}>
 					<section className={styles.noticeSection}>
 						<div className={styles.noticeDiv}>
@@ -103,18 +114,19 @@ export default function FAQPage() {
 									dateFormatterYYYYMMDDHHmm={dateFormatterYYYYMMDDHHmm}
 									onEditClick={() => handleEditClick(faq.id)}
 									deleteFaq={() => deleteFaq(faq.id)}
+									userRoleId={userRoleId}
 								/>
 							))}
 						</div>
-						{faqList.length == 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
+						{faqList.length === 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
 						{faqList.length > 0 && (
 							<div className={styles.paginationBar}>
 								<Pagination
 									count={pageInfo.totalPages}
 									page={currentPage}
 									onChange={handleChange}
-									showFirstButton={true}
-									showLastButton={true}
+									showFirstButton
+									showLastButton
 									size='large'
 								/>
 							</div>
@@ -126,26 +138,26 @@ export default function FAQPage() {
 	);
 }
 
-// AccordionItem 컴포넌트
-function AccordionItem({ index, question, answer, isOpen, toggleAccordion, createdate, updatedate, id, dateFormatterYYYYMMDDHHmm, onEditClick, deleteFaq }) {
+function AccordionItem({ index, question, answer, isOpen, toggleAccordion, createdate, id, dateFormatterYYYYMMDDHHmm, onEditClick, deleteFaq, userRoleId }) {
 	return (
 		<div className={styles.noticeDiv} onClick={() => toggleAccordion(index)}>
 			<div className={styles.noticeisOpen}>
 				<div className={styles.noticeQ}>Q</div>
 				<h3 className={styles.noticeContent}>{question}</h3>
-				<div className={styles.noticeContent}>작성자:{id}</div>
 				<div className={styles.noticeSysdate}>{dateFormatterYYYYMMDDHHmm(createdate)}</div>
-				<div className={styles.noticeSysdate}>{updatedate}</div>
 				{isOpen ? '-' : '+'}
-				{/* 수정 버튼 */}
-				<button onClick={(e) => {
-					e.stopPropagation(); // 부모 요소로의 이벤트 전파 방지
-					onEditClick(); // 수정 버튼 클릭 시 이벤트 핸들러 호출
-				}}>수정</button>
-				<button onClick={(e) => {
-					e.stopPropagation(); // 부모 요소로의 이벤트 전파 방지
-					deleteFaq(); // 삭제 버튼 클릭 시 이벤트 핸들러 호출
-				}}>삭제</button>
+				{userRoleId === 2 && (
+					<>
+						<button onClick={(e) => {
+							e.stopPropagation();
+							onEditClick();
+						}}>수정</button>
+						<button onClick={(e) => {
+							e.stopPropagation();
+							deleteFaq();
+						}}>삭제</button>
+					</>
+				)}
 			</div>
 			{isOpen && <div>{answer}</div>}
 		</div>
