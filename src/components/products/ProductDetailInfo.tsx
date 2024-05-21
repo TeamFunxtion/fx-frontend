@@ -105,6 +105,14 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		}
 	}
 
+	const clickBid = () => {
+		if (!userInfo.id) {
+			router.push(LOGIN_URL);
+		} else {
+			toggleModal('bid');
+		}
+	}
+
 	const clickFastPurchase = () => {
 		if (!userInfo.id) {
 			router.push(LOGIN_URL);
@@ -314,7 +322,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						!isSeller &&
 						<div className={styles.btnContainer}>
 							<button className={styles.btnChat} onClick={clickChatting} disabled={isSeller}>💬1:1채팅</button>
-							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={() => toggleModal('bid')} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
+							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBid} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
 							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
 						</div>
 					}
