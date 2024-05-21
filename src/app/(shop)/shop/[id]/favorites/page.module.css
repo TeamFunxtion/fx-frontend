@@ -1,0 +1,52 @@
+.title {
+	font-size:1.8rem;
+	font-weight: 600;
+	height: 150px;
+}
+
+.container {
+  padding-bottom: 150px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 35px 0 15px 0;
+  font-size: 1rem;
+}
+
+.totalCount {
+  font-weight: 600;
+  font-size: larger;
+}
+
+
+.ul {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.ul > div {
+  position: relative;
+  cursor: pointer;
+}
+
+.settingLike {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 1.5rem;
+  color: red;
+}
+
+.settingUnLike{
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 1.5rem;
+  
+}
+
