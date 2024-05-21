@@ -72,8 +72,7 @@ export default function User() {
 
 
 	// 웹소켓 구현 위치
-
-	const { sendMessage, lastMessage } = useWebSocket(`ws://${API_URL}/chat/${id}`);
+	const { sendMessage, lastMessage } = useWebSocket(`ws://localhost:8090/chat/${id}`);
 
 	const [sessionId, setSessionId] = useState(0);
 
@@ -229,7 +228,9 @@ export default function User() {
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || `결제 성공`);
-				getUserDetail();
+				if (userId === chatRoomInfo.customer.id) { // 구매자일때
+					getUserDetail();
+				}
 			}
 		}
 		closeModal(true);
@@ -271,7 +272,6 @@ export default function User() {
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || `판매 확정 성공`);
-				getUserDetail();
 				sendMessage(JSON.stringify({
 					type: "success",
 					roomNumber: id,
@@ -282,9 +282,11 @@ export default function User() {
 		}
 	}
 
-	if (safePaymentInfo != null && safePaymentInfo.status == 'SP04') {
-		getUserDetail();
-	}
+	useEffect(() => {
+		if (safePaymentInfo != null && safePaymentInfo.status == 'SP04' && userId === chatRoomInfo.store.id) { // 판매자 && 거래완료 될때
+			getUserDetail();
+		}
+	}, [safePaymentInfo])
 
 	return (
 		<div className={styles.chatRoom}>
