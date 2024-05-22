@@ -6,3 +6,7 @@
   display: inline-block;
   font-weight: 600;
 }
+
+.smallText {
+  font-size: 0.7rem;
+}

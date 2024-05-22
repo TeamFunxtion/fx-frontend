@@ -261,8 +261,8 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							<li><BsEyeFill />&nbsp;{productDetail.views}</li>
 							<li><BsFillHeartFill />&nbsp;{productDetail.favorites || '0'}</li>
 							{productDetail.salesTypeId !== "SA03" ? <>
-								<CardLabel label="경매" backgroundColor="#0057ff" color="white" /> {productDetail.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
-							</> : <CardLabel label="대화 거래" color="black" />
+								<CardLabel label="경매" backgroundColor="#0057ff" color="white" /> {productDetail.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="#9e04e0" color="white" />}
+							</> : <CardLabel label="대화거래" color="black" />
 							}
 						</ul>
 						<ul className={styles.etcIcon}>

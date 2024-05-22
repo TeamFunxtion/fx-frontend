@@ -67,7 +67,7 @@ export default function ProductsNewForm({ product }) {
 		}
 		// console.log(values)
 
-		if (imgFile.length === 0) {
+		if (imgBase64.length === 0) {
 			toast.error("상품 이미지를 1개 이상 업로드해주세요!");
 			return;
 		}

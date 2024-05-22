@@ -1,5 +1,5 @@
 import { categories } from "@/app/constants";
-import { qnaCategories} from "@/app/constants";
+import { qnaCategories } from "@/app/constants";
 import _ from "lodash";
 
 export const getProductQualityNameKR = (typeId: string) => {

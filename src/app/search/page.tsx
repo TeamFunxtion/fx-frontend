@@ -37,6 +37,7 @@ export default function ProductsSearchPage() {
 				keyword,
 				category,
 				sort,
+				size: 30
 			}
 		});
 		setList(result.data.content);

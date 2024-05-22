@@ -42,8 +42,8 @@ export default function ProductCard({ product, hideDeleted }) {
 					<div className={styles.cardBody}>
 						<div>
 							{product.salesTypeId !== "SA03" ? <>
-								<CardLabel label="경매" backgroundColor="#0057ff" color="white" /> {product.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="black" color="white" />}
-							</> : <CardLabel label="대화 거래" />
+								<CardLabel label="경매" backgroundColor="#0057ff" color="white" /> {product.salesTypeId == "SA02" && <CardLabel label="블라인드" backgroundColor="#9e04e0" color="white" />}
+							</> : <CardLabel label="대화거래" />
 							}
 						</div>
 						<h3 className={styles.productTitle}>{product.productTitle}</h3>
