@@ -78,7 +78,7 @@ export default function MyProductsPage({ guest, storeId }: { guest: boolean, sto
 	}
 
 	const changeStatus = async (productId, statusType) => {
-		const result = await api.patch("/products", {
+		const result = await api.patch("/products/status", {
 			productId,
 			statusTypeId: statusType,
 		});

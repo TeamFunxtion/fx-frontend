@@ -2,7 +2,7 @@ import { API_URL } from "./constants";
 import Home from "@/components/Home";
 
 export async function getAllProducts() {
-  const response = await fetch(`${API_URL}/products`, { cache: 'no-store' });
+  const response = await fetch(`${API_URL}/products?size=100`, { cache: 'no-store' });
   return await response.json();
 }
 
