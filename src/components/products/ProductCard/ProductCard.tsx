@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 export default function ProductCard({ product, hideDeleted }) {
 	const router = useRouter();
 	const [mounted, setMounted] = useState(false);
+	console.log(product);
 
 	const isDeleted = product && product.statusTypeId === 'ST05';
 
@@ -31,13 +32,12 @@ export default function ProductCard({ product, hideDeleted }) {
 					{!hideDeleted && isDeleted && <div className={styles.deleted}>삭제됨</div>}
 					<div className={styles.cardThumbnail}>
 						<Image
-							src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg"
+							src={`${product.thumbnailUrl || 'https://funxtion-image.s3.amazonaws.com/funxtion/no-image.jpg'}`}
 							width={200}
 							height={200}
 							layout="responsive"
 							alt={product.productTitle}
 						/>
-						{/* <img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" alt="" /> */}
 					</div>
 					<div className={styles.cardBody}>
 						<div>

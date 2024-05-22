@@ -8,7 +8,7 @@ const nextConfig = {
     scrollRestoration: true,
   },
   images: {
-    domains: ["funxtion-image.s3.ap-northeast-2.amazonaws.com"],
+    domains: ["funxtion-image.s3.amazonaws.com"],
   },
 };
 
