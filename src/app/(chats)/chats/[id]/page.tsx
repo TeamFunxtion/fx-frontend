@@ -52,7 +52,7 @@ export default function User() {
 	}
 
 	let today = new Date();
-	const insertMsg = (chat, safety, safePayAccept) => {
+	const insertMsg = (chat, safety, safePayAccept, safeRefuse) => {
 
 		sendMessage(JSON.stringify({
 			type: 'message',
@@ -65,7 +65,8 @@ export default function User() {
 			buyerId: chatRoomInfo.customer.id,
 			createDate: today,
 			safe: safety,
-			safePayAccept: safePayAccept
+			safePayAccept: safePayAccept,
+			safeRefuse: safeRefuse
 		}))
 
 	}
@@ -90,7 +91,8 @@ export default function User() {
 						setSessionId(object.sessionId);
 					} else if (object.type === "message") {
 						setMsgList((prev) => [...prev, object]);
-						if (object.safe === true) {
+						if (object.safe === true || safePay === true && object.safePayRefuse === false) {
+
 							setSafePay(true);
 						} else {
 							if (object.safePayAccept === true) {
@@ -139,6 +141,7 @@ export default function User() {
 		}
 	}, [sessionId, safePaymentInfo])
 
+	// 구매자가 안전 거래 요청 시
 	const safeTrade = () => {
 
 		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까?')
@@ -146,8 +149,9 @@ export default function User() {
 			const title = "상품의 안전거래가 요청되었습니다.";
 			const safety = true;
 			const safePayAccept = false;
+			const safeRefuse = false;
 			setSafePay(true);
-			insertMsg(title, safety, safePayAccept);
+			insertMsg(title, safety, safePayAccept, safeRefuse);
 		}
 	}
 
@@ -157,9 +161,10 @@ export default function User() {
 		const title = "상품의 안전거래가 수락되었습니다.";
 		const safety = false;
 		const safePayAccept = true;
+		const safeRefuse = false;
 		setSafePay(true);
 		setSafePayAcception(1);
-		insertMsg(title, safety, safePayAccept);
+		insertMsg(title, safety, safePayAccept, safeRefuse);
 		setSafePaymentInfo((prevState) => {
 			return { ...prevState, status: "SP02" }
 		});
@@ -169,9 +174,10 @@ export default function User() {
 		const title = "상품의 안전거래가 거절되었습니다.";
 		const safety = false;
 		const safePayAccept = false;
+		const safeRefuse = true;
 		setSafePay(false);
 		setSafePayAcception(0);
-		insertMsg(title, safety, safePayAccept);
+		insertMsg(title, safety, safePayAccept, safeRefuse);
 
 	}
 
@@ -474,8 +480,6 @@ export default function User() {
 									</div>);
 							})}
 						</div>
-
-
 					</div>
 				</div>
 
@@ -485,9 +489,15 @@ export default function User() {
 							setChat(e.target.value)
 						}} onKeyPress={(e) => {
 							if (e.key == 'Enter') {
-								const safety = false;
+								let safety = false;
+								if (safePay) {
+									safety = true;
+								} else {
+									safety = false;
+								}
 								const safePayAccept = false;
-								insertMsg(e.target.value, safety, safePayAccept);
+								const safeRefuse = false;
+								insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
 								setChat('');
 							}
 						}} />
