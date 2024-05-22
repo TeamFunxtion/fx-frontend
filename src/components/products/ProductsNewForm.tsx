@@ -4,14 +4,14 @@ import styles from "./ProductsNewForm.module.css"
 import { useForm, SubmitHandler } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { categories } from "@/app/constants"
 import { useRecoilValue } from "recoil"
 import { userInfoState } from "@/store/atoms"
 import MRadio, { TRadioGroup } from "../atom/MRadio"
-import axios, { AxiosInstance } from "axios"
-import api, { fileApi } from "@/utils/api"
+import { fileApi } from "@/utils/api"
 import { ErrorMessage } from "@hookform/error-message"
+import _ from 'lodash';
 
 interface FormValues {
 	storeId: string,
@@ -51,91 +51,84 @@ export default function ProductsNewForm({ product }) {
 
 	const router = useRouter();
 	const [categoryId, setCategoryId] = useState((product && product.categoryId) || "CA01");
-	const { id } = useRecoilValue(userInfoState)
+	const user = useRecoilValue(userInfoState)
+	const { id } = user;
 
 	const { salesTypeId } = watch();
 
 	const [imgBase64, setImgBase64] = useState([]);
 	const [imgFile, setImgFile] = useState([]);
+	const removeImgIds = useRef([]);
 
 	const onSubmitHandler: SubmitHandler<FormValues> = async (values) => {
 		if (!id) {
 			router.push("/auth/login");
 			return false;
 		}
-
 		// console.log(values)
 
-		// const fd = new FormData();
-		// for (let i = 0; i < imgFile.length; i++) {
-		// 	fd.append("file", imgFile[i]);
-		// }
+		if (imgFile.length === 0) {
+			toast.error("상품 이미지를 1개 이상 업로드해주세요!");
+			return;
+		}
 
-		// fd.append("productRequestDto", JSON.stringify({ ...values, storeId: id, categoryId }));
+		const formData = new FormData();
+		for (let i = 0; i < imgFile.length; i++) {
+			formData.append("file", imgFile[i]);
+		}
 
-		// // custom hook
-		// await fileApi({
-		// 	method: 'POST',
-		// 	url: '/products/uploadFiles',
-		// 	data: fd
-		// })
-		// 	.then((response) => {
-		// 		if (response.data) {
-		// 			setImgFile(null);
-		// 			setImgBase64([]);
-		// 			alert("업로드 완료!");
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log(error)
-		// 		alert("실패!");
-		// 	})
-
-
-		const requestbody = {
+		formData.append("newProduct", JSON.stringify({
 			...values,
 			productId,
 			storeId: id,
 			categoryId,
-			productPrice: values.productPrice.replace(/[^0-9]+/g, ""),
-		};
+			productPrice: String(values.productPrice).replace(/[^0-9]+/g, ""),
+			removeImgIds: !isNew ? removeImgIds.current : undefined,
+		}));
 
-		if (isNew) { // 생성 
-			const res = await api.post('/products', requestbody);
-			const { data: { resultCode, msg, data } } = res;
-			if (resultCode == '200') {
-				toast.success(msg || '상품 등록 성공!');
-				router.push(`/products/${data.id}`);
-			} else {
-				toast.error(msg || '상품 등록 실패!');
-			}
-
-		} else { // 수정
-			const res = await api.patch('/products', requestbody);
-			const { data: { resultCode, msg, data } } = res;
-			if (resultCode == '200') {
-				toast.success(msg || '상품 수정 성공!');
-				router.push(`/products/${data.id}`);
-			} else {
-				toast.error(msg || '상품 수정 실패!');
-			}
-		}
+		await fileApi({
+			method: isNew ? 'POST' : 'PATCH',
+			url: '/products',
+			data: formData
+		})
+			.then((res) => {
+				const { data: { resultCode, msg, data } } = res;
+				if (resultCode == '200') {
+					toast.success(msg || `상품 ${isNew ? '등록' : '수정'} 성공!`);
+					router.push(`/products/${data.id}`);
+				} else {
+					toast.error(msg || `상품 ${isNew ? '등록' : '수정'} 실패!`);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+				toast.error(`상품 ${isNew ? '등록' : '수정'} 실패!`);
+			})
 	}
 
 	const handleChangeFile = (event: any) => {
 		// console.log(imgFile.length);
 		// console.log(event.target.files.length);
-		if (imgFile.length + event.target.files.length > FILE_MAX_COUNT) {
+		if (imgBase64.length + event.target.files.length > FILE_MAX_COUNT) {
 			toast.error(`사진 첨부는 최대 ${FILE_MAX_COUNT}장까지 가능합니다.`);
 			return false;
 		}
 
+		// 파일 크기 1MB 이하인것만 
+		const files = _.filter(event.target.files, (file) => {
+			return file.size <= (1024 * 1024 * 1);
+		})
+
+		if (files.length !== event.target.files.length) {
+			toast.error("이미지는 최대 1MB 크기로 제한됩니다.");
+		}
+
 		// console.log(event.target.files);
-		setImgFile(imgFile => [...imgFile, ...event.target.files]);
-		for (let i = 0; i < event.target.files.length; i++) {
-			if (event.target.files[i]) {
+		setImgFile(imgFile => [...imgFile, ...files]);
+		for (let i = 0; i < files.length; i++) {
+			if (files[i]) {
 				let reader = new FileReader();
-				reader.readAsDataURL(event.target.files[i]);
+				reader.readAsDataURL(files[i]);
 				reader.onloadend = () => {
 					const base64 = reader.result; // 비트맵 데이터 리턴, 이 데이터를 통해 파일 미리보기가 가능함
 					// console.log(base64)
@@ -149,6 +142,13 @@ export default function ProductsNewForm({ product }) {
 	}
 
 	const removeImg = (index) => {
+		if (!isNew) { // 수정일때는 기존 이미지를 삭제한건지 체크
+			const img = _.find(product.images, { imageUrl: imgBase64[index] });
+			if (img && img.id) {
+				removeImgIds.current.push(img.id);
+			}
+		}
+
 		const newImgFile = [...imgFile];
 		const newImgBase64 = [...imgBase64];
 		newImgFile.splice(index, 1);
@@ -158,11 +158,18 @@ export default function ProductsNewForm({ product }) {
 	}
 
 	useEffect(() => {
-		if (!id) {
-			router.push("/auth/login");
-		} else if (!isNew && id !== product.seller.id) {
-			router.push("/");
-		}
+		setTimeout(() => {
+			if (!id) {
+				router.push("/auth/login");
+			} else if (!isNew && id !== product.seller.id) {
+				router.push("/");
+			} else {
+				if (!isNew && product.images.length > 0) {
+					const images = product.images.map((img) => img.imageUrl);
+					setImgBase64(images);
+				}
+			}
+		}, 2000)
 	}, [])
 
 	return (
@@ -171,11 +178,11 @@ export default function ProductsNewForm({ product }) {
 				<ul className={styles.list}>
 					<h2 className={styles.listTitle}>상품 정보</h2>
 					<li className={styles.listRow}>
-						<div className={styles.rowLabel}>상품 이미지<span className={styles.small}>({imgFile.length}/{FILE_MAX_COUNT})</span></div>
+						<div className={styles.rowLabel}>상품 이미지<sup className={styles.required}>*</sup><span className={styles.small}>({imgFile.length}/{FILE_MAX_COUNT})</span></div>
 						<div className={styles.rowContent}>
 							<ul className={styles.images}>
 								<label htmlFor="file">
-									<li><BsCardImage /><br />이미지 업로드</li>
+									<li style={{ textAlign: 'center' }}><BsCardImage /><br />이미지 업로드<br />(최대 1MB)</li>
 								</label>
 								<input type="file" id="file" onChange={handleChangeFile} multiple style={{ display: 'none' }} />
 								{imgBase64.map((item, index) => {
