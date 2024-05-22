@@ -14,8 +14,8 @@ export default function Auctions() {
 	const [list, setList] = useState([]);
 	const user = useRecoilValue(userInfoState);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
-	const [totalElements, setTotalElements] = useState(1);
+	const [totalPages, setTotalPages] = useState(0);
+	const [totalElements, setTotalElements] = useState(0);
 	const statusTypeId = useRef('ST01');
 	const [sort, setSort] = useState('id');
 
