@@ -251,7 +251,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						images={images}
 						showBullets={true}
 						showNavs={true}
-					/> : <img src="https://blog.kakaocdn.net/dn/bezjux/btqCX8fuOPX/6uq138en4osoKRq9rtbEG0/img.jpg" />}
+					/> : <img src="https://funxtion-image.s3.amazonaws.com/funxtion/no-image.jpg" />}
 				</div>
 				<div className={styles.contentContainer}>
 					<h2 className={styles.productTitle}>{productDetail.productTitle} </h2>

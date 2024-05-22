@@ -7,6 +7,7 @@
   background-color: white;
   border: 1px solid rgb(240, 240, 240);
   font-size: 0.91rem;
+  z-index: 999;
 }
 
 .categoryList li {

@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation';
 export default function PointNotEnoughModal({ clickModal }) {
 	const router = useRouter();
 
-	const clickOk = () => {
-		router.push("/shop/point");
-	}
-
 	return (
 		<ModalBox onClick={clickModal}>
 			<ModalContent onClick={(e) => e.stopPropagation()}>
@@ -19,8 +15,6 @@ export default function PointNotEnoughModal({ clickModal }) {
 				<ModalBody>
 				</ModalBody>
 				<ModalFooter>
-					<button className='btn-close' onClick={clickModal}>취소</button>
-					<button onClick={clickOk}>충전하러 가기</button>
 				</ModalFooter>
 			</ModalContent>
 		</ModalBox>
