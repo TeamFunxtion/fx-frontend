@@ -40,3 +40,4 @@ export const productStatusTypes = [
   { label: "거래중", value: "ST04" },
   { label: "삭제", value: "ST05" },
 ];
+
