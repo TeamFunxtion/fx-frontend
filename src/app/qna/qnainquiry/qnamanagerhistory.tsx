@@ -22,10 +22,6 @@ export default function QnaInquiryHistory() {
 		totalElements: 1,
 	});
 
-	const userInfoValue = useRecoilValue(userInfoState);
-	const userId = userInfoValue.id;
-	const userEmail = userInfoValue.email;
-	const useRole = userInfoValue.roleId;
 	const router = useRouter();
 	const [qnaManagerAnswer,setQnaManagerAnswer] = useState('');
     const [qnaAnswerId,setQnaAnswerId] = useState('');
