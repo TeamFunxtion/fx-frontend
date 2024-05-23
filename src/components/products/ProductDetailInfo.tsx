@@ -131,12 +131,9 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		const response = await getProductDetail(id, userInfo.id);
 		// console.log(response);
 		setProductDetail(response.data);
-
 		setIsFollow(response.data.follow);
 	}
-	if (productDetail != null) {
-		console.log(productDetail);
-	}
+
 
 	const images = productDetail.images.map((img: any) => img.imageUrl);
 
@@ -370,7 +367,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						<button
 							className={isFollow ? styles.followedBtn : styles.followBtn}
 							onClick={() => { setIsFollow(!isFollow); changeFollowState(seller.id); }}>
-							{isFollow ? '팔로우 해제' : '+팔로우'}
+							{isFollow ? '팔로우 해제' : '+ 팔로우'}
 						</button>
 					)}
 				</div>
