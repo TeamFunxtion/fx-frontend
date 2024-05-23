@@ -71,6 +71,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const [showAnimation, setShowAnimation] = useState(false);
 	const isSeller = userInfo.id === productDetail.seller.id; // 판매자 여부
 
+
 	const toggleModal = (name: string) => {
 		if ((name === 'bid' || name === 'report') && !userInfo.id) {
 			router.push(LOGIN_URL);
@@ -130,7 +131,9 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		const response = await getProductDetail(id, userInfo.id);
 		// console.log(response);
 		setProductDetail(response.data);
+		setIsFollow(response.data.follow);
 	}
+
 
 	const images = productDetail.images.map((img: any) => img.imageUrl);
 
@@ -225,6 +228,20 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			toast.error(msg || '신고 접수 실패!');
 		}
 	}
+
+	const changeFollowState = async (toId) => {
+		const res = await api.post(`/follow/follower`, { toId: toId, fromId: userInfo.id });
+		const { data: { resultCode, msg } } = res;
+		if (resultCode === '200') {
+			toast.success(msg || '팔로우 상태 변경 성공!');
+		}
+	};
+
+	const [isFollow, setIsFollow] = useState(false);
+
+
+
+
 
 	return (
 		<section className={styles.section} >
@@ -346,7 +363,13 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							{seller.intro}
 						</div>
 					</Link>
-					{(!isSeller && userInfo.id) && <button className={styles.followBtn}>+ 팔로우</button>}
+					{!isSeller && userInfo.id && (
+						<button
+							className={isFollow ? styles.followedBtn : styles.followBtn}
+							onClick={() => { setIsFollow(!isFollow); changeFollowState(seller.id); }}>
+							{isFollow ? '팔로우 해제' : '+ 팔로우'}
+						</button>
+					)}
 				</div>
 			</div>
 		</section >
