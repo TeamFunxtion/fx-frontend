@@ -366,9 +366,13 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							{seller.intro}
 						</div>
 					</Link>
-					{(!isSeller && userInfo.id && !isFollow)
-						? <button className={styles.followBtn} onClick={() => { setIsFollow(!isFollow); changeFollowState(seller.id); }}>+ 팔로우</button>
-						: <button className={styles.followedBtn} onClick={() => { setIsFollow(!isFollow); changeFollowState(seller.id); }}> 팔로우 해제</button>}
+					{!isSeller && userInfo.id && (
+						<button
+							className={isFollow ? styles.followedBtn : styles.followBtn}
+							onClick={() => { setIsFollow(!isFollow); changeFollowState(seller.id); }}>
+							{isFollow ? '팔로우 해제' : '+팔로우'}
+						</button>
+					)}
 				</div>
 			</div>
 		</section >
