@@ -31,7 +31,7 @@ const buyColumns: readonly BuyColumn[] = [
 	},
 	{ id: 'productTitle', label: '상품명', minWidth: 300 },
 	{ id: 'productPrice', label: '금액', minWidth: 150 },
-	{ id: 'nickname', label: '판매자', minWidth: 170 },
+	{ id: 'nickname', label: '구매자', minWidth: 170 },
 	{
 		id: 'createDate',
 		label: '거래날짜',
