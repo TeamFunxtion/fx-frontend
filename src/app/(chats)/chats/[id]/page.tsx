@@ -490,7 +490,9 @@ export default function User() {
 				<div className={styles.chatInput}>
 					<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
 						onChange={(e) => {
-							setChat(e.target.value)
+							if (e.target.value.trim() != '') {
+								setChat(e.target.value)
+							}
 						}} onKeyPress={(e) => {
 							if (e.key == 'Enter') {
 								let safety = false;
@@ -501,7 +503,9 @@ export default function User() {
 								}
 								const safePayAccept = false;
 								const safeRefuse = false;
-								insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
+								if (e.target.value.trim() != '') {
+									insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
+								}
 								setChat('');
 							}
 						}} />
