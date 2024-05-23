@@ -294,11 +294,15 @@ export default function User() {
 		}
 	}, [safePaymentInfo])
 
+	if (chatRoomInfo != null) {
+		console.log(chatRoomInfo);
+	}
+
 	return (
 		<div className={styles.chatRoom}>
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
-					<img src="https://cdn.pixabay.com/photo/2016/10/10/14/13/dog-1728494_1280.png"
+					<img src={chatRoomInfo != null ? chatRoomInfo.store.profileImageUrl : ""}
 						className={styles.profileImg} />
 					<div className={styles.chatName}>
 						{chatRoomInfo != null && chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : ""}
@@ -366,7 +370,7 @@ export default function User() {
 				<div className={styles.chatProduct}>
 					<div className={styles.connectProduct}>연결된 상품</div>
 					<div className={styles.chatProductInfo}>
-						<img src="https://cdn.pixabay.com/photo/2016/03/31/20/13/chair-1295604_1280.png"
+						<img src={chatRoomInfo != null ? chatRoomInfo.product.thumbnailUrl : ""}
 							className={styles.productImg} />
 						<div className={styles.price}>&nbsp;{chatRoomInfo == null ? '' : chatRoomInfo.product.currentPrice}원</div>
 					</div>
