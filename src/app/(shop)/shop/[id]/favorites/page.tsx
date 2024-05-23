@@ -60,6 +60,9 @@ export default function Favorites({ }) {
 		}
 	}
 
+
+
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.main}>
@@ -74,10 +77,10 @@ export default function Favorites({ }) {
 
 								<ProductCard product={product.product} />
 								{product.liked ?
-									<div className={styles.settingLike} onClick={() => updateFavorites(product.userId, product.product.id, idx)}>
+									<div className={styles.settingLike} onClick={() => { setTotalElements(totalElements - 1); updateFavorites(product.userId, product.product.id, idx); }}>
 										<IoIosHeart />
 									</div> :
-									<div className={styles.settingUnLike} onClick={() => updateFavorites(product.userId, product.product.id, idx)}>
+									<div className={styles.settingUnLike} onClick={() => { setTotalElements(totalElements + 1); updateFavorites(product.userId, product.product.id, idx); }}>
 										<IoIosHeart />
 									</div>}
 
@@ -92,7 +95,7 @@ export default function Favorites({ }) {
 						onChange={handleChange}
 					/>
 				}
-			</div>
-		</div>
+			</div >
+		</div >
 	)
 }
