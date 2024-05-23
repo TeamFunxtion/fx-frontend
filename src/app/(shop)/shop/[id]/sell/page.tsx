@@ -16,7 +16,7 @@ import { styled } from '@mui/material';
 import { getProductSalesNameKR } from "@/utils/product";
 
 interface BuyColumn {
-	id: 'salesTypeId' | 'productTitle'| 'productPrice' | 'nickname' | 'createDate';
+	id: 'salesTypeId' | 'productTitle' | 'productPrice' | 'nickname' | 'createDate';
 	label: string;
 	minWidth?: number;
 	align?: 'right';
@@ -24,30 +24,28 @@ interface BuyColumn {
 }
 
 const buyColumns: readonly BuyColumn[] = [
-	
-	{ id: 'salesTypeId', label:'판매방식', minWidth:100,
-	format: (value: string) => getProductSalesNameKR(value)
+
+	{
+		id: 'salesTypeId', label: '판매방식', minWidth: 100,
+		format: (value: string) => getProductSalesNameKR(value)
 	},
-    
-    { id: 'productTitle', label:'상품명', minWidth:300},
-	
-	{ id: 'productPrice', label:'금액', minWidth:150},
-    {id:'nickname',label:'판매자',minWidth:170},
+	{ id: 'productTitle', label: '상품명', minWidth: 300 },
+	{ id: 'productPrice', label: '금액', minWidth: 150 },
+	{ id: 'nickname', label: '판매자', minWidth: 170 },
 	{
 		id: 'createDate',
 		label: '거래날짜',
 		minWidth: 170,
 		format: (value: string) => dateFormatterYYYYMMDDHHmm(value)
-		
+
 	},
 ];
 
 interface BuyData {
-	
-    salesTypeId: string;
+	salesTypeId: string;
 	productTitle: string;
 	productPrice: string;
-    nickname: string;
+	nickname: string;
 	createDate: string;
 }
 
@@ -76,23 +74,19 @@ export default function StickyHeadTable() {
 
 	const [buys, setBuys] = useState([]);
 	const user = useRecoilValue(userInfoState);
-    
+
 
 	const getList = async () => {
 		const result = await api.get(`/sells?sellerId=${user.id}`);
 		const { data: { resultCode, data } } = result;
 		if (resultCode === "200") {
 			setBuys(data);
-            console.log(data);
 		}
 	}
-    
+
 	useEffect(() => {
 		getList();
-        
 	}, [])
-
-   
 
 	return (
 		<Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -123,7 +117,7 @@ export default function StickyHeadTable() {
 												<TableCell key={column.id} align={column.align}>
 													{column.format && typeof value === 'number'
 														? column.format(value)
-														: column.format && ( column.id === 'createDate' || column.id === 'salesTypeId') ? column.format(value) : value}
+														: column.format && (column.id === 'createDate' || column.id === 'salesTypeId') ? column.format(value) : value}
 												</TableCell>
 											);
 										})}
