@@ -40,9 +40,20 @@ export default function ProfilePage() {
     const handleUpdate = () => {
         // 비밀번호와 비밀번호 확인이 일치하는지 확인
         if (password !== confirmPassword) {
-            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            alert("비밀번호와 현재 비밀번호가 일치하지 않습니다.");
             return;
         }
+        // 현재 비밀번호와 신규 비밀번호가 같은지 확인
+        if (password === newPassword) {
+            alert("현재 비밀번호와 신규 비밀번호는 같을 수 없습니다.");
+            return;
+        }
+        // 신규 비밀번호가 비어 있는지 확인
+        if (newPassword.trim() === '') {
+            alert("신규 비밀번호를 입력해 주세요.");
+            return;
+        }
+
 
         // 서버에 비밀번호 변경 요청
         api.put('/members/update', {
@@ -62,6 +73,22 @@ export default function ProfilePage() {
                 alert("회원 정보 수정에 실패하였습니다.");
             });
     };
+    const handleDelete = () => {
+        // 서버에 탈퇴 요청
+        api.delete(`/delete/${userId}`) // userId를 경로 변수로 전달
+            .then(response => {
+                console.log(response.data);
+                alert(response.data.msg);
+                if (response.data.code === "200") {
+                    router.push('/'); // 탈퇴 후 메인 페이지로 이동
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting account:', error);
+                alert("회원 탈퇴에 실패하였습니다.");
+            });
+    };
+
 
     return (
         <div>
@@ -101,8 +128,8 @@ export default function ProfilePage() {
             </table>
             <div className={styles.buttondiv}>
                 <button className={styles.updateButton} onClick={handleUpdate}>수정완료</button>
-                <button className={styles.outButton}>회원탈퇴</button>
+                <button className={styles.outButton} onClick={handleDelete}>회원탈퇴</button>
             </div>
-        </div>
+        </div >
     );
 }
