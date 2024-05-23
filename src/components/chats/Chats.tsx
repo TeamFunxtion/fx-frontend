@@ -37,7 +37,10 @@ export default function Chats() {
 	const router = useRouter();
 	useEffect(() => {
 		getChatRoomList();
+
 	}, []);
+
+
 
 	let lastMsgDate = "";
 	if (chats.length > 0) {
@@ -76,7 +79,7 @@ export default function Chats() {
 								return (
 									<Link href={`/chats/${item.id}`}>
 										<div key={index} className={styles.list}>
-											<img src="https://cdn.pixabay.com/photo/2016/10/10/14/13/dog-1728494_1280.png"
+											<img src={item.store.profileImageUrl}
 												className={styles.profileImg} />
 
 											<div className={styles.shortcut}>
@@ -88,7 +91,7 @@ export default function Chats() {
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>
-											<img src="https://cdn.pixabay.com/photo/2016/03/31/20/13/chair-1295604_1280.png"
+											<img src={item.product.thumbnailUrl}
 												className={styles.productImg} />
 										</div>
 									</Link>
