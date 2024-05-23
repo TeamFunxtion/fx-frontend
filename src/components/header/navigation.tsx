@@ -9,7 +9,7 @@ import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import LogoutModal from "../modal/LogoutModal";
-import { numberFormatter } from "@/utils/common";
+import { getNotificationIcons, numberFormatter } from "@/utils/common";
 import useModal from "@/hooks/useModal";
 import PaymentModal from "../modal/PaymentModal";
 import { API_URL } from "@/app/constants";
@@ -50,7 +50,6 @@ export default function Navigation() {
 		}
 	}
 
-
 	const onClickLogout = () => {
 		setShowModalLogout(!showModalLogout);
 	}
@@ -61,10 +60,11 @@ export default function Navigation() {
 
 			eventSource.onmessage = function (event) {
 				console.log(event.data);
-
+				const jsonData = JSON.parse(event.data);
 				toast((t) => (
 					<span>
-						{event.data}
+						<img src={jsonData.data.thumbnailUrl} alt="" />
+						{jsonData.message}
 						<button onClick={() => toast.dismiss(t.id)}>
 							Dismiss
 						</button>
@@ -72,7 +72,7 @@ export default function Navigation() {
 				), {
 					duration: 30000,
 					position: 'top-center',
-					icon: '👏',
+					icon: getNotificationIcons(jsonData.type),
 				});
 			};
 

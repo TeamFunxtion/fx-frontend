@@ -46,3 +46,14 @@ export const copyClipboard = async (text: string) => {
     toast.success("클립보드에 복사 완료!");
   } catch (e) {}
 };
+
+export const getNotificationIcons = (type: string) => {
+  switch (type) {
+    case "auction_winner":
+      return "👏";
+    case "auction_miss":
+      return "😡";
+    default:
+      return "😀";
+  }
+};
