@@ -84,6 +84,17 @@ button:hover {
   padding-top: 50px;
 }
 
+.error {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: rgb(53, 53, 53);
+}
+
 .paginationBar {
   display: flex;
   justify-content: center;
