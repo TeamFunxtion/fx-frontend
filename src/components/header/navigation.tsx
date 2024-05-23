@@ -12,6 +12,8 @@ import LogoutModal from "../modal/LogoutModal";
 import { numberFormatter } from "@/utils/common";
 import useModal from "@/hooks/useModal";
 import PaymentModal from "../modal/PaymentModal";
+import { API_URL } from "@/app/constants";
+import toast from "react-hot-toast";
 
 export default function Navigation() {
 	const user = useRecoilValue(userInfoState);
@@ -52,6 +54,39 @@ export default function Navigation() {
 	const onClickLogout = () => {
 		setShowModalLogout(!showModalLogout);
 	}
+
+	useEffect(() => {
+		if (user && user.id) {
+			const eventSource = new EventSource(`${API_URL}/notify/events/${user.id}`);
+
+			eventSource.onmessage = function (event) {
+				console.log(event.data);
+
+				toast((t) => (
+					<span>
+						{event.data}
+						<button onClick={() => toast.dismiss(t.id)}>
+							Dismiss
+						</button>
+					</span>
+				), {
+					duration: 30000,
+					position: 'top-center',
+					icon: '👏',
+				});
+			};
+
+			eventSource.onerror = function (error) {
+				console.error('EventSource failed:', error);
+				eventSource.close();
+			};
+
+			return () => {
+				eventSource.close();
+			};
+		}
+
+	}, [user]);
 
 	return (
 		<nav className={styles.navigation}>
