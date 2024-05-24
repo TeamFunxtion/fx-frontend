@@ -31,10 +31,7 @@ export default function User() {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-
 			setChatRoomInfo(data);
-			toast.success(msg || `${id}방 조회 성공!`);
-
 			if (data != null) {
 				getSafePaymentInfo(data);
 			}
@@ -47,7 +44,6 @@ export default function User() {
 		const res = await api.patch(`chats/${id}/messages`, { userId: userId, roomId: id });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			toast.success(msg || `${id}방 채팅 읽기 완료!`);
 		}
 	}
 
@@ -187,15 +183,11 @@ export default function User() {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-
 			if (data != null) {
 				setSafePaymentInfo(data);
 				setSafePayAcception(1);
 				setSafePay(true);
-
 			}
-			toast.success(msg || `${id}방 안전거래 여부 조회 성공!`);
-
 		}
 	}
 
