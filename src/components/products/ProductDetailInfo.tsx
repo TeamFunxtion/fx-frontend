@@ -19,6 +19,7 @@ import { API_URL } from "@/app/constants";
 import ProductReportModal from "../modal/ProductReportModal";
 import AuctionWinnerModal from "../modal/AuctionWinnerModal";
 import Confetti from 'react-confetti'
+import useUserInfo from "@/hooks/useUserInfo";
 
 
 export async function getProductDetail(id: string, userId: string) {
@@ -70,6 +71,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const LOGIN_URL = "/auth/login";
 	const [showAnimation, setShowAnimation] = useState(false);
 	const isSeller = userInfo.id === productDetail.seller.id; // 판매자 여부
+	const { getUserDetail } = useUserInfo();
 
 
 	const toggleModal = (name: string) => {
@@ -179,6 +181,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			if (resultCode === "200") {
 				toast.success(msg);
 				init();
+				getUserDetail();
 
 				if (data.winnerYn) { // 낙찰자로 정해졌으면
 					callWinnerAnimation()
@@ -227,6 +230,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		} else {
 			toast.error(msg || '신고 접수 실패!');
 		}
+		toggleModal('report');
 	}
 
 	const changeFollowState = async (toId) => {
