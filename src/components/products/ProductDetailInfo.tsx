@@ -272,6 +272,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						images={images}
 						showBullets={true}
 						showNavs={true}
+						bgColor={'#ffffff'}
 					/> : <img src="https://funxtion-image.s3.amazonaws.com/funxtion/no-image.jpg" />}
 				</div>
 				<div className={styles.contentContainer}>

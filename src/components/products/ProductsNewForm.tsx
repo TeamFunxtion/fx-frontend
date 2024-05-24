@@ -65,10 +65,15 @@ export default function ProductsNewForm({ product }) {
 			router.push("/auth/login");
 			return false;
 		}
-		// console.log(values)
 
 		if (imgBase64.length === 0) {
 			toast.error("상품 이미지를 1개 이상 업로드해주세요!");
+			return;
+		}
+
+		const productPrice = String(values.productPrice).replace(/[^0-9]+/g, "");
+		if (values.coolPrice && (Number(values.coolPrice) <= Number(productPrice))) {
+			toast.error("즉시 구매가는 상품 가격보다 높아야합니다!");
 			return;
 		}
 
@@ -82,7 +87,7 @@ export default function ProductsNewForm({ product }) {
 			productId,
 			storeId: id,
 			categoryId,
-			productPrice: String(values.productPrice).replace(/[^0-9]+/g, ""),
+			productPrice,
 			removeImgIds: !isNew ? removeImgIds.current : undefined,
 		}));
 
@@ -123,7 +128,6 @@ export default function ProductsNewForm({ product }) {
 			toast.error("이미지는 최대 1MB 크기로 제한됩니다.");
 		}
 
-		// console.log(event.target.files);
 		setImgFile(imgFile => [...imgFile, ...files]);
 		for (let i = 0; i < files.length; i++) {
 			if (files[i]) {
@@ -136,6 +140,7 @@ export default function ProductsNewForm({ product }) {
 						let base64Sub = base64.toString()
 						setImgBase64(imgBase64 => [...imgBase64, base64Sub]);
 					}
+					event.target.value = '';
 				}
 			}
 		}
@@ -184,7 +189,7 @@ export default function ProductsNewForm({ product }) {
 								<label htmlFor="file">
 									<li style={{ textAlign: 'center' }}><BsCardImage /><br />이미지 업로드<br />(최대 1MB)</li>
 								</label>
-								<input type="file" id="file" onChange={handleChangeFile} multiple style={{ display: 'none' }} />
+								<input type="file" id="file" onChange={handleChangeFile} multiple style={{ display: 'none' }} accept="image/png, image/gif, image/jpeg" />
 								{imgBase64.map((item, index) => {
 									return (
 										<li className={styles.imgBox}>
@@ -231,6 +236,10 @@ export default function ProductsNewForm({ product }) {
 										value: /[0-9]/,
 										message: '숫자만 입력 가능합니다.'
 									},
+									minLength: {
+										value: 4,
+										message: '1000원 이상 입력해주세요.'
+									}
 								})}
 								type="text"
 								placeholder="가격"
@@ -242,7 +251,12 @@ export default function ProductsNewForm({ product }) {
 						<div className={styles.rowLabel}>설명<sup className={styles.required}>*</sup><span className={styles.small}>({watch("productDesc").length}/1000)</span></div>
 						<div className={styles.rowContent}>
 							<textarea className={styles.textArea}
-								{...register("productDesc", { required: '필수값 입니다.', maxLength: { value: 1000, message: "최대 1000자까지 입력이 가능합니다." } })}
+								{...register("productDesc", {
+									required: '필수값 입니다.',
+									maxLength: {
+										value: 1000, message: "최대 1000자까지 입력이 가능합니다."
+									}
+								})}
 								placeholder="브랜드, 모델명, 구매 시기, 하자 유무 등 상품 설명을 최대한 자세히 적어주세요."
 								maxLength={1000} />
 							<p className={styles.error}><ErrorMessage errors={errors} name="productDesc" /></p>
@@ -296,6 +310,10 @@ export default function ProductsNewForm({ product }) {
 											value: /[0-9]/,
 											message: '숫자만 입력 가능합니다.'
 										},
+										minLength: {
+											value: 4,
+											message: '1000원 이상 입력해주세요.'
+										}
 									})}
 									type="text"
 									placeholder="즉시 구매가"
