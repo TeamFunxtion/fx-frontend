@@ -11,14 +11,15 @@ export default function BidModal({ clickModal, handleOk, productDetail }) {
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = Number(e.target.value);
-		if (Number.isNaN(value)) return;
-		if (value === 0) return;
+		if (!value && Number.isNaN(value)) {
+			return;
+		}
 		setBidPrice(value);
 	}
 
 	const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (e.target.value === '0') {
-			setBidPrice(1); // 초기화할 수량 입력
+			// setBidPrice(1); // 초기화할 수량 입력
 		}
 	}
 

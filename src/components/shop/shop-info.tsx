@@ -1,21 +1,19 @@
 'use client'
 import Link from "next/link";
 import styles from "./shop-info.module.css";
-import { useRecoilValue } from "recoil";
-import { userInfoState } from "@/store/atoms";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
+import useUserInfo from "@/hooks/useUserInfo";
 
 export default function ShopInfo({ params }) {
-	const user = useRecoilValue(userInfoState);
+	const { user } = useUserInfo();
 	const isGuest = params.id != user.id;
 	const baseUrl = `/shop/${user.id}`;
-
 	const [userInfo, setUserInfo] = useState({
 	});
 
 
-	const getUserDetail = async () => {
+	const getShopUserDetail = async () => {
 		const result = await api.get(`/members/${params.id}`);
 
 		const { data: { resultCode, msg, data } } = result;
@@ -25,7 +23,7 @@ export default function ShopInfo({ params }) {
 	}
 
 	useEffect(() => {
-		getUserDetail();
+		getShopUserDetail();
 	}, [])
 
 	return (

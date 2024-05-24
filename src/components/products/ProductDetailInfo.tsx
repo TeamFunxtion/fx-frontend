@@ -305,7 +305,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							<ul className={styles.infoList}>
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
-									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}명&nbsp;&nbsp;
+									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}회&nbsp;&nbsp;
 										{
 											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={() => toggleModal('history')}>입찰내역</span>
 										}
