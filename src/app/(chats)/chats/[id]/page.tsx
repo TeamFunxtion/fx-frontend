@@ -13,6 +13,7 @@ import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
 import { API_URL } from "@/app/constants";
+import { log } from "console";
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
@@ -109,6 +110,12 @@ export default function User() {
 						setSafePaymentInfo((prevState) => {
 							return { ...prevState, [object.target]: "Y" }
 						})
+					} else if (object.type === "enter") {
+						let newMsgList = [...msgList];
+						for (let i = 0; i < newMsgList.length; i++) {
+							newMsgList[i].sessionLength = 3;
+						}
+						setMsgList(newMsgList);
 					}
 				}
 				return prev.concat(lastMessage)
@@ -117,12 +124,7 @@ export default function User() {
 	}, [lastMessage, setMessageHistory]);
 
 
-	if (msgList.length != 0) {
-		setChats(msgList);
-		if (msgList[msgList.length - 1].sessionLength >= 3) {
-			msgList = msgList.map(msg => ({ ...msg, sessionLength: 3 }));
-		}
-	}
+
 
 	useEffect(() => {
 		updateMsg();
@@ -174,7 +176,15 @@ export default function User() {
 		setSafePay(false);
 		setSafePayAcception(0);
 		insertMsg(title, safety, safePayAccept, safeRefuse);
+		deleteSafePayment();
+	}
 
+	const deleteSafePayment = async () => {
+		const res = await api.post(`/safe/delete`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			toast.success(msg || '안전거래 삭제 성공');
+		}
 	}
 
 
@@ -286,9 +296,11 @@ export default function User() {
 		}
 	}, [safePaymentInfo])
 
-	if (chatRoomInfo != null) {
-		console.log(chatRoomInfo);
-	}
+	useEffect(() => {
+		if (chatRoomInfo) {
+			updateMsg();
+		}
+	}, [chatRoomInfo]);
 
 	return (
 		<div className={styles.chatRoom}>
@@ -482,9 +494,9 @@ export default function User() {
 				<div className={styles.chatInput}>
 					<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
 						onChange={(e) => {
-							if (e.target.value.trim() != '') {
-								setChat(e.target.value)
-							}
+
+							setChat(e.target.value)
+
 						}} onKeyPress={(e) => {
 							if (e.key == 'Enter') {
 								let safety = false;
