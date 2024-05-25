@@ -148,17 +148,19 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		return response.data.data;
 	}
 
-	const createNewBid = async (bidPrice: number) => {
+	const createNewBid = async (bidPrice: number, isFirst: boolean) => {
 		if (!bidPrice) {
 			toast.error("입찰가를 입력해주세요!");
 			return;
 		}
 
-		if (productDetail.salesTypeId === "SA01" && bidPrice <= productDetail.currentPrice) {
-			toast.error("입찰가가 현재가보다 낮습니다!");
+		if (productDetail.salesTypeId === "SA01" &&
+			((isFirst && (bidPrice < productDetail.productPrice)) || (!isFirst && bidPrice <= productDetail.currentPrice))) {
+			toast.error("입찰할 수 없는 금액입니다!");
 			return;
-		} else if (productDetail.salesTypeId === "SA02" && bidPrice <= productDetail.productPrice) {
-			toast.error("입찰가가 시작가보다 낮습니다!");
+		} else if (productDetail.salesTypeId === "SA02" &&
+			((isFirst && (bidPrice < productDetail.productPrice)) || (!isFirst && bidPrice <= productDetail.productPrice))) {
+			toast.error("입찰할 수 없는 금액입니다!");
 			return;
 		}
 
@@ -192,7 +194,9 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 
 			} else {
 				toast.error(msg);
+				toggleModal('bid');
 			}
+
 		}
 	}
 
