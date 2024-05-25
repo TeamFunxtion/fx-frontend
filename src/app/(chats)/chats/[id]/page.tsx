@@ -12,8 +12,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
-import { API_URL } from "@/app/constants";
-import { log } from "console";
+
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
