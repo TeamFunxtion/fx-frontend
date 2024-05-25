@@ -15,6 +15,7 @@ export default function Follower() {
 	const [page, setPage] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
 	const [ref, inView] = useInView();
+	const [initialLoad, setInitialLoad] = useState(true);
 
 	const getFollowerList = async (page) => {
 
@@ -23,12 +24,16 @@ export default function Follower() {
 		if (resultCode === '200') {
 			setFollowList(list => [...list, ...data.content]);
 			setHasMore(data.content.length > 0);
+
 		}
 	};
 
 	useEffect(() => {
-		getFollowerList(page);
-	}, [page]);
+		if (initialLoad) {
+			getFollowerList(page);
+			setInitialLoad(false);
+		}
+	}, [page, initialLoad]);
 
 	useEffect(() => {
 		if (inView && hasMore) {
@@ -40,7 +45,7 @@ export default function Follower() {
 		const res = await api.post(`/follow/follower`, { toId: toId, fromId: userId });
 		const { data: { resultCode, msg } } = res;
 		if (resultCode === '200') {
-			toast.success(msg || '팔로우 상태 변경 성공!');
+
 		}
 	};
 

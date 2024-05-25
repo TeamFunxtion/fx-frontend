@@ -12,8 +12,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
-import { API_URL } from "@/app/constants";
-import { log } from "console";
+
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
@@ -89,14 +88,13 @@ export default function User() {
 					} else if (object.type === "message") {
 						setMsgList((prev) => [...prev, object]);
 						if (object.safe === true || safePay === true && object.safePayRefuse === false) {
-
 							setSafePay(true);
 						} else {
 							if (object.safePayAccept === true) {
 								setSafePay(true);
 								setSafePayAcception(1);
 								setSafePaymentInfo((prevState) => {
-									return { ...prevState, status: "SP02" }
+									return { ...prevState, status: "SP02" };
 								});
 							} else {
 								setSafePay(false);
@@ -104,25 +102,24 @@ export default function User() {
 						}
 					} else if (object.type === "confirm") {
 						setSafePaymentInfo((prevState) => {
-							return { ...prevState, status: "SP03" }
-						})
+							return { ...prevState, status: "SP03" };
+						});
 					} else if (object.type === "success") {
 						setSafePaymentInfo((prevState) => {
-							return { ...prevState, [object.target]: "Y" }
-						})
+							return { ...prevState, [object.target]: "Y" };
+						});
 					} else if (object.type === "enter") {
-						let newMsgList = [...msgList];
-						for (let i = 0; i < newMsgList.length; i++) {
-							newMsgList[i].sessionLength = 3;
-						}
-						setMsgList(newMsgList);
+						setMsgList((prev) => prev.map((msg) => ({ ...msg, sessionLength: 3 })));
 					}
 				}
-				return prev.concat(lastMessage)
+				return prev.concat(lastMessage);
 			});
 		}
 	}, [lastMessage, setMessageHistory]);
 
+	useEffect(() => {
+		setChats(msgList);
+	}, [msgList])
 
 
 
@@ -518,3 +515,4 @@ export default function User() {
 		</div>
 	);
 }
+

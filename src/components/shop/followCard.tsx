@@ -16,7 +16,7 @@ const FollowCard = forwardRef(({ item, index, followState, changeFollowState }) 
 					</>
 				}
 				<div className={styles.rating}>★★★★★</div>
-				<div>상품 {item.prCnt} | 팔로우 {item.followerCnt}</div>
+				<div>상품 {item.productCnt} | 팔로우 {item.followerCnt}</div>
 				{item.fromMember != null ?
 					<button
 						className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
