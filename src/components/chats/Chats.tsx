@@ -14,7 +14,7 @@ import { chatState } from "@/store/atoms";
 export default function Chats() {
 
 	const chats = useRecoilValue(chatState);
-
+	console.log(chats);
 	const path = usePathname();
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -39,7 +39,6 @@ export default function Chats() {
 		getChatRoomList();
 
 	}, []);
-
 
 
 	let lastMsgDate = "";
@@ -87,7 +86,7 @@ export default function Chats() {
 													<div className={styles.roomName}>{item.store.nickname}</div> :
 													<div className={styles.roomName}>{item.customer.nickname}</div>}
 												<div className={styles.msgArea}>
-													<div className={styles.lastMsg}>{chats.length > 0 ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
+													<div className={styles.lastMsg}>{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>

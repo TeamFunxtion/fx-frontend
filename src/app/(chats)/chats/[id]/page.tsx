@@ -13,6 +13,7 @@ import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
 import { API_URL } from "@/app/constants";
+import { log } from "console";
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
@@ -31,10 +32,7 @@ export default function User() {
 		const res = await api.get(`chats/${id}?id=${id}`)
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-
 			setChatRoomInfo(data);
-			toast.success(msg || `${id}방 조회 성공!`);
-
 			if (data != null) {
 				getSafePaymentInfo(data);
 			}
@@ -47,7 +45,6 @@ export default function User() {
 		const res = await api.patch(`chats/${id}/messages`, { userId: userId, roomId: id });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			toast.success(msg || `${id}방 채팅 읽기 완료!`);
 		}
 	}
 
@@ -92,14 +89,13 @@ export default function User() {
 					} else if (object.type === "message") {
 						setMsgList((prev) => [...prev, object]);
 						if (object.safe === true || safePay === true && object.safePayRefuse === false) {
-
 							setSafePay(true);
 						} else {
 							if (object.safePayAccept === true) {
 								setSafePay(true);
 								setSafePayAcception(1);
 								setSafePaymentInfo((prevState) => {
-									return { ...prevState, status: "SP02" }
+									return { ...prevState, status: "SP02" };
 								});
 							} else {
 								setSafePay(false);
@@ -107,26 +103,26 @@ export default function User() {
 						}
 					} else if (object.type === "confirm") {
 						setSafePaymentInfo((prevState) => {
-							return { ...prevState, status: "SP03" }
-						})
+							return { ...prevState, status: "SP03" };
+						});
 					} else if (object.type === "success") {
 						setSafePaymentInfo((prevState) => {
-							return { ...prevState, [object.target]: "Y" }
-						})
+							return { ...prevState, [object.target]: "Y" };
+						});
+					} else if (object.type === "enter") {
+						setMsgList((prev) => prev.map((msg) => ({ ...msg, sessionLength: 3 })));
 					}
 				}
-				return prev.concat(lastMessage)
+				return prev.concat(lastMessage);
 			});
 		}
 	}, [lastMessage, setMessageHistory]);
 
-
-	if (msgList.length != 0) {
+	useEffect(() => {
 		setChats(msgList);
-		if (msgList[msgList.length - 1].sessionLength >= 3) {
-			msgList = msgList.map(msg => ({ ...msg, sessionLength: 3 }));
-		}
-	}
+	}, [msgList])
+
+
 
 	useEffect(() => {
 		updateMsg();
@@ -178,7 +174,15 @@ export default function User() {
 		setSafePay(false);
 		setSafePayAcception(0);
 		insertMsg(title, safety, safePayAccept, safeRefuse);
+		deleteSafePayment();
+	}
 
+	const deleteSafePayment = async () => {
+		const res = await api.post(`/safe/delete`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode == '200') {
+			toast.success(msg || '안전거래 삭제 성공');
+		}
 	}
 
 
@@ -187,15 +191,11 @@ export default function User() {
 		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
 		let { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-
 			if (data != null) {
 				setSafePaymentInfo(data);
 				setSafePayAcception(1);
 				setSafePay(true);
-
 			}
-			toast.success(msg || `${id}방 안전거래 여부 조회 성공!`);
-
 		}
 	}
 
@@ -294,9 +294,13 @@ export default function User() {
 		}
 	}, [safePaymentInfo])
 
-	if (chatRoomInfo != null) {
-		console.log(chatRoomInfo);
-	}
+	useEffect(() => {
+		if (chatRoomInfo) {
+			updateMsg();
+		}
+	}, [chatRoomInfo]);
+
+
 
 	return (
 		<div className={styles.chatRoom}>
@@ -490,9 +494,9 @@ export default function User() {
 				<div className={styles.chatInput}>
 					<input className={styles.inputMsg} placeholder="메시지를 입력하세요." value={chat}
 						onChange={(e) => {
-							if (e.target.value.trim() != '') {
-								setChat(e.target.value)
-							}
+
+							setChat(e.target.value)
+
 						}} onKeyPress={(e) => {
 							if (e.key == 'Enter') {
 								let safety = false;
@@ -514,3 +518,4 @@ export default function User() {
 		</div>
 	);
 }
+

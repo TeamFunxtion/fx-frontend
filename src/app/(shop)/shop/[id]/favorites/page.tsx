@@ -8,7 +8,7 @@ import ProductCard from "@/components/products/ProductCard/ProductCard"
 import FxPagination from "@/components/FxPagination"
 import NoResult from "@/components/NoResult"
 import { IoIosHeart } from "react-icons/io";
-import toast from "react-hot-toast"
+
 
 export default function Favorites({ }) {
 
@@ -53,7 +53,6 @@ export default function Favorites({ }) {
 		const res = await api.post(`/favorites`, { userId: userId, productId: productId });
 		const { data: { resultCode, msg } } = res;
 		if (resultCode === '200') {
-			toast.success(msg || '관심상품 상태 변경 성공!');
 			const newList = [...list];
 			newList[index].liked = !newList[index].liked;
 			setList(newList);
@@ -67,8 +66,7 @@ export default function Favorites({ }) {
 		<div className={styles.container}>
 			<div className={styles.main}>
 				<div className={styles.header}>
-					<h3 className={styles.title}>관심 상품</h3>
-					<p className={styles.totalCount}>총 {totalElements}개</p>
+					<h3 className={styles.title}>관심 상품 &nbsp;&nbsp;&nbsp;<span className={styles.totalCount}>총 {totalElements}개</span></h3>
 				</div>
 				<ul className={styles.ul}>
 					{
