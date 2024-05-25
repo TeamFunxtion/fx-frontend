@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { chatState } from "@/store/atoms";
 
 export default function Chats() {
@@ -21,24 +19,24 @@ export default function Chats() {
 	const [chatRoomList, setChatRoomList] = useState([]);
 
 	const getChatRoomList = async () => {
-		if (!userInfoValue.id) {
-			router.push("/auth/login");
-			return false;
-		}
-
 		const res = await api.get('/chats?id=' + userInfoValue.id);
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-
 			setChatRoomList(data);
-			toast.success(msg || '채팅방 조회 성공!');
 		}
 	}
-	const router = useRouter();
-	useEffect(() => {
-		getChatRoomList();
 
-	}, []);
+	// useEffect(() => {
+
+	// 	getChatRoomList();
+
+	// }, []);
+	useEffect(() => {
+		if (userInfoValue && userInfoValue.id) {
+			getChatRoomList();
+		}
+	}, [userInfoValue]);
+
 
 
 	let lastMsgDate = "";

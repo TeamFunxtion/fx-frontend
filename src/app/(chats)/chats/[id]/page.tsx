@@ -300,8 +300,6 @@ export default function User() {
 		}
 	}, [chatRoomInfo]);
 
-
-
 	return (
 		<div className={styles.chatRoom}>
 			<div className={styles.chatRoomHeader}>

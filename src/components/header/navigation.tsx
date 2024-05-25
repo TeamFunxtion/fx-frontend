@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from "react";
-import { BsList } from "react-icons/bs";
+import { BsList, BsX } from "react-icons/bs";
 import styles from "./navigation.module.css";
 import Link from "next/link";
 import CategoryList from "./category-list";
@@ -88,6 +88,43 @@ export default function Navigation() {
 
 	}, [user]);
 
+
+	const test = () => {
+		var jsonData = {
+			type: "auction_winner",
+			message: "축하합니다!! 낙찰되었어영!!",
+			data: {
+				thumbnailUrl: 'https://funxtion-image.s3.amazonaws.com/5b65b0de-d7c1-4293-8b73-2567f1e4d61f.jpg',
+				productId: 7,
+			}
+		}
+
+		jsonData = {
+			type: "auction_miss",
+			message: "이런, 경매 낙찰 기회를 뺏겼어요!!",
+			data: {
+				thumbnailUrl: 'https://funxtion-image.s3.amazonaws.com/5b65b0de-d7c1-4293-8b73-2567f1e4d61f.jpg',
+				productId: 7,
+			}
+		}
+
+		toast((t) => (
+			<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+				{/* <img src={jsonData.data.thumbnailUrl} style={{ width: '25px', height: '25px', borderRadius: '50%' }} alt="" /> */}
+				<p>
+					{jsonData.message}
+					<Link href={`/products/${jsonData.data.productId}`} style={{ color: 'dodgerblue' }}>이동</Link>
+				</p>
+				<div onClick={() => toast.dismiss(t.id)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}><BsX /></div>
+			</div>
+		), {
+			duration: 10000,
+			position: 'top-center',
+			// icon: getNotificationIcons(jsonData.type),
+			icon: <img src={jsonData.data.thumbnailUrl} style={{ width: '35px', height: '35px', borderRadius: '50%' }} alt="" />
+		});
+	}
+
 	return (
 		<nav className={styles.navigation}>
 			{modal.payment && <PaymentModal clickModal={() => toggleModal('payment')} />}
@@ -115,6 +152,7 @@ export default function Navigation() {
 						<>
 							<li><Link href="/auth/login">로그인</Link></li>
 							<li><Link href="/auth/join">회원가입</Link></li>
+							<li onClick={test}>테스트</li>
 						</>
 						: <>
 							<li className={styles.userInfoContainer}>
