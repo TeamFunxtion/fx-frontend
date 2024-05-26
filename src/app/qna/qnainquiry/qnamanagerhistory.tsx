@@ -159,7 +159,7 @@ function QnaInquiryHistoryBack({list, qnaAnswerContent ,setQnaManagerAnswer ,ins
                         Answer === qna.id &&
                         <div className={styles.qnaHistoryDiv}>
                             <div className={styles.qnaAnswer}>
-                                <div className={styles.qnaAnsWerMail}>유저Id : {qna.userId}</div>
+                                <div className={styles.qnaAnsWerMail}>유저 이메일 : {qna.email}</div>
                             </div>
                             <div className={styles.qnaAnswerContent}>내용: {qna.qnaContent}</div>
                             
