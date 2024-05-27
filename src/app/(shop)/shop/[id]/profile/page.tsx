@@ -16,14 +16,13 @@ export default function ProfilePage() {
     const [intro, setIntro] = useState('');
     const [email, setEmail] = useState(userEmail);
     const [newPassword, setNewPassword] = useState('');
-    const [confirmNewPassword, setConfirmNewPassword] = useState(''); // confirmNewPassword 추가
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         console.log(id);
-        // 컴포넌트가 마운트될 때 사용자 데이터를 가져옴
         api.get(`members/${userId}?userId=` + userId)
             .then(response => {
                 const data = response.data.data;
@@ -36,11 +35,10 @@ export default function ProfilePage() {
                 console.error('Error fetching user data:', error);
                 alert('회원 정보를 불러오는 데 실패했습니다.');
             });
-    }, []);
+    }, [userId]);
 
     const handleUpdate = () => {
         if (newPassword !== confirmNewPassword) {
-            setErrorMessage('새 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
             return;
         }
 
@@ -51,7 +49,7 @@ export default function ProfilePage() {
             password,
             phoneNumber,
             newPassword,
-            confirmNewPassword // confirmNewPassword도 요청에 추가
+            confirmNewPassword
         };
 
         api.put('/members/update', requestData)
@@ -99,7 +97,7 @@ export default function ProfilePage() {
                     </tr>
                     <tr>
                         <td>이메일</td>
-                        <td><input className={styles.input} type="text" value={email} onChange={(e) => setEmail(e.target.value)} readOnly /></td>
+                        <td><input className={styles.input} type="text" value={email} readOnly /></td>
                     </tr>
                     <tr>
                         <td>비밀번호</td>
@@ -110,11 +108,16 @@ export default function ProfilePage() {
                         <td><input className={styles.input} type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} /></td>
                     </tr>
                     <tr>
+                        <td>새 비밀번호 확인</td> {/* 새 비밀번호 확인 필드 추가 */}
+                        <td><input className={styles.input} type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} /></td>
+                    </tr>
+                    <tr>
                         <td>핸드폰번호</td>
                         <td><input className={styles.input} type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} /></td>
                     </tr>
                 </tbody>
             </table>
+            {errorMessage && <p className={styles.error}>{errorMessage}</p>}
             <div className={styles.buttondiv}>
                 <button className={styles.updateButton} onClick={handleUpdate}>수정완료</button>
                 <button className={styles.outButton} onClick={handleDelete}>회원탈퇴</button>
