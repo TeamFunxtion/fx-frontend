@@ -12,6 +12,7 @@ import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
+import ReviewModal from "@/components/modal/ReviewModal";
 
 
 export default function User() {
@@ -24,6 +25,7 @@ export default function User() {
 	const userId = userInfoValue.id;
 	const [safePay, setSafePay] = useState(false);
 	const [safePaymentInfo, setSafePaymentInfo] = useState(null);
+	const [showReviewModal, setShowReviewModal] = useState(false);
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
@@ -299,8 +301,31 @@ export default function User() {
 		}
 	}, [chatRoomInfo]);
 
+
+	const onClickReview = () => {
+		setShowReviewModal(!showReviewModal);
+	}
+
+	const enrollReview = async (content: string, rating: number) => {
+		const result = await api.post("/reviews", {
+			buyerId: chatRoomInfo.customer.id,
+			sellerId: chatRoomInfo.store.id,
+			productId: chatRoomInfo.product.id,
+			content,
+			rating
+		});
+		const { data: { resultCode, msg, data } } = result;
+		if (resultCode == "200") {
+			toast.success(msg || "판매자 리뷰 작성 성공!");
+		} else {
+			toast.error(msg || '판매자 리뷰 작성 실패..');
+		}
+		setShowReviewModal(false);
+	}
+
 	return (
 		<div className={styles.chatRoom}>
+			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
 					<img src={chatRoomInfo != null ? chatRoomInfo.store.profileImageUrl : ""}
@@ -309,6 +334,13 @@ export default function User() {
 						{chatRoomInfo != null && chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : ""}
 						{chatRoomInfo != null && chatRoomInfo.customer.id != userId ? chatRoomInfo.customer.nickname : ""}
 					</div>
+					<button style={{
+						width: '130px',
+						padding: 0,
+						fontSize: '0.8rem'
+					}} onClick={onClickReview}>
+						판매자 리뷰
+					</button>
 				</div>
 				<div className={styles.safeTradeDiv}>
 					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
