@@ -70,8 +70,8 @@ export default function QnaInquiryHistory() {
 
 	}, [qnaAnswerId]);
 
-
 	const insertAnswer = async (qnaId) => {
+
 		if (qnaManagerAnswer.trim() === '') {
 			toast.error("답변을 입력해 주세요")
 		} else {
