@@ -42,9 +42,9 @@ export default function Qna() {
 							useRole === 2 ? 
 							<QnaManagerHistory/>
 							:
-							<QnaInquiryHistory />
+							<QnaInquiryHistory/>
 							
-							: <QnaInquiry />
+							: <QnaInquiry qnaContentlist={qnaContentlist}/>
 					}
 				</div>
 			</section >

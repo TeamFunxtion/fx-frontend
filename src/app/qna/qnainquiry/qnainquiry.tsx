@@ -8,12 +8,10 @@ import toast from "react-hot-toast";
 import { qnaCategories } from "@/app/constants"
 
 
-
-export default function QnaInquiry() {
+export default function QnaInquiry({qnaContentlist}) {
 	const [qnaContent, setQnaContent] = useState('');
 	const [qnaTitle, setQnaTitle] = useState('');
 	const [categoryId, setCategoryId] = useState('QNA01');
-
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
 
@@ -27,8 +25,9 @@ export default function QnaInquiry() {
 		const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
+			qnaContentlist(1);
 			toast.success(msg || ` `);
-
+			
 		}
 	}
 	}
