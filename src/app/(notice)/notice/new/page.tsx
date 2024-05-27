@@ -12,9 +12,9 @@ export default function NoticeNewPage() {
 	const router = useRouter();
 	const createNotice = async () => {
 
-		if (noticeTitle === '') {
+		if (noticeTitle.trim() === '') {
 			toast.error("타이틀을 입력해 주세요");
-		} if (notcieContent === '') {
+		} if (notcieContent.trim() === '') {
 			toast.error("내용을 입력해 주세요");
 		} else {
 			const res = await api.post(`/notices`, { noticeTitle: noticeTitle, noticeContent: notcieContent });

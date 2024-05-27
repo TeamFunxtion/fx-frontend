@@ -25,7 +25,8 @@ type TProps<T extends FieldValues> = Omit<RadioGroupProps, "onChange"> &
 	TControl<T>;
 
 
-export default function MRadio<T extends FieldValues>(props: TProps<T>) {
+export default function
+	MRadio<T extends FieldValues>(props: TProps<T>) {
 	const {
 		name,
 		rules,
