@@ -24,7 +24,7 @@ export default function ShopInfo({ params }) {
 
 	useEffect(() => {
 		getShopUserDetail();
-	}, [])
+	}, [user])
 
 	return (
 		<div className={styles.container}>

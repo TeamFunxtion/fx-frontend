@@ -6,6 +6,8 @@ import api from "@/utils/api";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import { usePathname, useRouter } from "next/navigation";
+import toast from 'react-hot-toast';
+import useUserInfo from '@/hooks/useUserInfo';
 
 export default function ProfilePage() {
     const userInfoValue = useRecoilValue(userInfoState);
@@ -21,6 +23,7 @@ export default function ProfilePage() {
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
+    const { getUserDetail } = useUserInfo();
 
     useEffect(() => {
         console.log(id);
@@ -39,11 +42,11 @@ export default function ProfilePage() {
 
     const handleUpdate = () => {
         if (newPassword && newPassword !== confirmNewPassword) {
-            alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+            toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
             return;
         }
         if (newPassword && password === newPassword) {
-            alert('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
+            toast.error('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
             return;
         }
 
@@ -60,7 +63,7 @@ export default function ProfilePage() {
         api.put('/members/update', requestData)
             .then(response => {
                 console.log(response.data);
-                alert(response.data.msg);
+                toast.success(response.data.msg);
                 setNickname(nickname);
                 setIntro(intro);
                 setPhoneNumber(phoneNumber);
@@ -68,10 +71,11 @@ export default function ProfilePage() {
                 setPassword('');
                 setNewPassword('');
                 setConfirmNewPassword('');
+                getUserDetail();
             })
             .catch(error => {
                 console.error('Error updating profile:', error);
-                alert("회원 정보 수정에 실패하였습니다.");
+                toast.error("회원 정보 수정에 실패하였습니다.");
             });
     };
 
@@ -81,7 +85,7 @@ export default function ProfilePage() {
             api.delete(`/members/delete/${userId}`)
                 .then(response => {
                     console.log(response.data);
-                    alert(response.data.msg);
+                    toast.success(response.data.msg);
                     if (response.status === 200) { // 응답 상태가 200인지 확인
                         // Recoil 상태 초기화 (로그아웃)
                         resetUserInfo();
@@ -91,7 +95,7 @@ export default function ProfilePage() {
                 })
                 .catch(error => {
                     console.error('Error deleting account:', error);
-                    alert("회원 탈퇴에 실패하였습니다.");
+                    toast.error("회원 탈퇴에 실패하였습니다.");
                 });
         }
     };
