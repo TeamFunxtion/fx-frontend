@@ -8,6 +8,7 @@ export default function BidModal({ clickModal, handleOk, productDetail }) {
 	const [ok, setOk] = useState(false);
 
 	const isBlind = productDetail.salesTypeId === "SA02";
+	const isFirst = productDetail.bids.length === 0;
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = Number(e.target.value);
@@ -24,15 +25,20 @@ export default function BidModal({ clickModal, handleOk, productDetail }) {
 	}
 
 	const handleClickBid = () => {
-		handleOk(bidPrice);
+		handleOk(bidPrice, isFirst);
 	}
 
 	useEffect(() => {
-		if (!isBlind) {
-			setOk(productDetail.currentPrice + 1000 <= bidPrice);
+		if (isFirst) {
+			setOk(productDetail.productPrice <= bidPrice);
 		} else {
-			setOk(productDetail.productPrice + 1000 <= bidPrice);
+			if (!isBlind) { // 일반경매
+				setOk(productDetail.currentPrice + 1000 <= bidPrice);
+			} else { // 블라인드
+				setOk(productDetail.productPrice + 1000 <= bidPrice);
+			}
 		}
+
 	}, [bidPrice])
 	return (
 		// 뒷배경을 클릭하면 모달을 나갈 수 있게 해야하므로 뒷 배경 onClick에 state함수를 넣는다.
@@ -41,12 +47,7 @@ export default function BidModal({ clickModal, handleOk, productDetail }) {
 				<ModalHeader>
 					<h2>✋ 입찰하기</h2>
 					<h3>
-						{!isBlind ?
-							<p>지금까지 최고 입찰가는 {numberFormatter(productDetail.currentPrice)}원입니다.<br />
-								<b>{numberFormatter(productDetail.currentPrice + 1000)}원(+1000원)</b>부터 입찰이 가능합니다!</p>
-							: <p>블라인드 경매는 최고 입찰가가 공개되지 않습니다.<br />
-								시작가 <b>{numberFormatter(productDetail.productPrice + 1000)}원(+1000원)</b>부터 입찰이 가능합니다!</p>
-						}
+						<p><b>{numberFormatter(productDetail.currentPrice + (isFirst ? 0 : 1000))}원{!isFirst && '(+1000원)'}</b>부터 입찰이 가능합니다!</p>
 					</h3>
 					<h3 style={{ marginTop: '25px' }}>입력하신 입찰가는 {numberFormatter(bidPrice)}원입니다.</h3>
 				</ModalHeader>

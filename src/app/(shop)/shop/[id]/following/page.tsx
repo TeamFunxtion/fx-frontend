@@ -15,6 +15,8 @@ export default function Following() {
 	const [page, setPage] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
 	const [ref, inView] = useInView();
+	const [followCnt, setFollowCnt] = useState(0);
+	const [initialLoad, setInitialLoad] = useState(true);
 
 	const getFollowingList = async (page) => {
 
@@ -23,13 +25,16 @@ export default function Following() {
 		if (resultCode == '200') {
 			setFollowList(list => [...list, ...data.content]);
 			setHasMore(data.content.length > 0);
-			toast.success(msg || `팔로잉 목록 조회 성공!`);
+			setFollowCnt(data.content.length);
 		}
 	}
 
 	useEffect(() => {
-		getFollowingList(page);
-	}, [page]);
+		if (initialLoad) {
+			getFollowingList(page);
+			setInitialLoad(false);
+		}
+	}, [page, initialLoad]);
 
 	useEffect(() => {
 		if (inView && hasMore) {
@@ -41,7 +46,7 @@ export default function Following() {
 		const res = await api.post(`/follow/follower`, { toId: toId, fromId: userId })
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			toast.success(msg || '팔로우 상태 변경 성공!');
+
 		}
 	}
 	const followState = (i) => {
@@ -49,18 +54,23 @@ export default function Following() {
 		newList[i].following = !newList[i].following;
 		if (newList[i].following == true) {
 			newList[i].followerCnt = newList[i].followerCnt + 1;
+			setFollowCnt(followCnt + 1);
 		} else {
 			newList[i].followerCnt = newList[i].followerCnt - 1;
+			setFollowCnt(followCnt - 1);
 		}
 
 		setFollowList(newList);
 	}
 
+
 	return (
 		<>
 			<h3 className={styles.title}>팔로잉</h3>
 			<div className={styles.follow}>
-				팔로우 <span className={styles.followCount}>&nbsp;&nbsp;{followList.length > 0 ? followList[0].followCnt : ""}</span>
+				팔로우 <span className={styles.followCount}>&nbsp;&nbsp;
+					{followCnt > 0 ? followCnt : ""}
+				</span>
 			</div>
 			{followList.length == 0 ?
 				<div>

@@ -8,7 +8,7 @@ export default function AuctionWinnerModal({ clickModal }) {
 				<ModalHeader>
 					<h2>🎉 낙찰되었습니다!</h2>
 					<h3>
-						판매자와의 대화를 통해 거래를 진행해주시기 바랍니다!
+						판매자와 대화하여 거래를 진행해주시기 바랍니다!
 					</h3>
 				</ModalHeader>
 				<ModalBody>
