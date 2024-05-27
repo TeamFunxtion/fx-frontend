@@ -14,6 +14,7 @@ import useModal from "@/hooks/useModal";
 import PaymentModal from "../modal/PaymentModal";
 import { API_URL } from "@/app/constants";
 import toast from "react-hot-toast";
+import Confetti from 'react-confetti'
 
 export default function Navigation() {
 	const user = useRecoilValue(userInfoState);
@@ -23,6 +24,7 @@ export default function Navigation() {
 	const timer: any = useRef(null);
 	const [showModalLogout, setShowModalLogout] = useState(false);
 	const { modal, showModal, toggleModal } = useModal();
+	const [showAnimation, setShowAnimation] = useState(false);
 
 	const setSsrCompleted = useSsrComplectedState();
 	useEffect(setSsrCompleted, [setSsrCompleted]);
@@ -60,6 +62,11 @@ export default function Navigation() {
 
 			eventSource.onmessage = function (event) {
 				// console.log(event.data);
+
+				if (event.data.type === 'auction_winner') {
+					callWinnerAnimation();
+				}
+
 				const jsonData = JSON.parse(event.data);
 				toast((t) => (
 					<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -89,8 +96,16 @@ export default function Navigation() {
 
 	}, [user]);
 
+	const callWinnerAnimation = () => {
+		setShowAnimation(true);
+		setTimeout(() => {
+			setShowAnimation(false);
+		}, 10000)
+	}
+
 	return (
 		<nav className={styles.navigation}>
+			{showAnimation && <Confetti />}
 			{modal.payment && <PaymentModal clickModal={() => toggleModal('payment')} />}
 			{showModalLogout && <LogoutModal clickModal={onClickLogout} logout={logout} />}
 			<div className={styles.left}>
