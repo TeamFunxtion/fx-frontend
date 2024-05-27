@@ -8,28 +8,28 @@ import toast from "react-hot-toast";
 import { qnaCategories } from "@/app/constants"
 
 
-export default function QnaInquiry({qnaContentlist}) {
+export default function QnaInquiry({ qnaContentlist }) {
 	const [qnaContent, setQnaContent] = useState('');
 	const [qnaTitle, setQnaTitle] = useState('');
 	const [categoryId, setCategoryId] = useState('QNA01');
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
 
-	
+
 	const createQna = async () => {
-		if(qnaTitle == ''){
+		if (qnaTitle.trim() == '') {
 			toast.error("제목을 입력하세요");
-		}else if(qnaContent == ''){
+		} else if (qnaContent.trim() == '') {
 			toast.error("내용을 입력하세요");
-		}else{
-		const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			qnaContentlist(1);
-			toast.success(msg || ` `);
-			
+		} else {
+			const res = await api.post(`qnas`, { userId: userId, categoryId: categoryId, qnaTitle: qnaTitle, qnaContent: qnaContent });
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode == '200') {
+				qnaContentlist(1);
+				toast.success(msg || ` `);
+
+			}
 		}
-	}
 	}
 
 	return (
@@ -81,7 +81,7 @@ export default function QnaInquiry({qnaContentlist}) {
 
 					<button className={styles.qnaInquirtButtonInquirt} onClick={createQna}>문의하기</button>
 				}
-				
+
 			</div>
 		</div >
 	)

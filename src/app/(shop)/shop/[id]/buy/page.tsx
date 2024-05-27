@@ -16,7 +16,7 @@ import { styled } from '@mui/material';
 import { getProductSalesNameKR } from "@/utils/product";
 
 interface BuyColumn {
-	id: 'salesTypeId' | 'productTitle' | 'productPrice' | 'nickname' | 'createDate';
+	id: 'salesTypeId' | 'productTitle' | 'coolPrice' | 'nickname' | 'createDate';
 	label: string;
 	minWidth?: number;
 	align?: 'right';
@@ -30,7 +30,7 @@ const buyColumns: readonly BuyColumn[] = [
 		format: (value: string) => getProductSalesNameKR(value)
 	},
 	{ id: 'productTitle', label: '상품명', minWidth: 300 },
-	{ id: 'productPrice', label: '금액', minWidth: 150 },
+	{ id: 'coolPrice', label: '금액', minWidth: 150 },
 	{ id: 'nickname', label: '판매자', minWidth: 170 },
 	{
 		id: 'createDate',
@@ -43,7 +43,7 @@ const buyColumns: readonly BuyColumn[] = [
 interface BuyData {
 	salesTypeId: string;
 	productTitle: string;
-	productPrice: string;
+	coolPrice: string;
 	nickname: string;
 	createDate: string;
 }
