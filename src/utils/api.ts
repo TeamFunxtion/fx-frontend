@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
+import { API_URL } from "@/app/constants";
 
 const api = axios.create({
-  baseURL: "http://localhost:8090/api/v1",
+  baseURL: API_URL,
   headers: {
     "Content-type": "application/json",
   },
@@ -11,7 +12,7 @@ const api = axios.create({
 export default api;
 
 export const fileApi: AxiosInstance = axios.create({
-  baseURL: "http://localhost:8090/api/v1",
+  baseURL: API_URL,
   headers: {
     "Content-Type": "multipart/form-data;",
   },

@@ -1,4 +1,5 @@
 export const API_URL = "http://localhost:8090/api/v1";
+// export const API_URL = "http://192.168.10.17:8090/api/v1";
 
 export const categories = [
   { categoryId: "CA01", categoryName: "여성의류" },
@@ -40,4 +41,3 @@ export const productStatusTypes = [
   { label: "거래중", value: "ST04" },
   { label: "삭제", value: "ST05" },
 ];
-
