@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 export default function ProductCard({ product, hideDeleted }) {
 	const router = useRouter();
 	const [mounted, setMounted] = useState(false);
-	console.log(product);
+	// console.log(product);
 
 	const isDeleted = product && product.statusTypeId === 'ST05';
 

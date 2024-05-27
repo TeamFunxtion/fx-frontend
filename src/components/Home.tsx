@@ -24,7 +24,7 @@ export default function Home({ products }) {
 			<ul className={styles.productList}>
 				{
 					products && products.map((product, index) => (
-						<ProductCard product={product} />
+						<ProductCard product={product} key={index} />
 					))
 				}
 			</ul>
