@@ -3,15 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import styles from './page.module.css';
 import api from "@/utils/api";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userInfoState } from "@/store/atoms";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function ProfilePage() {
     const userInfoValue = useRecoilValue(userInfoState);
+    const resetUserInfo = useResetRecoilState(userInfoState);
     const userId = userInfoValue.id;
     const userEmail = userInfoValue.email;
     const id = usePathname().substring(7);
+    const router = useRouter();
     const [nickname, setNickname] = useState('');
     const [intro, setIntro] = useState('');
     const [email, setEmail] = useState(userEmail);
@@ -19,7 +21,6 @@ export default function ProfilePage() {
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         console.log(id);
@@ -33,12 +34,16 @@ export default function ProfilePage() {
             })
             .catch(error => {
                 console.error('Error fetching user data:', error);
-                alert('회원 정보를 불러오는 데 실패했습니다.');
             });
     }, [userId]);
 
     const handleUpdate = () => {
-        if (newPassword !== confirmNewPassword) {
+        if (newPassword && newPassword !== confirmNewPassword) {
+            alert('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+            return;
+        }
+        if (newPassword && password === newPassword) {
+            alert('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
             return;
         }
 
@@ -56,6 +61,13 @@ export default function ProfilePage() {
             .then(response => {
                 console.log(response.data);
                 alert(response.data.msg);
+                setNickname(nickname);
+                setIntro(intro);
+                setPhoneNumber(phoneNumber);
+                // 비밀번호 필드를 초기화
+                setPassword('');
+                setNewPassword('');
+                setConfirmNewPassword('');
             })
             .catch(error => {
                 console.error('Error updating profile:', error);
@@ -70,7 +82,10 @@ export default function ProfilePage() {
                 .then(response => {
                     console.log(response.data);
                     alert(response.data.msg);
-                    if (response.data.code === "200") {
+                    if (response.status === 200) { // 응답 상태가 200인지 확인
+                        // Recoil 상태 초기화 (로그아웃)
+                        resetUserInfo();
+                        // 홈 화면으로 이동
                         router.push('/');
                     }
                 })
@@ -108,7 +123,7 @@ export default function ProfilePage() {
                         <td><input className={styles.input} type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} /></td>
                     </tr>
                     <tr>
-                        <td>새 비밀번호 확인</td> {/* 새 비밀번호 확인 필드 추가 */}
+                        <td>새 비밀번호 확인</td>
                         <td><input className={styles.input} type="password" value={confirmNewPassword} onChange={(e) => setConfirmNewPassword(e.target.value)} /></td>
                     </tr>
                     <tr>
@@ -117,7 +132,6 @@ export default function ProfilePage() {
                     </tr>
                 </tbody>
             </table>
-            {errorMessage && <p className={styles.error}>{errorMessage}</p>}
             <div className={styles.buttondiv}>
                 <button className={styles.updateButton} onClick={handleUpdate}>수정완료</button>
                 <button className={styles.outButton} onClick={handleDelete}>회원탈퇴</button>
