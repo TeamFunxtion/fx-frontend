@@ -9,7 +9,7 @@ import { userInfoState, useSsrComplectedState } from "@/store/atoms.js";
 import api from "@/utils/api";
 import { useRouter } from "next/navigation";
 import LogoutModal from "../modal/LogoutModal";
-import { getNotificationIcons, numberFormatter } from "@/utils/common";
+import { numberFormatter } from "@/utils/common";
 import useModal from "@/hooks/useModal";
 import PaymentModal from "../modal/PaymentModal";
 import { API_URL } from "@/app/constants";
@@ -59,20 +59,21 @@ export default function Navigation() {
 			const eventSource = new EventSource(`${API_URL}/notify/events/${user.id}`);
 
 			eventSource.onmessage = function (event) {
-				console.log(event.data);
+				// console.log(event.data);
 				const jsonData = JSON.parse(event.data);
 				toast((t) => (
-					<span>
-						<img src={jsonData.data.thumbnailUrl} alt="" />
-						{jsonData.message}
-						<button onClick={() => toast.dismiss(t.id)}>
-							Dismiss
-						</button>
-					</span>
+					<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+						<p>
+							{jsonData.message}
+							<Link href={`/products/${jsonData.data.productId}`} style={{ color: 'dodgerblue' }}>이동</Link>
+						</p>
+						<div onClick={() => toast.dismiss(t.id)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}><BsX /></div>
+					</div>
 				), {
-					duration: 30000,
+					duration: 10000,
 					position: 'top-center',
-					icon: getNotificationIcons(jsonData.type),
+					// icon: getNotificationIcons(jsonData.type),
+					icon: <img src={jsonData.data.thumbnailUrl} style={{ width: '35px', height: '35px', borderRadius: '50%' }} alt="" />
 				});
 			};
 
@@ -87,43 +88,6 @@ export default function Navigation() {
 		}
 
 	}, [user]);
-
-
-	const test = () => {
-		var jsonData = {
-			type: "auction_winner",
-			message: "축하합니다!! 낙찰되었어영!!",
-			data: {
-				thumbnailUrl: 'https://funxtion-image.s3.amazonaws.com/5b65b0de-d7c1-4293-8b73-2567f1e4d61f.jpg',
-				productId: 7,
-			}
-		}
-
-		jsonData = {
-			type: "auction_miss",
-			message: "이런, 경매 낙찰 기회를 뺏겼어요!!",
-			data: {
-				thumbnailUrl: 'https://funxtion-image.s3.amazonaws.com/5b65b0de-d7c1-4293-8b73-2567f1e4d61f.jpg',
-				productId: 7,
-			}
-		}
-
-		toast((t) => (
-			<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-				{/* <img src={jsonData.data.thumbnailUrl} style={{ width: '25px', height: '25px', borderRadius: '50%' }} alt="" /> */}
-				<p>
-					{jsonData.message}
-					<Link href={`/products/${jsonData.data.productId}`} style={{ color: 'dodgerblue' }}>이동</Link>
-				</p>
-				<div onClick={() => toast.dismiss(t.id)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}><BsX /></div>
-			</div>
-		), {
-			duration: 10000,
-			position: 'top-center',
-			// icon: getNotificationIcons(jsonData.type),
-			icon: <img src={jsonData.data.thumbnailUrl} style={{ width: '35px', height: '35px', borderRadius: '50%' }} alt="" />
-		});
-	}
 
 	return (
 		<nav className={styles.navigation}>
@@ -152,7 +116,6 @@ export default function Navigation() {
 						<>
 							<li><Link href="/auth/login">로그인</Link></li>
 							<li><Link href="/auth/join">회원가입</Link></li>
-							<li onClick={test}>테스트</li>
 						</>
 						: <>
 							<li className={styles.userInfoContainer}>
