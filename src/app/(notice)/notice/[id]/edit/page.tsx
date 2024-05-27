@@ -16,12 +16,11 @@ export default function NoticeNewPage() {
 	const router = useRouter();
 	const id = usePathname().substring(8).replace(/[^0-9]/g, "");
 
-
 	const updateNotice = async () => {
 
-		if (noticeTitle === '') {
+		if (noticeTitle.trim() === '') {
 			toast.error("타이틀을 입력해 주세요");
-		} if (notcieContent === '') {
+		} else if (notcieContent.trim() === '') {
 			toast.error("내용을 입력해 주세요");
 		} else {
 			const res = await api.patch(`/notices`, { noticeId: Number(id), noticeTitle: noticeTitle, noticeContent: notcieContent });
@@ -35,7 +34,6 @@ export default function NoticeNewPage() {
 
 	const getNoticeDetail = async () => {
 		const result = await api.get(`/notices/${id}`);
-		console.log(result.data.data);
 		setNoticeDetail(result.data.data);
 	}
 	useEffect(() => {

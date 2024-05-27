@@ -14,7 +14,7 @@ export default function NoticeNewPage() {
 
 		if (noticeTitle.trim() === '') {
 			toast.error("타이틀을 입력해 주세요");
-		} if (notcieContent.trim() === '') {
+		} else if (notcieContent.trim() === '') {
 			toast.error("내용을 입력해 주세요");
 		} else {
 			const res = await api.post(`/notices`, { noticeTitle: noticeTitle, noticeContent: notcieContent });
