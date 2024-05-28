@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
-import toast from "react-hot-toast";
 import FollowCard from "@/components/shop/followCard";
 import { useInView } from "react-intersection-observer";
+
 
 export default function SellerFollower({ storeId }: { storeId: string }) {
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -67,9 +67,7 @@ export default function SellerFollower({ storeId }: { storeId: string }) {
 		}
 		setFollowList(newList);
 	};
-	if (followList.length > 0) {
-		console.log(followList);
-	}
+
 
 	return (
 		<>
