@@ -7,6 +7,7 @@ import Header from "../components/header/header";
 import { Toaster } from 'react-hot-toast';
 import RecoilRootWrapper from "@/components/RecoilWrapper";
 import Head from "next/head";
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,6 +47,9 @@ export default function RootLayout({
       <body className={pretendard.className}>
         <RecoilRootWrapper>
           <Header />
+          <div style={{ position: 'fixed', right: 100, top: 200, cursor: 'pointer' }}>
+            <Link href="/notice"><img style={{ width: '85px', height: '85px' }} src="/images/helpcenter.png" alt="" /></Link>
+          </div>
           <main>
             {children}
           </main>
