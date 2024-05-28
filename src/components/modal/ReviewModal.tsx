@@ -5,16 +5,7 @@ import { Rating, TextField, styled } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import toast from 'react-hot-toast';
-
-const StyledRating = styled(Rating)({
-	'& .MuiRating-iconFilled': {
-		color: '#ff6d75',
-	},
-	'& .MuiRating-iconHover': {
-		color: '#ff3d47',
-	},
-});
-
+import { StyledRating } from '../StyledRating';
 
 export default function ReviewModal({ clickModal, enrollReview }) {
 

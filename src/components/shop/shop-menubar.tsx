@@ -25,6 +25,7 @@ export default function ShopMenubar({ params }) {
 						<li className={`${pathname.indexOf('/bids') > -1 ? 'active' : ''}`}><Link href={`${baseUrl}/bids`}>참여중 경매</Link></li>
 						<li className={`${pathname.indexOf('/sell') > -1 ? 'active' : ''}`}><Link href={`${baseUrl}/sell`}>판매 내역</Link></li>
 						<li className={`${pathname.indexOf('/buy') > -1 ? 'active' : ''}`}><Link href={`${baseUrl}/buy`}>구매 내역</Link></li>
+						<li className={`${pathname.indexOf('/reviews') > -1 ? 'active' : ''}`}><Link href={`${baseUrl}/reviews`}>상점 후기</Link></li>
 					</ul>
 
 					<ul className={styles.listContainer}>

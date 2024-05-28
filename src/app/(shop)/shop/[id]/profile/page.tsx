@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './page.module.css';
-import api from "@/utils/api";
+import api, { fileApi } from "@/utils/api";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,10 +23,12 @@ export default function ProfilePage() {
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState('');
+    const file = useRef(null);
     const { getUserDetail } = useUserInfo();
 
     useEffect(() => {
-        console.log(id);
+        // console.log(id);
         api.get(`members/${userId}?userId=` + userId)
             .then(response => {
                 const data = response.data.data;
@@ -34,6 +36,7 @@ export default function ProfilePage() {
                 setIntro(data.intro);
                 setEmail(data.email);
                 setPhoneNumber(data.phoneNumber);
+                setProfileImageUrl(data.profileImageUrl);
             })
             .catch(error => {
                 console.error('Error fetching user data:', error);
@@ -41,12 +44,25 @@ export default function ProfilePage() {
     }, [userId]);
 
     const handleUpdate = () => {
-        if (newPassword && newPassword !== confirmNewPassword) {
-            toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
-            return;
+        // 새 비밀번호와 새 비밀번호 확인이 입력된 경우에만 검증합니다.
+        if (newPassword || confirmNewPassword) {
+            if (!newPassword) {
+                toast.error('새 비밀번호를 입력해 주세요.');
+                return;
+            }
+            if (newPassword !== confirmNewPassword) {
+                toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+                return;
+            }
+            if (password === newPassword) {
+                toast.error('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
+                return;
+            }
         }
-        if (newPassword && password === newPassword) {
-            toast.error('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
+
+        var regex = /^[0-9]*$/; // 숫자만 체크
+        if (!(regex.test(phoneNumber) && (11 == phoneNumber.length))) {
+            toast.error("핸드폰번호는 숫자 11자리로 입력하세요.");
             return;
         }
 
@@ -60,10 +76,19 @@ export default function ProfilePage() {
             confirmNewPassword
         };
 
-        api.put('/members/update', requestData)
+        const formData = new FormData();
+        formData.append("file", file.current);
+        formData.append("updateUser", JSON.stringify(requestData));
+
+
+        fileApi.put('/members/update', formData)
             .then(response => {
                 console.log(response.data);
-                toast.success(response.data.msg);
+                if (response.data.resultCode !== '200') {
+                    toast.error(response.data.msg);
+                } else {
+                    toast.success(response.data.msg);
+                }
                 setNickname(nickname);
                 setIntro(intro);
                 setPhoneNumber(phoneNumber);
@@ -72,6 +97,7 @@ export default function ProfilePage() {
                 setNewPassword('');
                 setConfirmNewPassword('');
                 getUserDetail();
+                file.current = null;
             })
             .catch(error => {
                 console.error('Error updating profile:', error);
@@ -100,10 +126,44 @@ export default function ProfilePage() {
         }
     };
 
+    const handleChangeFile = (event: any) => {
+
+        const files = event.target.files;
+
+        if (files.length === 0) return;
+
+        // 파일 크기 1MB 이하인것만 
+        if (files[0].size > (1024 * 1024 * 1)) {
+            toast.error("이미지는 최대 1MB 크기로 제한됩니다.");
+            return false;
+        }
+
+        file.current = files[0];
+
+        for (let i = 0; i < files.length; i++) {
+            if (files[i]) {
+                let reader = new FileReader();
+                reader.readAsDataURL(files[i]);
+                reader.onloadend = () => {
+                    const base64 = reader.result; // 비트맵 데이터 리턴, 이 데이터를 통해 파일 미리보기가 가능함
+                    // console.log(base64)
+                    if (base64) {
+                        let base64Sub = base64.toString()
+                        setProfileImageUrl(base64Sub);
+                    }
+                    event.target.value = '';
+                }
+            }
+        }
+    }
+
     return (
         <div>
             <h3>회원정보 수정</h3>
-            <a><img className={styles.image} src="https://image.kmib.co.kr/online_image/2023/0217/2023021610191969585_1676510359_0017971537.jpg" alt="" /></a>
+            <label htmlFor="file">
+                <a><img className={styles.image} src={profileImageUrl} alt="" /></a>
+            </label>
+            <input type="file" id="file" onChange={handleChangeFile} style={{ display: 'none' }} accept="image/png, image/gif, image/jpeg" />
             <table className={styles.form}>
                 <tbody>
                     <tr>
@@ -132,7 +192,7 @@ export default function ProfilePage() {
                     </tr>
                     <tr>
                         <td>핸드폰번호</td>
-                        <td><input className={styles.input} type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} /></td>
+                        <td><input className={styles.input} type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} maxLength={11} /></td>
                     </tr>
                 </tbody>
             </table>

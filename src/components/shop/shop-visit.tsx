@@ -5,8 +5,7 @@ import { useState } from "react"
 import NoResult from "../NoResult"
 import SellerFollower from "@/app/(shop)/shop/[id]/sellerfollower/page"
 import SellerFollowing from "@/app/(shop)/shop/[id]/sellerfollowing/page"
-
-
+import MyReviewsPage from "@/app/(shop)/shop/[id]/reviews/page"
 
 const items = [
 	{ label: '상품', value: 0 },
@@ -28,7 +27,8 @@ export default function ShopVisit({ params }) {
 			{idx === 0 && <MyProductsPage guest={true} storeId={params.id} />}
 			{idx === 1 && <SellerFollower guest={true} storeId={params.id} />}
 			{idx === 2 && <SellerFollowing guest={true} storeId={params.id} />}
-			{idx === 3 && <NoResult text="준비중입니다." />}
+			{idx === 3 && <MyReviewsPage guest={true} storeId={params.id} />}
+
 		</div>
 	)
 }
