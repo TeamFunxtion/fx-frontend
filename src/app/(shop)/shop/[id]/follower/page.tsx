@@ -60,6 +60,10 @@ export default function Follower() {
 		setFollowList(newList);
 	};
 
+	if (followList.length > 0) {
+		console.log(followList);
+	}
+
 	return (
 		<>
 			<h3 className={styles.title}>팔로워</h3>

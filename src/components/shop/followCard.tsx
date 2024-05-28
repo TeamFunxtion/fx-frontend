@@ -1,7 +1,12 @@
 import styles from './followCard.module.css';
 import React, { forwardRef } from 'react';
 
-const FollowCard = forwardRef(({ item, index, followState, changeFollowState }) => {
+const FollowCard = forwardRef(({ item, index, followState, changeFollowState, userId, storeId }) => {
+	console.log(item);
+	console.log(userId);
+	console.log(storeId);
+
+
 	return (
 		<div key={index} className={styles.profiles}>
 			<div className={styles.followProfile}>
@@ -18,18 +23,24 @@ const FollowCard = forwardRef(({ item, index, followState, changeFollowState }) 
 				<div className={styles.rating}>★★★★★</div>
 				<div>상품 {item.productCnt} | 팔로우 {item.followerCnt}</div>
 				{item.fromMember != null ?
-					<button
-						className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
-						onClick={() => { followState(index); changeFollowState(item.fromMember.id); }}
-					>
-						{item.following == true ? '팔로잉' : '팔로우'}
-					</button> :
-					<button
-						className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
-						onClick={() => { followState(index); changeFollowState(item.toMember.id); }}
-					>
-						{item.following == true ? '팔로잉' : '팔로우'}
-					</button>}
+					(item.fromMember.id !== userId ?
+						<button
+							className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+							onClick={() => { followState(index); changeFollowState(item.fromMember.id); }}
+						>
+							{item.following == true ? '팔로잉' : '팔로우'}
+						</button> : ""
+					)
+					:
+					(item.toMember.id !== userId ?
+						<button
+							className={`${styles.btn} ${item.following == true ? styles.following : styles.follower}`}
+							onClick={() => { followState(index); changeFollowState(item.toMember.id); }}
+						>
+							{item.following == true ? '팔로잉' : '팔로우'}
+						</button> : ""
+					)
+				}
 			</div>
 		</div>
 	)

@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import FollowCard from "@/components/shop/followCard";
 import { useInView } from "react-intersection-observer";
 
-export default function Following() {
+export default function SellerFollowing({ guest, storeId }: { guest: boolean, storeId: string }) {
 	const userInfoValue = useRecoilValue(userInfoState);
 	const userId = userInfoValue.id;
 	const [followList, setFollowList] = useState([]);
@@ -20,14 +20,21 @@ export default function Following() {
 
 	const getFollowingList = async (page) => {
 
-		const res = await api.get(`/follow/following?userId=${userId}&page=${page}&size=10`)
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
+		const res = await api.get('/follow/sellerfollowing', {
+			params: {
+				userId: userId,
+				storeId: storeId,
+				page: page,
+				size: 10
+			}
+		});
+		const { data: { resultCode, data } } = res;
+		if (resultCode === '200') {
 			setFollowList(list => [...list, ...data.content]);
 			setHasMore(data.content.length > 0);
-			setFollowCnt(data.content.length);
+
 		}
-	}
+	};
 
 	useEffect(() => {
 		if (initialLoad) {
@@ -67,13 +74,12 @@ export default function Following() {
 		console.log(followList);
 	}
 
-
 	return (
 		<>
 			<h3 className={styles.title}>팔로잉</h3>
 			<div className={styles.follow}>
 				팔로잉 <span className={styles.followCount}>&nbsp;&nbsp;
-					{followCnt > 0 ? followCnt : ""}
+					{followList.length}
 				</span>
 			</div>
 			{followList.length == 0 ?
@@ -88,6 +94,7 @@ export default function Following() {
 							index={index}
 							followState={followState}
 							changeFollowState={changeFollowState}
+							userId={userId}
 						/>
 					))}
 					<div ref={ref}></div>
