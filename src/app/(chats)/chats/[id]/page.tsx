@@ -334,13 +334,7 @@ export default function User() {
 						{chatRoomInfo != null && chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : ""}
 						{chatRoomInfo != null && chatRoomInfo.customer.id != userId ? chatRoomInfo.customer.nickname : ""}
 					</div>
-					<button style={{
-						width: '130px',
-						padding: 0,
-						fontSize: '0.8rem'
-					}} onClick={onClickReview}>
-						판매자 리뷰
-					</button>
+
 				</div>
 				<div className={styles.safeTradeDiv}>
 					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
@@ -542,6 +536,14 @@ export default function User() {
 								setChat('');
 							}
 						}} />
+					<button style={{
+						padding: '10px 2px',
+						fontSize: '0.8rem',
+						background: 'purple',
+						color: 'white'
+					}} onClick={onClickReview}>
+						리뷰 작성
+					</button>
 				</div>
 			</div>
 		</div>
