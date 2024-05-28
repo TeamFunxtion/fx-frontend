@@ -9,6 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Pagination from '@mui/material/Pagination';
 import { dateFormatterYYYYMMDDHHmm } from "@/utils/common";
 import Etcsidebar from "@/components/etc/etcsidebar";
+import { ImBullhorn } from "react-icons/im";
 import toast from "react-hot-toast";
 export default function Notice() {
 
@@ -92,7 +93,7 @@ export default function Notice() {
 		}
 	}
 
-	
+
 	return (
 		<div className={styles.noticeMain}>
 			<Etcsidebar />
@@ -103,17 +104,24 @@ export default function Notice() {
 					userRoleId === 2 &&
 					<div className={styles.noticeMove}>
 						<button onClick={() => newMove()} className={styles.noticeMoveButton}>공지등록</button>
+
 					</div>
 				}
-					{list.length <=0 &&
-						<div className={styles.nullNotice}>입력된 공지사항이 없습니다.</div>
-					}
+				<div className={styles.noticeSectionDiv}>
+					<div className={styles.noticeMegaPohnIcon}><ImBullhorn /></div>
+					<div className={styles.noticeSectionDivDiv}>공지사항</div>
+				</div>
+
+				<div className={styles.noticeDivTop} />
+				{list.length <= 0 &&
+					<div className={styles.nullNotice}>입력된 공지사항이 없습니다.</div>
+				}
 				{
 					list.length > 0 && list.map(function (notice) {
 						return (
-							
+
 							<div className="container">
-																							
+
 								<div className={styles.noticeDiv} onClick={() => accordion(notice.id)}>
 									<div className={styles.noticeQ}>Q</div>
 									<div className={styles.noticeTitle} >{notice.noticeTitle}</div>
@@ -124,19 +132,22 @@ export default function Notice() {
 										}
 									</div>
 								</div>
-					
-								{notice.id === idcode && <div className={styles.noticeContent}><p className={styles.noticeContentDetail}>{notice.noticeContent}</p>
-									{userRoleId === 2 &&
-										<div>
-											<button onClick={() => updateMove(notice.id)}>수정</button>
-											<button onClick={() => deleteMove(notice.id)}>삭제</button>
-										</div>
-									}
-								</div>
+
+								{notice.id === idcode &&
+									<div className={styles.noticeContent}>
+										<div className={styles.noticeA}>A</div>
+										<p className={styles.noticeContentDetail}>{notice.noticeContent}</p>
+										{userRoleId === 2 &&
+											<div>
+												<button onClick={() => updateMove(notice.id)}>수정</button>
+												<button onClick={() => deleteMove(notice.id)}>삭제</button>
+											</div>
+										}
+									</div>
 								}
-							
+
 							</div>
-							
+
 						);
 					})}
 
