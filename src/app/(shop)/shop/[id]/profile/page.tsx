@@ -41,13 +41,20 @@ export default function ProfilePage() {
     }, [userId]);
 
     const handleUpdate = () => {
-        if (newPassword && newPassword !== confirmNewPassword) {
-            toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
-            return;
-        }
-        if (newPassword && password === newPassword) {
-            toast.error('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
-            return;
+        // 새 비밀번호와 새 비밀번호 확인이 입력된 경우에만 검증합니다.
+        if (newPassword || confirmNewPassword) {
+            if (!newPassword) {
+                toast.error('새 비밀번호를 입력해 주세요.');
+                return;
+            }
+            if (newPassword !== confirmNewPassword) {
+                toast.error('새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.');
+                return;
+            }
+            if (password === newPassword) {
+                toast.error('현재 비밀번호와 새 비밀번호는 같을 수 없습니다.');
+                return;
+            }
         }
 
         const requestData = {
@@ -63,7 +70,11 @@ export default function ProfilePage() {
         api.put('/members/update', requestData)
             .then(response => {
                 console.log(response.data);
-                toast.success(response.data.msg);
+                if (response.data.resultCode !== '200') {
+                    toast.error(response.data.msg);
+                } else {
+                    toast.success(response.data.msg);
+                }
                 setNickname(nickname);
                 setIntro(intro);
                 setPhoneNumber(phoneNumber);
