@@ -76,7 +76,7 @@ export default function SellerFollowing({ guest, storeId }: { guest: boolean, st
 			<h3 className={styles.title}>팔로잉</h3>
 			<div className={styles.follow}>
 				팔로잉 <span className={styles.followCount}>&nbsp;&nbsp;
-					{followList.length}
+					{followList.length > 0 ? followList.length : ""}
 				</span>
 			</div>
 			{followList.length == 0 ?
