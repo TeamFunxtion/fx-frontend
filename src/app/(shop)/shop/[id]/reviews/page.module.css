@@ -1,0 +1,70 @@
+.container {
+  padding-bottom: 150px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 35px 0 15px 0;
+  font-size: 1rem;
+}
+
+.totalCount {
+  font-weight: 600;
+}
+
+.reviewItem {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 150px auto;
+  cursor: pointer;
+  border-bottom: 1px solid rgb(231, 231, 231);
+  padding: 20px 0;
+}
+
+.buyerProfileImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.buyerProfileImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.buyerNameAndDate {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buyerName {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.rating {
+}
+
+.productTitle {
+  padding: 10px 20px;
+  border: 1px solid rgb(185, 185, 185);
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  font-size: 1rem;
+}
+
+.moreBtn {
+  padding: 35px;
+  display: flex;
+  justify-content: center;
+}
+
+.moreBtn button {
+  padding: 15px 25px;
+  background-color: dodgerblue;
+  color: white;
+}
