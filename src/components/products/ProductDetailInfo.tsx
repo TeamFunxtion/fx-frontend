@@ -154,6 +154,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			return;
 		}
 
+		const now = new Date().getTime();
 		if (productDetail.salesTypeId === "SA01" &&
 			((isFirst && (bidPrice < productDetail.productPrice)) || (!isFirst && bidPrice <= productDetail.currentPrice))) {
 			toast.error("입찰할 수 없는 금액입니다!");
@@ -161,6 +162,9 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		} else if (productDetail.salesTypeId === "SA02" &&
 			((isFirst && (bidPrice < productDetail.productPrice)) || (!isFirst && bidPrice <= productDetail.productPrice))) {
 			toast.error("입찰할 수 없는 금액입니다!");
+			return;
+		} else if ((productDetail.salesTypeId === "SA01" || productDetail.salesTypeId === "SA02") && now >= new Date(productDetail.endTime).getTime()) { // 경매 종료일 체크
+			toast.error("경매가 종료되어 입찰이 불가합니다!");
 			return;
 		}
 
