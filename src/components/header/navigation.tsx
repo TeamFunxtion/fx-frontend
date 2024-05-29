@@ -61,23 +61,21 @@ export default function Navigation() {
 			const eventSource = new EventSource(`${API_URL}/notify/events/${user.id}`);
 
 			eventSource.onmessage = function (event) {
-				// console.log(event.data);
-
-				if (event.data.type === 'auction_winner') {
+				const jsonData = JSON.parse(event.data);
+				if (jsonData.type === "auction_winner") {
 					callWinnerAnimation();
 				}
 
-				const jsonData = JSON.parse(event.data);
 				toast((t) => (
 					<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 						<p>
-							{jsonData.message}
-							<Link href={`/products/${jsonData.data.productId}`} style={{ color: 'dodgerblue' }}>이동</Link>
+							{jsonData.message}&nbsp;&nbsp;
+							<Link href={`/products/${jsonData.data.id}`} style={{ color: 'dodgerblue' }}>이동</Link>
 						</p>
 						<div onClick={() => toast.dismiss(t.id)} style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}><BsX /></div>
 					</div>
 				), {
-					duration: 10000,
+					duration: 60000,
 					position: 'top-center',
 					// icon: getNotificationIcons(jsonData.type),
 					icon: <img src={jsonData.data.thumbnailUrl} style={{ width: '35px', height: '35px', borderRadius: '50%' }} alt="" />
