@@ -6,7 +6,7 @@ export default function useUserInfo() {
   const [user, setUser] = useRecoilState(userInfoState);
 
   const getUserDetail = async () => {
-    const result = await api.get(`/members/${user.id}`);
+    const result = await api.get(`/members?id=${user.id}`);
     // console.log(result);
     const {
       data: { resultCode, data },

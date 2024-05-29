@@ -14,7 +14,7 @@ export default function ShopInfo({ params }) {
 
 
 	const getShopUserDetail = async () => {
-		const result = await api.get(`/members/${params.id}`);
+		const result = await api.get(`/members?id=${params.id}`);
 
 		const { data: { resultCode, msg, data } } = result;
 		if (resultCode === '200') {

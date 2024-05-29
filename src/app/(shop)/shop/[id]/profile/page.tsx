@@ -29,7 +29,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         // console.log(id);
-        api.get(`members/${userId}?userId=` + userId)
+        api.get(`members?id=` + userId)
             .then(response => {
                 const data = response.data.data;
                 setNickname(data.nickname);
