@@ -20,6 +20,7 @@ import ProductReportModal from "../modal/ProductReportModal";
 import AuctionWinnerModal from "../modal/AuctionWinnerModal";
 import Confetti from 'react-confetti'
 import useUserInfo from "@/hooks/useUserInfo";
+import _ from "lodash";
 
 
 export async function getProductDetail(id: string, userId: string) {
@@ -62,6 +63,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		bid: false,
 		point: false,
 		history: false,
+		historyMy: false,
 		report: false,
 		winner: false,
 	});
@@ -71,7 +73,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	const LOGIN_URL = "/auth/login";
 	const [showAnimation, setShowAnimation] = useState(false);
 	const isSeller = userInfo.id === productDetail.seller.id; // 판매자 여부
-	const { getUserDetail } = useUserInfo();
+	const { user, getUserDetail } = useUserInfo();
 
 
 	const toggleModal = (name: string) => {
@@ -261,6 +263,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 			{modal.winner && <AuctionWinnerModal clickModal={() => toggleModal('winner')} />}
 			{modal.report && <ProductReportModal clickModal={() => toggleModal('report')} ok={handleReport} />}
 			{modal.history && <BidHistoryModal clickModal={() => toggleModal('history')} bidList={[...bids]} />}
+			{modal.historyMy && <BidHistoryModal clickModal={() => toggleModal('historyMy')} bidList={_.filter(bids, { bidderId: user.id })} />}
 			{modal.point && <PointNotEnoughModal clickModal={() => toggleModal('point')} />}
 			{modal.bid && <BidModal
 				clickModal={() => toggleModal('bid')}
@@ -314,9 +317,8 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 								<li className={styles.infoCol}>
 									<div className={styles.label}>입찰</div>
 									<div className={styles.content}>{numberFormatter(productDetail.bids.length) || '0'}회&nbsp;&nbsp;
-										{
-											productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={() => toggleModal('history')}>입찰내역</span>
-										}
+										{productDetail.salesTypeId === "SA01" && <span className={styles.bidCountText} onClick={() => toggleModal('history')}>입찰내역</span>}
+										{productDetail.salesTypeId === "SA02" && user.id && <span className={styles.bidCountText} onClick={() => toggleModal('historyMy')}>입찰내역</span>}
 									</div>
 								</li>
 								<li className={styles.infoCol}>
