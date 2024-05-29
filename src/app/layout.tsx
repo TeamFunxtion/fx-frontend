@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import RecoilRootWrapper from "@/components/RecoilWrapper";
 import Head from "next/head";
 import Link from 'next/link'
+import UserRefresh from "@/components/UserRefresh";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,6 +52,7 @@ export default function RootLayout({
             <Link href="/notice"><img style={{ width: '85px', height: '85px' }} src="/images/helpcenter.png" alt="" /></Link>
           </div>
           <main>
+            <UserRefresh />
             {children}
           </main>
           <Toaster
