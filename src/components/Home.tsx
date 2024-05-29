@@ -2,8 +2,22 @@
 import SimpleImageSlider from "react-simple-image-slider";
 import ProductCard from "./products/ProductCard/ProductCard"
 import styles from '@/styles/Home.module.css'
+import { useEffect, useState } from "react";
+import api from "@/utils/api";
 
-export default function Home({ products }) {
+export default function Home() {
+	const [list, setList] = useState([]);
+
+	const getProductList = async () => {
+		const result = await api.get(`/products?size=1000`);
+		const { data: { content } } = result;
+		setList(content);
+	}
+
+	useEffect(() => {
+		getProductList();
+	}, []);
+
 	return (
 		<div>
 			<div className={styles.mainBanner}>
@@ -23,7 +37,7 @@ export default function Home({ products }) {
 			</div>
 			<ul className={styles.productList}>
 				{
-					products && products.map((product, index) => (
+					list && list.map((product, index) => (
 						<ProductCard product={product} key={index} />
 					))
 				}
