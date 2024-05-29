@@ -367,7 +367,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 				</div>
 				<div>
 					<h3>판매자 정보</h3>
-					<Link href={`/shop/${seller.id}`}>
+					<Link href={`${isSeller ? `/shop/${seller.id}/products` : `/shop/${seller.id}`}`}>
 						<div className={styles.userInfo}>
 							<h4>{seller.nickname}</h4>
 							<img src={seller.profileImageUrl} alt="유저 이미지" />
