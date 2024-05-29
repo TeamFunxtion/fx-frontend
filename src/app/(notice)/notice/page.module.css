@@ -20,25 +20,69 @@
 }
 
 .noticeSection{
-
-	width: 1300px;
+	margin: auto;
+	width: 60%;
 
 
 	
 }
-
-.noticeDiv{
-	margin-left: 40px;
-	border: 2px solid rgba(121, 121, 121, 0.5);
+.noticeSectionDiv{
+	margin-bottom: 3%;
 	display: flex;
-	justify-content: space-between;
+	height: 80px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+}
+
+.noticeMegaPohnIcon{
+	margin: auto 0 auto 40px;
+
+	font-size: 50px;
+	
+}
+
+.noticeSectionDivDiv{
+	margin-left: 5%;
+	align-content: center;
+	color: rgba(121, 121, 121);
+	font-size: 40px;
+	font-weight: 600;
+
 }
 
 
+.noticeDivTop{
+	border-bottom: 2px solid rgba(121, 121, 121, 0.5);;
+}
+
+.noticeDiv{
+	height: 50px;
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	border-top: 0px;
+	display: flex;
+	justify-content: space-between;
+
+}
+
+
+
 .noticeQ{
-	margin: 5px 0;
+	margin: 10px 0;
 	margin-left: 30px;
 	background-color: rgb(8, 115, 228);
+	color: white;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	align-content: center;
+	border-radius: 30px
+
+}
+
+
+.noticeA{
+	margin: 5px 0;
+	margin-left: 30px;
+	background-color: rgb(255, 106, 47);
 	color: white;
 	width: 30px;
 	height: 30px;
@@ -54,18 +98,19 @@
 }
 
 .noticeContent{
-	margin-left: 40px;
 	border: 2px solid rgba(121, 121, 121, 0.5);
+	border-top: 0px;
 	display: flex;
-	justify-content: space-between;
 }
 
 .noticeContentDetail{
 	margin: 5px 10px;
 	line-height: 1.5;
 	color: rgb(0, 106, 219);
+	width: 80%;
 	
 }
+
 
 .noticeIc{
 	margin-right: 5px;
