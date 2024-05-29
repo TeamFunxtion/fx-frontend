@@ -328,9 +328,9 @@ export default function User() {
 			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
-					<img src={chatRoomInfo != null ? chatRoomInfo.store.profileImageUrl : ""}
+					<img src={chatRoomInfo != null ? (userId == chatRoomInfo.store.id ? chatRoomInfo.customer.profileImageUrl : chatRoomInfo.store.profileImageUrl) : ""}
 						className={styles.profileImg} />
-					<div className={styles.chatName}>
+					<div className={styles.chatName} title={chatRoomInfo == null ? '' : (chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : chatRoomInfo.customer.nickname)}>
 						{chatRoomInfo != null && chatRoomInfo.customer.id == userId ? chatRoomInfo.store.nickname : ""}
 						{chatRoomInfo != null && chatRoomInfo.customer.id != userId ? chatRoomInfo.customer.nickname : ""}
 					</div>
@@ -340,56 +340,58 @@ export default function User() {
 					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
-							<span>안전거래</span>
+							<span className={styles.safeWord}>안전거래</span>
 						</button>
 						: ""}
 					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
 						<div className={styles.safeTradeSeller}>
-							<button className={styles.safeTradeBtnAccept} onClick={acceptSafePay}>안전거래 수락</button>
-							<button className={styles.safeTradeBtnRefuse} onClick={refuseSafePay}>안전거래 거절</button>
+							<button className={`${styles.safeTradeBtnAccept}`} onClick={acceptSafePay}>안전거래 수락</button>
+							<button className={`${styles.safeTradeBtnRefuse}`} onClick={refuseSafePay}>안전거래 거절</button>
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
 						<div className={styles.pay}>
-							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
-							<button onClick={openModal} className={styles.payBtn}><MdOutlinePayment />결제하기</button>
+							<div className={styles.safePayContainer}>
+								<div className={styles.safeTrading}>안전거래 진행중</div>
+								<button onClick={openModal} className={styles.payBtn}><MdOutlinePayment />결제하기</button>
+							</div>
 							<SafePayModal isModalOpen={isModalOpen} onClose={closeModal} point={chatRoomInfo.product.currentPrice} ok={updateSafePayStatus} />
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
 						<div className={styles.pay}>
-							<div className={styles.safeTrading2}>안전거래중인 상품입니다.</div>
+							<div className={styles.safeTradingTwo}>안전거래 진행중</div>
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.sellerOk != 'Y' && safePaymentInfo.status == 'SP03' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
 						<div className={styles.confirm}>
-							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
-							<button className={styles.confirmBtn} onClick={sellerConfirm}>판매 확정</button>
+							<div className={styles.safeTradingThree}>안전거래 진행중</div>
+							<button className={styles.confirmBtn} onClick={sellerConfirm}><span>판매완료</span></button>
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.buyerOk != 'Y' && safePaymentInfo.status == 'SP03' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
 						<div className={styles.confirm}>
-							<div className={styles.safeTrading}>안전거래중인 상품입니다.</div>
-							<button className={styles.confirmBtn} onClick={buyerConfirm}>구매 확정</button>
+							<div className={styles.safeTradingThree}>안전거래 진행중</div>
+							<button className={styles.confirmBtn} onClick={buyerConfirm}><span>구매완료</span></button>
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.sellerOk == 'Y' && safePaymentInfo.status != 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
-						<div>
+						<div className={styles.wait}>
 							구매자의 거래 확정을 대기중입니다.
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.buyerOk == 'Y' && safePaymentInfo.status != 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
-						<div>
+						<div className={styles.wait}>
 							판매자의 거래 확정을 대기중입니다.
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id != userId ?
-						<div>
+						<div className={styles.complete}>
 							완료된 거래입니다.
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP04' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
-						<div>
+						<div className={styles.complete}>
 							완료된 거래입니다.
 						</div>
 						: ""}
@@ -399,9 +401,12 @@ export default function User() {
 					<div className={styles.chatProductInfo}>
 						<img src={chatRoomInfo != null ? chatRoomInfo.product.thumbnailUrl : ""}
 							className={styles.productImg} />
-						<div className={styles.price}>&nbsp;{chatRoomInfo == null ? '' : chatRoomInfo.product.currentPrice}원</div>
+						<div className={styles.productInf}>
+							<div className={styles.price}>&nbsp;{chatRoomInfo == null ? '' : chatRoomInfo.product.currentPrice.toLocaleString()}원</div>
+							<div className={styles.chatProductTitle} title={chatRoomInfo == null ? '' : chatRoomInfo.product.productTitle}>{chatRoomInfo == null ? '' : chatRoomInfo.product.productTitle}</div>
+						</div>
 					</div>
-					<div className={styles.chatProductTitle}>{chatRoomInfo == null ? '' : chatRoomInfo.product.productTitle}</div>
+
 				</div>
 			</div>
 
@@ -536,14 +541,15 @@ export default function User() {
 								setChat('');
 							}
 						}} />
-					<button style={{
-						padding: '10px 2px',
-						fontSize: '0.8rem',
-						background: 'purple',
-						color: 'white'
-					}} onClick={onClickReview}>
-						리뷰 작성
-					</button>
+					{chatRoomInfo && chatRoomInfo.customer.id == userId ?
+						<button style={{
+							padding: '10px 2px',
+							fontSize: '0.8rem',
+							background: 'purple',
+							color: 'white'
+						}} onClick={onClickReview}>
+							리뷰 작성
+						</button> : ""}
 				</div>
 			</div>
 		</div>
