@@ -47,3 +47,8 @@
 	color: var(--primary-color);
 	border : 1px solid var(--primary-color);
 }
+.followNo {
+	background-color: lightgray;
+	color: white;
+	
+}
