@@ -95,12 +95,16 @@
 	align-content: center;
 	text-align: left;
 	width: 60%;
+	word-break: break-all;
+	overflow:auto;
 }
 
 .noticeContent{
 	border: 2px solid rgba(121, 121, 121, 0.5);
 	border-top: 0px;
 	display: flex;
+	word-break: break-all;
+	overflow:auto;
 }
 
 .noticeContentDetail{
@@ -108,7 +112,8 @@
 	line-height: 1.5;
 	color: rgb(0, 106, 219);
 	width: 80%;
-	
+	word-break: break-all;
+	overflow:auto;
 }
 
 
