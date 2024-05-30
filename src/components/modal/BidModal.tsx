@@ -47,7 +47,11 @@ export default function BidModal({ clickModal, handleOk, productDetail }) {
 				<ModalHeader>
 					<h2>✋ 입찰하기</h2>
 					<h3>
-						<p><b>{numberFormatter(productDetail.currentPrice + (isFirst ? 0 : 1000))}원{!isFirst && '(+1000원)'}</b>부터 입찰이 가능합니다!</p>
+						{
+							!isBlind && <p>
+								<b>{numberFormatter(productDetail.currentPrice + (isFirst ? 0 : 1000))}원{!isFirst && '(+1000원)'}</b>부터 입찰이 가능합니다!
+							</p>
+						}
 					</h3>
 					<h3 style={{ marginTop: '25px' }}>입력하신 입찰가는 {numberFormatter(bidPrice)}원입니다.</h3>
 				</ModalHeader>
