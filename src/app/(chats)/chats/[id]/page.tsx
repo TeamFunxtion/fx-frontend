@@ -367,7 +367,7 @@ export default function User() {
 						<div className={styles.pay}>
 							<div className={styles.safePayContainer}>
 								<div className={styles.safeTrading}>안전거래 진행중</div>
-								<button onClick={openModal} className={styles.payBtn}><MdOutlinePayment />결제하기</button>
+								<button onClick={openModal} className={styles.payBtn}><span><MdOutlinePayment />결제하기</span></button>
 							</div>
 							<SafePayModal isModalOpen={isModalOpen} onClose={closeModal} point={chatRoomInfo.product.currentPrice} ok={updateSafePayStatus} />
 						</div>
