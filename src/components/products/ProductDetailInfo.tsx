@@ -15,20 +15,11 @@ import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import PointNotEnoughModal from "../modal/PointNotEnoughModal";
 import BidHistoryModal from "../modal/BidHistoryModal";
-import { API_URL } from "@/app/constants";
 import ProductReportModal from "../modal/ProductReportModal";
 import AuctionWinnerModal from "../modal/AuctionWinnerModal";
 import Confetti from 'react-confetti'
 import useUserInfo from "@/hooks/useUserInfo";
 import _ from "lodash";
-
-
-export async function getProductDetail(id: string, userId: string) {
-	// await new Promise((resolve) => setTimeout(resolve, 5000));
-	// throw new Error("Oops...");
-	const response = await fetch(`${API_URL}/products/${id}?u=${userId}`, { method: 'GET', cache: 'no-store' });
-	return response.json();
-}
 
 export default function ProductDetailInfo({ id }: { id: string }) {
 	const [productDetail, setProductDetail] = useState({
@@ -132,12 +123,14 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	}, [])
 
 	const init = async () => {
-		const response = await getProductDetail(id, userInfo.id);
+		const result = await api.get(`/products/${id}?u=${userInfo.id}`);
+		const { data: { resultCode, msg, data } } = result;
 		// console.log(response);
-		setProductDetail(response.data);
-		setIsFollow(response.data.follow);
+		if (resultCode === '200') {
+			setProductDetail(data);
+			setIsFollow(data.follow);
+		}
 	}
-
 
 	const images = productDetail.images.map((img: any) => img.imageUrl);
 
@@ -252,10 +245,6 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 	};
 
 	const [isFollow, setIsFollow] = useState(false);
-
-
-
-
 
 	return (
 		<section className={styles.section} >
