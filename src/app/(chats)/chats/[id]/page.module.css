@@ -12,6 +12,24 @@
   padding-bottom: 10px;
   
 }
+
+.reloadBtn {
+  background-color: white; /* 버튼의 배경색을 흰색으로 설정 */
+  border: none; /* 버튼의 테두리 제거 */
+  padding: 0; /* 내부 패딩 제거 */
+  
+}
+
+.reloadBtn:active {
+  transform: translateY(2px); /* 클릭 시 버튼을 아래로 이동하여 눌린 효과 표시 */
+}
+
+.reloadIcon {
+  color: var(--primary-color);
+  width: 20px;
+  height: 20px;
+  padding: 0; 
+}
 .chatName {
   padding-top: 20px;
   font-weight: 600;
@@ -22,8 +40,8 @@
   text-overflow: ellipsis;
   word-break: break-all;
   overflow: hidden;
-  padding-left: 10px;
-  padding-bottom: 13px;
+  padding-bottom: 15px;
+  padding-left: 13px;
 }
 
 .chatProduct {
@@ -298,7 +316,8 @@
   color: var(--primary-color);
   font-size: 25px;
   font-weight: bold;
-  margin-bottom: 35px;
+  margin-bottom: 5px;
+  padding-left: 25px;
 }
 .safeTradingThree {
   color: var(--primary-color);
@@ -388,6 +407,42 @@
   width: 100%;
 }
 
+/* .reviewBtn {
+
+}
+.heartBtn {
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  padding-left: 23px;
+} */
+.reviewBtn {
+  background-color: white; /* 버튼의 배경색을 흰색으로 설정 */
+  border: none; /* 버튼의 테두리 제거 */
+  padding: 0; /* 내부 패딩 제거 */
+  margin-left: 20px; /* 입력 창과의 간격을 조정 */
+}
+
+.reviewBtn:active {
+  transform: translateY(2px); /* 클릭 시 버튼을 아래로 이동하여 눌린 효과 표시 */
+}
+
+.heartBtn {
+  color: rgb(255, 128, 128);
+  width: 40px;
+  height: 40px;
+  padding: 0; /* 아이콘 주위의 내부 패딩 제거 */
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.heartBtn:hover {
+  color: red;
+  font-weight: 900;
+  box-shadow: none;
+  border-color: var(--primary-color); 
+  transform: scale(1.1);
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
+}
 
 
 

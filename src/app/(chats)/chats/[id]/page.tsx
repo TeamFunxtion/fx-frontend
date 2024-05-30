@@ -13,6 +13,9 @@ import { chatState } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
 import ReviewModal from "@/components/modal/ReviewModal";
+import { BsChatHeart } from "react-icons/bs";
+import { IoReloadCircle } from "react-icons/io5";
+import { IoReloadCircleOutline } from "react-icons/io5";
 
 
 export default function User() {
@@ -323,9 +326,12 @@ export default function User() {
 		setShowReviewModal(false);
 	}
 
+	console.log(chatRoomInfo);
+
 	return (
 		<div className={styles.chatRoom}>
 			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
+
 			<div className={styles.chatRoomHeader}>
 				<div className={styles.chatProfile}>
 					<img src={chatRoomInfo != null ? (userId == chatRoomInfo.store.id ? chatRoomInfo.customer.profileImageUrl : chatRoomInfo.store.profileImageUrl) : ""}
@@ -335,9 +341,10 @@ export default function User() {
 						{chatRoomInfo != null && chatRoomInfo.customer.id != userId ? chatRoomInfo.customer.nickname : ""}
 					</div>
 
+
 				</div>
 				<div className={styles.safeTradeDiv}>
-					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && safePay == false && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span className={styles.safeWord}>안전거래</span>
@@ -397,7 +404,12 @@ export default function User() {
 						: ""}
 				</div>
 				<div className={styles.chatProduct}>
-					<div className={styles.connectProduct}>연결된 상품</div>
+					<div className={styles.connectProduct}>
+						연결된 상품
+						<button className={styles.reloadBtn}>
+							<IoReloadCircleOutline className={styles.reloadIcon} />
+						</button>
+					</div>
 					<div className={styles.chatProductInfo}>
 						<img src={chatRoomInfo != null ? chatRoomInfo.product.thumbnailUrl : ""}
 							className={styles.productImg} />
@@ -542,14 +554,11 @@ export default function User() {
 							}
 						}} />
 					{chatRoomInfo && chatRoomInfo.customer.id == userId ?
-						<button style={{
-							padding: '10px 2px',
-							fontSize: '0.8rem',
-							background: 'purple',
-							color: 'white'
-						}} onClick={onClickReview}>
-							리뷰 작성
-						</button> : ""}
+						// <button className={styles.heartButton} onClick={onClickReview}>
+						<button className={styles.reviewBtn} onClick={onClickReview} >
+							<BsChatHeart className={styles.heartBtn} />
+						</button>
+						: ""}
 				</div>
 			</div>
 		</div>
