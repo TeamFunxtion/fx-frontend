@@ -51,6 +51,7 @@ export default function Notification() {
 
 	const onClickNewList = () => {
 		getUserNotifications(page + 1);
+		setPage(page + 1);
 	}
 
 	const remove = async () => {
@@ -66,7 +67,7 @@ export default function Notification() {
 	}
 
 	return (
-		<div style={{ background: '#f0f0f0', height: '100%' }}>
+		<div style={{ background: '#f0f0f0', height: '100%', overflow: 'scroll', paddingBottom: '50px' }}>
 			<div style={{ display: 'flex', justifyContent: 'center', paddingTop: '25px' }}>
 				<h1 style={{ marginRight: '50px', fontSize: '1.3rem', fontWeight: 600 }}>전체 {totalCount}</h1>
 				<button onClick={remove}>모든알림 삭제</button>
