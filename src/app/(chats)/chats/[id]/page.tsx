@@ -10,18 +10,19 @@ import useWebSocket from 'react-use-websocket';
 import { AiOutlineSafety } from "react-icons/ai";
 import { MdOutlinePayment } from "react-icons/md";
 import { chatState } from "@/store/atoms";
+import { chatProduct } from "@/store/atoms";
 import SafePayModal from "@/components/modal/SafePayModal";
 import useUserInfo from '@/hooks/useUserInfo';
 import ReviewModal from "@/components/modal/ReviewModal";
 import { BsChatHeart } from "react-icons/bs";
-import { IoReloadCircle } from "react-icons/io5";
 import { IoReloadCircleOutline } from "react-icons/io5";
+
 
 
 export default function User() {
 	const { getUserDetail } = useUserInfo();
 	const [chats, setChats] = useRecoilState(chatState);
-
+	const [chatImg, setChatImg] = useRecoilState(chatProduct);
 	const id = usePathname().substring(7);
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chat, setChat] = useState('');
@@ -125,6 +126,12 @@ export default function User() {
 	useEffect(() => {
 		setChats(msgList);
 	}, [msgList])
+
+	useEffect(() => {
+		if (chatRoomInfo != null) {
+			setChatImg(chatRoomInfo.product.thumbnailUrl)
+		}
+	}, [chatRoomInfo])
 
 
 
@@ -406,7 +413,7 @@ export default function User() {
 				<div className={styles.chatProduct}>
 					<div className={styles.connectProduct}>
 						연결된 상품
-						<button className={styles.reloadBtn}>
+						<button className={styles.reloadBtn} onClick={getChatRoomInfo}>
 							<IoReloadCircleOutline className={styles.reloadIcon} />
 						</button>
 					</div>

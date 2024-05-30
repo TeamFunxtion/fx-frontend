@@ -8,10 +8,12 @@ import { userInfoState } from "@/store/atoms";
 import api from "@/utils/api";
 import { useRecoilValue } from "recoil";
 import { chatState } from "@/store/atoms";
+import { chatProduct } from "@/store/atoms";
 
 export default function Chats() {
 
 	const chats = useRecoilValue(chatState);
+	const chatProductImg = useRecoilValue(chatProduct)
 	const path = usePathname();
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -25,11 +27,7 @@ export default function Chats() {
 		}
 	}
 
-	// useEffect(() => {
 
-	// 	getChatRoomList();
-
-	// }, []);
 	useEffect(() => {
 		if (userInfoValue && userInfoValue.id) {
 			getChatRoomList();
@@ -90,7 +88,7 @@ export default function Chats() {
 												</div>
 											</div>
 											<div className={styles.imageContainer}>
-												<img src={item.product.thumbnailUrl}
+												<img src={chatProductImg ? chatProductImg : item.product.thumbnailUrl}
 													className={styles.productImg} sizes="50px, 50px" />
 											</div>
 										</div>
