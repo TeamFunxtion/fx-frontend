@@ -10,57 +10,91 @@
 .chatProfile {
   display: flex;
   padding-bottom: 10px;
+  
+}
+
+.reloadBtn {
+  background-color: white; /* 버튼의 배경색을 흰색으로 설정 */
+  border: none; /* 버튼의 테두리 제거 */
+  padding: 0; /* 내부 패딩 제거 */
+  
+}
+
+.reloadBtn:active {
+  transform: translateY(2px); /* 클릭 시 버튼을 아래로 이동하여 눌린 효과 표시 */
+}
+
+.reloadIcon {
+  color: var(--primary-color);
+  width: 20px;
+  height: 20px;
+  padding: 0; 
 }
 .chatName {
-  padding-top: 9px;
-  padding-left: 18px;
+  padding-top: 20px;
   font-weight: 600;
   font-size: 1.3rem;
   max-width: 350px;
+  width: 115px;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  word-break: break-all;
   overflow: hidden;
+  padding-bottom: 15px;
+  padding-left: 13px;
 }
 
 .chatProduct {
   width: 250px;
   padding-right: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 13px;
+  padding-left: 20px;
+  text-align: right;
+
 }
 
 .connectProduct {
+  padding-top: 10px;
   padding-bottom: 3px;
-  font-size: 0.8rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  
 }
 
 .chatProductInfo {
   display: flex;
   align-items: center;
+  justify-content: right;
+  padding-bottom: 15px;
 }
-
+.productInf {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
 .price {
   font-weight: bold;
   font-size: 1rem;
+  padding-bottom: 3px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  overflow: hidden;
 }
 
 .chatProductTitle {
   color: gray;
-  font-size: 0.8rem;
+  font-size: 1rem;
   overflow: hidden;
+  max-width: 60px;
   white-space: nowrap;
   text-overflow: ellipsis;
   word-break: break-all;
+  padding-bottom: 5px;
+  
 }
 
-/* .chatView {
-	padding-top: 30px;
-	padding-left: 30px;
-	padding-right: 30px;
-	height: 600px;
-	border-bottom: 1px solid lightgray;
-	overflow: auto; 
-	
-	
-} */
 .chatView {
   padding-top: 30px;
   padding-left: 30px;
@@ -68,7 +102,6 @@
   height: 600px;
   border-bottom: 1px solid lightgray;
   overflow: auto;
-  /* flex-direction: column; */ /* 해당 줄 주석 처리 또는 삭제 */
   display: flex; /* 세로로 배치되도록 변경 */
   flex-direction: column-reverse;
   font-size: 0.9rem;
@@ -84,7 +117,7 @@
 .opponentMsg {
   border: 1px solid lightgray;
   border-radius: 30px;
-  padding: 10px;
+  padding: 15px 15px 15px 15px;
   max-width: 500px;
   word-break: break-all;
 }
@@ -153,12 +186,14 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit:cover
 }
 
 .productImg {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit:cover
 }
 
 .chatRoom {
@@ -175,7 +210,8 @@
 }
 
 .safeTradeBtn {
-  border-radius: 5px;
+  border-radius: 15px;
+  border: 2px solid white;
   font-size: 0.9rem;
   font-weight: 600;
   color: white;
@@ -184,11 +220,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s; /* Smooth transition effect */
 }
+
+.safeTradeBtn:hover {
+  background-color: white;
+  font-weight: 600;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  transform: scale(1.2); /* Slightly increase the scale on hover */
+}
+
+
 .safeIcon {
   padding-top: 4px;
   color: rgb(47, 255, 5);
   font-size: larger;
+}
+
+.safeWord {
+  padding-bottom: 4px;
 }
 .safeTradeSeller {
   display: flex;
@@ -206,8 +257,19 @@
   display: flex;
   align-items: center;
   justify-content: left;
-  margin-right: 5px;
+  margin-right: 20px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s; /* Transition for hover effect */
 }
+
+.safeTradeBtnAccept:hover {
+  color: var(--primary-color);
+  font-weight: 900;
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--primary-color); 
+  transform: scale(1.2);
+}
+
 .safeTradeBtnRefuse {
   border: 2px solid red;
   border-radius: 30px;
@@ -222,58 +284,174 @@
   align-items: center;
   justify-content: left;
   margin-right: 5px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s; 
 }
+
+.safeTradeBtnRefuse:hover {
+  color: red;
+  font-weight: 900;
+  background: transparent;
+  box-shadow: none;
+  border-color: red; 
+  transform: scale(1.2);
+}
+
+
 .pay {
+  width: 100%;
+}
+.safePayContainer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: end;
 }
 .safeTrading {
   color: var(--primary-color);
-  margin-right: 110px;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
+  padding-bottom: 5px;
+  padding-right: 10px;
 }
-.safeTrading2 {
+.safeTradingTwo {
   color: var(--primary-color);
-  margin-right: 160px;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
-  margin-bottom: 35px;
+  margin-bottom: 5px;
+  padding-left: 25px;
+}
+.safeTradingThree {
+  color: var(--primary-color);
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 .payBtn {
   border: 2px solid black;
   border-radius: 30px;
-  height: 50px;
+  height: 40px;
   font-size: 17px;
   font-weight: 600;
   color: rgb(158, 255, 47);
   background-color: black;
   margin-bottom: 10px;
-  text-align: center;
+  text-align: right;
   display: flex;
   align-items: center;
-  justify-content: left;
-  margin-right: 20px;
-  width: 80px;
+  justify-content: center;
+  margin-right: 10px;
+  width: 110px;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.3s;
 }
+
+.payBtn:hover {
+  color: black;
+  font-weight: 900;
+  background: rgb(158, 255, 47);
+  box-shadow: none;
+  border-color: rgb(158, 255, 47); 
+  transform: scale(1.1);
+}
+
 
 .confirm {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .confirmBtn {
-  border: 2px solid var(--primary-color);
-  border-radius: 30px;
+  border: 2px solid white;
+  border-radius: 15px;
   height: 50px;
-  font-size: 17px;
+  width: 100px;
+  font-size: 19px;
   font-weight: 900;
   color: white;
-  background-color: var(--primary-color);
+  background-image: linear-gradient(to bottom right, #adf0e1, #87ceeb, var(--primary-color), blue);
   margin-bottom: 10px;
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: left;
-  margin-right: 5px;
+  justify-content: center;
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
+  
+} 
+
+ .confirmBtn:hover {
+  color: blue;
+  font-weight: 900;
+  background-image: linear-gradient(to top left, #adf0e1, #87ceeb, var(--primary-color));
+  box-shadow: none;
+  border-color: var(--primary-color); 
+  transform: scale(1.1);
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
 }
+
+.wait {
+  color: var(--primary-color);
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+  width: 100%;
+}
+
+.complete {
+  color: var(--primary-color);
+  font-size: 25px;
+  font-weight: bold;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+  width: 100%;
+}
+
+/* .reviewBtn {
+
+}
+.heartBtn {
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  padding-left: 23px;
+} */
+.reviewBtn {
+  background-color: white; /* 버튼의 배경색을 흰색으로 설정 */
+  border: none; /* 버튼의 테두리 제거 */
+  padding: 0; /* 내부 패딩 제거 */
+  margin-left: 20px; /* 입력 창과의 간격을 조정 */
+}
+
+.reviewBtn:active {
+  transform: translateY(2px); /* 클릭 시 버튼을 아래로 이동하여 눌린 효과 표시 */
+}
+
+.heartBtn {
+  color: rgb(255, 128, 128);
+  width: 40px;
+  height: 40px;
+  padding: 0; /* 아이콘 주위의 내부 패딩 제거 */
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+.heartBtn:hover {
+  color: red;
+  font-weight: 900;
+  box-shadow: none;
+  border-color: var(--primary-color); 
+  transform: scale(1.1);
+  transition: background-color 2s, color 0.3s, border-color 0.3s, transform 0.3s;
+}
+
+
+
+
+
+
+
+
+
+
+
+

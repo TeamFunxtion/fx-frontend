@@ -12,7 +12,6 @@ import { chatState } from "@/store/atoms";
 export default function Chats() {
 
 	const chats = useRecoilValue(chatState);
-	console.log(chats);
 	const path = usePathname();
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
@@ -43,6 +42,7 @@ export default function Chats() {
 	if (chats.length > 0) {
 		lastMsgDate = chats[chats.length - 1].createDate.substring(5, 7) + "/" + chats[chats.length - 1].createDate.substring(8, 10);
 	}
+	console.log(chatRoomList);
 
 	return (
 		<>
@@ -76,9 +76,10 @@ export default function Chats() {
 								return (
 									<Link href={`/chats/${item.id}`}>
 										<div key={index} className={styles.list}>
-											<img src={item.store.profileImageUrl}
-												className={styles.profileImg} />
-
+											<div className={styles.imageContainer}>
+												<img src={item.store.id != userInfoValue.id ? item.store.profileImageUrl : item.customer.profileImageUrl}
+													className={styles.profileImg} sizes="50px, 50px" />
+											</div>
 											<div className={styles.shortcut}>
 												{userInfoValue.id != item.store.id ?
 													<div className={styles.roomName}>{item.store.nickname}</div> :
@@ -88,8 +89,10 @@ export default function Chats() {
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>
-											<img src={item.product.thumbnailUrl}
-												className={styles.productImg} />
+											<div className={styles.imageContainer}>
+												<img src={item.product.thumbnailUrl}
+													className={styles.productImg} sizes="50px, 50px" />
+											</div>
 										</div>
 									</Link>
 								)
