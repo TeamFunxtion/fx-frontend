@@ -98,7 +98,7 @@ export default function Navigation() {
 		setShowAnimation(true);
 		setTimeout(() => {
 			setShowAnimation(false);
-		}, 10000)
+		}, 15000)
 	}
 
 	return (
