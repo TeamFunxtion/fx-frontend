@@ -271,8 +271,12 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 				productDetail={productDetail}
 			/>}
 			{
-				productDetail.statusTypeId && productDetail.statusTypeId !== 'ST01' && <div className={styles.alert}>
-					😅 해당 상품은 거래가 진행중인 상품입니다. 입찰 또는 바로구매가 제한됩니다.
+				productDetail.statusTypeId && productDetail.statusTypeId !== 'ST01' &&
+				<div className={styles.alert}>
+					😅 {productDetail.statusTypeId === "ST02" && <span>판매 완료된 상품입니다.</span>}
+					{productDetail.statusTypeId === "ST03" && <span>판매 대기중인 상품입니다.</span>}
+					{productDetail.statusTypeId === "ST04" && <span>해당 상품은 거래가 진행중인 상품입니다. 입찰 또는 바로구매가 제한됩니다.</span>}
+					{productDetail.statusTypeId === "ST05" && <span>삭제된 상품입니다.</span>}
 				</div>
 			}
 			<div className={styles.sectionTop}>
@@ -353,7 +357,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 					{
 						!isSeller &&
 						<div className={styles.btnContainer}>
-							<button className={styles.btnChat} onClick={clickChatting} disabled={isSeller}>💬1:1채팅</button>
+							<button className={`${styles.btnChat} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickChatting} disabled={productDetail.statusTypeId !== 'ST01'}>💬1:1채팅</button>
 							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBid} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
 							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
 						</div>
