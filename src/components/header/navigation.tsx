@@ -25,6 +25,7 @@ export default function Navigation() {
 	const [showModalLogout, setShowModalLogout] = useState(false);
 	const { modal, showModal, toggleModal } = useModal();
 	const [showAnimation, setShowAnimation] = useState(false);
+	const [mounted, setMounted] = useState(false);
 
 	const setSsrCompleted = useSsrComplectedState();
 	useEffect(setSsrCompleted, [setSsrCompleted]);
@@ -100,6 +101,12 @@ export default function Navigation() {
 			setShowAnimation(false);
 		}, 15000)
 	}
+
+	useEffect(() => {
+		setMounted(true);
+	})
+
+	if (!mounted) return <></>;
 
 	return (
 		<nav className={styles.navigation}>
