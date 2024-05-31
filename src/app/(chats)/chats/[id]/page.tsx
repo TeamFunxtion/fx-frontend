@@ -33,17 +33,7 @@ export default function User() {
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
-	// const getChatRoomInfo = async () => {
-	// 	const res = await api.get(`chats/${id}?id=${id}`)
-	// 	const { data: { resultCode, msg, data } } = res;
-	// 	if (resultCode == '200') {
-	// 		setChatRoomInfo(data);
-	// 		if (data != null) {
-	// 			getSafePaymentInfo(data);
-	// 		}
 
-	// 	}
-	// }
 	// 5/31 수정 부분
 	useEffect(() => {
 		console.log(chatRoomInfo)
@@ -61,7 +51,6 @@ export default function User() {
 			if (resultCode === '200') {
 				console.log('Chat Room Info:', data);
 				setChatRoomInfo(data);
-				// getSafePaymentInfo(data)
 			}
 		} catch (error) {
 			console.error('Error fetching chat room info:', error);
@@ -195,18 +184,8 @@ export default function User() {
 			setSafePaymentInfo((prev) => { return { ...prev, status: "SP04" } });
 		}
 
-		console.log("--------------------safepaymentinfo------------------");
-		console.log(safePaymentInfo);
-		console.log("--------------------------------------");
 	}, [sessionId, safePaymentInfo])
 
-	useEffect(() => {
-
-		console.log("-------------------safePayAcception-------------------");
-		console.log(safePayAcception);
-		console.log("--------------------------------------");
-
-	}, [safePayAcception])
 
 	// 구매자가 안전 거래 요청 시
 	const safeTrade = () => {
@@ -258,18 +237,6 @@ export default function User() {
 	}
 
 
-	// DB연동 안전거래 시작 여부 조회
-	// const getSafePaymentInfo = async (data2) => {
-	// 	const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
-	// 	let { data: { resultCode, msg, data } } = res;
-	// 	if (resultCode == '200') {
-	// 		if (data != null) {
-	// 			setSafePaymentInfo(data);
-	// 			setSafePayAcception(1);
-	// 			setSafePay(true);
-	// 		}
-	// 	}
-	// }
 	// 5/31 변경 부분
 	const getSafePaymentInfo = async (data2) => {
 		try {
@@ -390,13 +357,6 @@ export default function User() {
 		}
 	}, [chatRoomInfo]);
 
-	// useEffect(() => {
-	// 	if (chatRoomInfo != null) {
-	// 		getSafePaymentInfo(chatRoomInfo);
-	// 		console.log(safePaymentInfo);
-	// 	}
-	// }, [chatRoomInfo]);
-
 
 	const onClickReview = () => {
 		setShowReviewModal(!showReviewModal);
@@ -439,8 +399,6 @@ export default function User() {
 	}
 
 
-	// console.log(chatRoomInfo);
-	// console.log(safePaymentInfo);
 	return (
 		<div className={styles.chatRoom}>
 			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
@@ -652,7 +610,6 @@ export default function User() {
 
 						}} onKeyPress={(e) => { handleKeyPress(e); }} />
 					{chatRoomInfo && chatRoomInfo.customer.id == userId ?
-						// <button className={styles.heartButton} onClick={onClickReview}>
 						<button className={styles.reviewBtn} onClick={onClickReview} >
 							<BsChatHeart className={styles.heartBtn} />
 						</button>
