@@ -44,10 +44,7 @@ export default function Chats() {
 	if (chats.length > 0) {
 		lastMsgDate = chats[chats.length - 1].createDate.substring(5, 7) + "/" + chats[chats.length - 1].createDate.substring(8, 10);
 	}
-	console.log(chatRoomList);
-	console.log(productImg)
-	console.log(chatProductImg.id);
-	console.log(userInfoValue.id);
+
 	return (
 		<>
 			<div className={styles.chatsContainer}>

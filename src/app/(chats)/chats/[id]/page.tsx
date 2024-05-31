@@ -33,17 +33,31 @@ export default function User() {
 
 	// DB연동 (해당 채팅방 정보 조회)
 	const [chatRoomInfo, setChatRoomInfo] = useState(null);
-	const getChatRoomInfo = async () => {
-		const res = await api.get(`chats/${id}?id=${id}`)
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			setChatRoomInfo(data);
-			if (data != null) {
-				getSafePaymentInfo(data);
-			}
 
+	// 5/31 수정 부분
+	useEffect(() => {
+		console.log(chatRoomInfo)
+		if (chatRoomInfo != null) {
+			getSafePaymentInfo(chatRoomInfo);
+			console.log(chatRoomInfo)
+			console.log(safePaymentInfo)
 		}
-	}
+	}, [chatRoomInfo]);
+
+	const getChatRoomInfo = async () => {
+		try {
+			const res = await api.get(`chats/${id}?id=${id}`);
+			const { data: { resultCode, msg, data } } = res;
+			if (resultCode === '200') {
+				console.log('Chat Room Info:', data);
+				setChatRoomInfo(data);
+			}
+		} catch (error) {
+			console.error('Error fetching chat room info:', error);
+		}
+	};
+
+
 
 	// DB연동 (채팅 읽음 처리)
 	const updateMsg = async () => {
@@ -93,18 +107,32 @@ export default function User() {
 						setSessionId(object.sessionId);
 					} else if (object.type === "message") {
 						setMsgList((prev) => [...prev, object]);
-						if (object.safe === true || safePay === true && object.safePayRefuse === false) {
-							setSafePay(true);
+
+
+						if ((object.safe || safePay) && !object.safePayAccept && !object.safePayRefuse) {
+							setSafePay(object.safe);
+							setSafePayAcception(0);
+							setSafePaymentInfo((prevState) => {
+								return { ...prevState, status: "SP01" };
+							});
 						} else {
-							if (object.safePayAccept === true) {
+
+							if (object.safePayAccept === true && safePaymentInfo.status != "SP03") {
 								setSafePay(true);
 								setSafePayAcception(1);
 								setSafePaymentInfo((prevState) => {
 									return { ...prevState, status: "SP02" };
 								});
-							} else {
+							} else if (object.safePayRefuse) {
+
+								setSafePayAcception(0);
+								setSafePay(false);
+
+							} else if (!object.safe && !object.safePayAccept && !object.safePayRefuse) {
 								setSafePay(false);
 							}
+
+
 						}
 					} else if (object.type === "confirm") {
 						setSafePaymentInfo((prevState) => {
@@ -143,13 +171,21 @@ export default function User() {
 		getChatRoomInfo();
 	}, [])
 
+	if (safePaymentInfo) {
+		console.log("+++++++++++++++safepaymentinfo.status+++++++++++++++++++++++")
+		console.log(safePaymentInfo.status)
+		console.log("++++++++++++++++++++++++++++++++++++++")
+	}
+
 	// 구매자 & 판매자 모두 거래 완료 버튼 클릭 시
 	useEffect(() => {
 
 		if (safePaymentInfo && safePaymentInfo.sellerOk === "Y" && safePaymentInfo.buyerOk === "Y" && safePaymentInfo.status !== "SP04") {
 			setSafePaymentInfo((prev) => { return { ...prev, status: "SP04" } });
 		}
+
 	}, [sessionId, safePaymentInfo])
+
 
 	// 구매자가 안전 거래 요청 시
 	const safeTrade = () => {
@@ -160,6 +196,7 @@ export default function User() {
 			const safety = true;
 			const safePayAccept = false;
 			const safeRefuse = false;
+			setSafePayAcception(1);
 			setSafePay(true);
 			insertMsg(title, safety, safePayAccept, safeRefuse);
 		}
@@ -200,18 +237,24 @@ export default function User() {
 	}
 
 
-	// DB연동 안전거래 시작 여부 조회
+	// 5/31 변경 부분
 	const getSafePaymentInfo = async (data2) => {
-		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`)
-		let { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			if (data != null) {
+		try {
+			const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`);
+			let { data: { resultCode, msg, data } } = res;
+			if (resultCode === '200') {
 				setSafePaymentInfo(data);
-				setSafePayAcception(1);
-				setSafePay(true);
+				if (data != null) {
+					setSafePayAcception(1);
+					setSafePay(true);
+				}
 			}
+		} catch (error) {
+			console.error('Error fetching safe payment info:', error);
 		}
-	}
+	};
+
+
 
 	// 안전결제 모달 열기
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -314,12 +357,6 @@ export default function User() {
 		}
 	}, [chatRoomInfo]);
 
-	useEffect(() => {
-		if (chatRoomInfo != null) {
-			getSafePaymentInfo(chatRoomInfo);
-		}
-	}, [chatRoomInfo]);
-
 
 	const onClickReview = () => {
 		setShowReviewModal(!showReviewModal);
@@ -342,8 +379,26 @@ export default function User() {
 		setShowReviewModal(false);
 	}
 
-	console.log(chatRoomInfo);
-	console.log(safePaymentInfo);
+
+	const handleKeyPress = (e) => {
+		if (e.key == 'Enter') {
+			let safety = false;
+			if (safePay) {
+				safety = true;
+			} else {
+				safety = false;
+			}
+			const safePayAccept = safePayAcception === 1;
+			const safeRefuse = false;
+			if (e.target.value.trim() != '') {
+				insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
+			}
+			setChat('');
+		}
+
+	}
+
+
 	return (
 		<div className={styles.chatRoom}>
 			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
@@ -360,13 +415,13 @@ export default function User() {
 
 				</div>
 				<div className={styles.safeTradeDiv}>
-					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 0) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePay == false && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePaymentInfo == null) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePay == false && safePayAcception == 0) ?
 						<button className={styles.safeTradeBtn} onClick={safeTrade} >
 							<span className={styles.safeIcon}><AiOutlineSafety /></span>
 							<span className={styles.safeWord}>안전거래</span>
 						</button>
 						: ""}
-					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0) ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (safePaymentInfo != null && chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0 && safePaymentInfo.status == 'SP01') ?
 						<div className={styles.safeTradeSeller}>
 							<button className={`${styles.safeTradeBtnAccept}`} onClick={acceptSafePay}>안전거래 수락</button>
 							<button className={`${styles.safeTradeBtnRefuse}`} onClick={refuseSafePay}>안전거래 거절</button>
@@ -553,24 +608,8 @@ export default function User() {
 
 							setChat(e.target.value)
 
-						}} onKeyPress={(e) => {
-							if (e.key == 'Enter') {
-								let safety = false;
-								if (safePay) {
-									safety = true;
-								} else {
-									safety = false;
-								}
-								const safePayAccept = false;
-								const safeRefuse = false;
-								if (e.target.value.trim() != '') {
-									insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
-								}
-								setChat('');
-							}
-						}} />
+						}} onKeyPress={(e) => { handleKeyPress(e); }} />
 					{chatRoomInfo && chatRoomInfo.customer.id == userId ?
-						// <button className={styles.heartButton} onClick={onClickReview}>
 						<button className={styles.reviewBtn} onClick={onClickReview} >
 							<BsChatHeart className={styles.heartBtn} />
 						</button>
