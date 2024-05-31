@@ -428,7 +428,7 @@ export default function User() {
 							<span className={styles.safeWord}>안전거래</span>
 						</button>
 						: ""}
-					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0 && safePaymentInfo.status != 'SP04') ?
+					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0 && safePaymentInfo.status == 'SP01') ?
 						<div className={styles.safeTradeSeller}>
 							<button className={`${styles.safeTradeBtnAccept}`} onClick={acceptSafePay}>안전거래 수락</button>
 							<button className={`${styles.safeTradeBtnRefuse}`} onClick={refuseSafePay}>안전거래 거절</button>
