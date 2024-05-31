@@ -124,3 +124,8 @@
 	align-self: center;
 	min-width: 2rem;
 }
+.faqnewbutton{
+	width: 10%;
+	background-color: var(--primary-color) !important;
+	color: white;
+}
