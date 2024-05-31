@@ -4,19 +4,28 @@ import ProductCard from "./products/ProductCard/ProductCard"
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
+import { useInView } from "react-intersection-observer";
 
 export default function Home() {
 	const [list, setList] = useState([]);
+	const [ref, inView] = useInView();
+	const [page, setPage] = useState(0);
+	const [hasMore, setHasMore] = useState(true);
 
-	const getProductList = async () => {
-		const result = await api.get(`/products?size=1000`);
-		const { data: { content } } = result;
-		setList(content);
+	const getProductList = async (pageNo) => {
+		const result = await api.get(`/products?page=${pageNo || page}&size=30&sort=createDate`);
+		const { data: { content, last } } = result;
+		setList(list => [...list, ...content]);
+		setHasMore(!last);
 	}
 
 	useEffect(() => {
-		getProductList();
-	}, []);
+		console.log('inview!');
+		if (inView && hasMore) {
+			setPage(prevPage => prevPage + 1);
+			getProductList(page + 1);
+		}
+	}, [inView]);
 
 	return (
 		<div>
@@ -42,6 +51,9 @@ export default function Home() {
 					))
 				}
 			</ul>
+			{
+				hasMore && <div ref={ref} style={{ textAlign: 'center' }}>상품을 불러오는 중...</div>
+			}
 		</div>
 	)
 }

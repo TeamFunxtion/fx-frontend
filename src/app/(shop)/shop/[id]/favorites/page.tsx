@@ -28,7 +28,7 @@ export default function Favorites({ }) {
 		const result = await api.get('/favorites', {
 			params: {
 				userId: user.id,
-				sort: 'id',
+				sort: 'createDate',
 				page: page || currentPage || 1,
 			}
 		})

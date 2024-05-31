@@ -21,7 +21,7 @@ export default function ProductsSearchPage() {
 	const router = useRouter();
 	const keyword = searchParams.get("keyword");
 	const category = searchParams.get("category");
-	const [sort, setSort] = useState('id');
+	const [sort, setSort] = useState('createDate');
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setCurrentPage(value);
@@ -78,7 +78,7 @@ export default function ProductsSearchPage() {
 			<div className={styles.main}>
 				<div>
 					<ul className={styles.sortBar}>
-						<li className={sort === 'id' ? 'active' : ''} onClick={() => setSort('id')}>최신순</li>
+						<li className={sort === 'createDate' ? 'active' : ''} onClick={() => setSort('createDate')}>최신순</li>
 						<li className={sort === 'views' ? 'active' : ''} onClick={() => setSort('views')}>조회수순</li>
 						<li className={sort === 'price_asc' ? 'active' : ''} onClick={() => setSort('price_asc')}>낮은가격순</li>
 						<li className={sort === 'price_desc' ? 'active' : ''} onClick={() => setSort('price_desc')}>높은가격순</li>

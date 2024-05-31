@@ -22,7 +22,7 @@ export default function MyProductsPage({ guest, storeId }: { guest: boolean, sto
 	const [totalPages, setTotalPages] = useState(1);
 	const [totalElements, setTotalElements] = useState(1);
 	const statusTypeId = useRef('ST01');
-	const [sort, setSort] = useState('id');
+	const [sort, setSort] = useState('createDate');
 
 	const router = useRouter();
 
@@ -36,7 +36,7 @@ export default function MyProductsPage({ guest, storeId }: { guest: boolean, sto
 			params: {
 				userId: !guest ? user.id : storeId,
 				status: statusTypeId.current || 'ST01',
-				sort: sort || 'id',
+				sort: sort || 'createDate',
 				page: page || currentPage || 1,
 			}
 		})
@@ -101,7 +101,7 @@ export default function MyProductsPage({ guest, storeId }: { guest: boolean, sto
 				<div className={styles.header}>
 					<p className={styles.totalCount}>총 {totalElements}개</p>
 					<ul className={styles.sort}>
-						<li className={`${sort === 'id' ? 'active' : ''}`} onClick={() => setSort('id')}>최신순</li>
+						<li className={`${sort === 'createDate' ? 'active' : ''}`} onClick={() => setSort('createDate')}>최신순</li>
 						<li className={`${sort === 'views' ? 'active' : ''}`} onClick={() => setSort('views')}>조회수순</li>
 						<li className={`${sort === 'price_asc' ? 'active' : ''}`} onClick={() => setSort('price_asc')}>낮은가격순</li>
 						<li className={`${sort === 'price_desc' ? 'active' : ''}`} onClick={() => setSort('price_desc')}>높은가격순</li>
