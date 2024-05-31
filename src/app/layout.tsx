@@ -9,6 +9,7 @@ import RecoilRootWrapper from "@/components/RecoilWrapper";
 import Head from "next/head";
 import Link from 'next/link'
 import UserRefresh from "@/components/UserRefresh";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +54,9 @@ export default function RootLayout({
           </div>
           <main>
             <UserRefresh />
-            {children}
+            <Suspense fallback={<div>Loading...</div>}>
+              {children}
+            </Suspense>
           </main>
           <Toaster
             position="bottom-center"
