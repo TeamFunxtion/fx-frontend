@@ -129,7 +129,10 @@ export default function User() {
 
 	useEffect(() => {
 		if (chatRoomInfo != null) {
-			setChatImg(chatRoomInfo.product.thumbnailUrl)
+			setChatImg({
+				id: id,
+				image: chatRoomInfo.product.thumbnailUrl
+			});
 		}
 	}, [chatRoomInfo])
 
@@ -311,6 +314,12 @@ export default function User() {
 		}
 	}, [chatRoomInfo]);
 
+	useEffect(() => {
+		if (chatRoomInfo != null) {
+			getSafePaymentInfo(chatRoomInfo);
+		}
+	}, [chatRoomInfo]);
+
 
 	const onClickReview = () => {
 		setShowReviewModal(!showReviewModal);
@@ -334,7 +343,7 @@ export default function User() {
 	}
 
 	console.log(chatRoomInfo);
-
+	console.log(safePaymentInfo);
 	return (
 		<div className={styles.chatRoom}>
 			{showReviewModal && <ReviewModal enrollReview={enrollReview} clickModal={onClickReview} />}
