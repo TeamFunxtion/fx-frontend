@@ -18,6 +18,9 @@ export default function EditFAQPage({ params: { id } }: IParams) {
 
 	const userRoleId = userInfoValue.roleId;
 
+	const faqMove = () => {
+		router.push(`/faq`);
+	}
 	const updateFaq = async () => {
 		if (userRoleId !== 2) {
 			toast.error("접근 권한이 없습니다.");
@@ -96,6 +99,7 @@ export default function EditFAQPage({ params: { id } }: IParams) {
 			</div>
 			<div className={styles.faqButtonArea}>
 				<button className={styles.faqUpdateButton} onClick={updateFaq}>저장</button>
+				<button className={styles.faqUpdateButton} onClick={faqMove}>목록가기</button>
 			</div>
 		</div>
 	);

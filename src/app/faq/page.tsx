@@ -97,8 +97,8 @@ export default function FAQPage() {
 					<br />
 					<Etcsidebar />
 				</aside>
-				{userRoleId === 2 && <button onClick={handleNewPostClick}>새 글 등록</button>}
 				<div className={styles.container}>
+					{userRoleId === 2 && <button className={styles.faqnewbutton} onClick={handleNewPostClick}>새 글 등록</button>}
 					<section className={styles.noticeSection}>
 						<div className={styles.noticeDiv}>
 							{faqList.map((faq, index) => (
