@@ -18,6 +18,7 @@ export default function Chats() {
 	// DB연동 (채팅방 리스트 조회)
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chatRoomList, setChatRoomList] = useState([]);
+	const [productImg, setProductImg] = useState("");
 
 	const getChatRoomList = async () => {
 		const res = await api.get('/chats?id=' + userInfoValue.id);
@@ -34,6 +35,9 @@ export default function Chats() {
 		}
 	}, [userInfoValue]);
 
+	useEffect(() => {
+		setProductImg(chatProductImg.image)
+	}, [chatProductImg])
 
 
 	let lastMsgDate = "";
@@ -41,7 +45,9 @@ export default function Chats() {
 		lastMsgDate = chats[chats.length - 1].createDate.substring(5, 7) + "/" + chats[chats.length - 1].createDate.substring(8, 10);
 	}
 	console.log(chatRoomList);
-
+	console.log(productImg)
+	console.log(chatProductImg.id);
+	console.log(userInfoValue.id);
 	return (
 		<>
 			<div className={styles.chatsContainer}>
@@ -80,15 +86,15 @@ export default function Chats() {
 											</div>
 											<div className={styles.shortcut}>
 												{userInfoValue.id != item.store.id ?
-													<div className={styles.roomName}>{item.store.nickname}</div> :
-													<div className={styles.roomName}>{item.customer.nickname}</div>}
+													<div className={styles.roomName} title={item.store.nickname}><span className={styles.sellerBuyer}>Ⓢ</span><span>{item.store.nickname}</span></div> :
+													<div className={styles.roomName} title={item.customer.nickname}><span className={styles.sellerBuyer}>Ⓑ</span><span>{item.customer.nickname}</span></div>}
 												<div className={styles.msgArea}>
 													<div className={styles.lastMsg}>{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>
 											<div className={styles.imageContainer}>
-												<img src={chatProductImg ? chatProductImg : item.product.thumbnailUrl}
+												<img src={chatProductImg && chatProductImg.id == item.id ? productImg : item.product.thumbnailUrl}
 													className={styles.productImg} sizes="50px, 50px" />
 											</div>
 										</div>

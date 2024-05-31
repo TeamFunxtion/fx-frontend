@@ -53,5 +53,8 @@ export const chatState = atom({
 // 상품이미지
 export const chatProduct = atom({
   key: 'chatProduct',
-  default: "",
+  default: {
+    id: "",
+    image: "",
+  },
 });

@@ -21,6 +21,7 @@
   font-weight: 600;
   padding-bottom: 30px;
   padding-left: 30px;
+  font-size: larger;
 }
 .list {
   display: flex;
@@ -62,8 +63,10 @@
   font-weight: bold;
   padding-bottom: 5px;
   max-width: 280px;
-  overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  word-break: break-all;
+  overflow: hidden;
 }
 
 .msgArea {
@@ -127,4 +130,10 @@
 .noChatFontSmall {
   font-size: medium;
   text-align: center;
+}
+
+.sellerBuyer {
+  font-weight: 500;
+  color: var(--primary-color);
+  padding-right: 2px;
 }
