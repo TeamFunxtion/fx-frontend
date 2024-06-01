@@ -48,7 +48,7 @@ export default function Chats() {
 	return (
 		<>
 			<div className={styles.chatsContainer}>
-				<h1 className={styles.chatsTitle}>전체 대화</h1>
+				<h1 className={styles.chatsTitle}>전체 대화 &nbsp;&nbsp;<span className={styles.chatsCnt}>{chatRoomList.length}</span></h1>
 				{
 					chatRoomList.length == 0 ?
 						<div className={styles.noChatRoom}>
@@ -83,14 +83,15 @@ export default function Chats() {
 											</div>
 											<div className={styles.shortcut}>
 												{userInfoValue.id != item.store.id ?
-													<div className={styles.roomName} title={item.store.nickname}><span className={styles.sellerBuyer}>Ⓢ</span><span>{item.store.nickname}</span></div> :
-													<div className={styles.roomName} title={item.customer.nickname}><span className={styles.sellerBuyer}>Ⓑ</span><span>{item.customer.nickname}</span></div>}
+													<div className={styles.roomName} title={item.store.nickname}><span className={styles.seller}>Ⓢ</span><span>{item.store.nickname}</span></div> :
+													<div className={styles.roomName} title={item.customer.nickname}><span className={styles.buyer}>Ⓑ</span><span>{item.customer.nickname}</span></div>}
 												<div className={styles.msgArea}>
-													<div className={styles.lastMsg}>{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
+													<div className={styles.lastMsg} title={chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}>
+														{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 												</div>
 											</div>
-											<div className={styles.imageContainer}>
+											<div className={styles.imageContainerP}>
 												<img src={chatProductImg && chatProductImg.id == item.id ? productImg : item.product.thumbnailUrl}
 													className={styles.productImg} sizes="50px, 50px" />
 											</div>

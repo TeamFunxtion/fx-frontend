@@ -10,11 +10,21 @@
   border: 1px solid rgb(240, 240, 240);
 }
 
+.chatsCnt {
+  color: var(--primary-color);
+}
+
 .chatsContainer {
   width: 45%;
   padding-top: 30px;
-  overflow: auto;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+  overflow-y: scroll; 
   border-right: 1px solid rgb(240, 240, 240);
+}
+
+.chatsContainer::-webkit-scrollbar {
+  display: none; 
 }
 
 .chatsTitle {
@@ -34,6 +44,10 @@
 .imageContainer {
   height: 0;
 }
+.imageContainerP {
+  height: 0;
+  padding-right: 50px;
+}
 .profileImg {
   
   width: 50px;
@@ -43,11 +57,10 @@
 }
 
 .productImg {
-  
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  
+  position: fixed;
 }
 
 .shortcut {
@@ -132,7 +145,13 @@
   text-align: center;
 }
 
-.sellerBuyer {
+.seller {
+  font-weight: 500;
+  color: red;
+  padding-right: 2px;
+}
+
+.buyer {
   font-weight: 500;
   color: var(--primary-color);
   padding-right: 2px;

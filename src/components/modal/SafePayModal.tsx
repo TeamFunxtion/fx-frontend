@@ -7,7 +7,7 @@ export default function SafePayModal({ isModalOpen, onClose, point, ok }) {
 		<div className={styles.modalOverlay}>
 			<div className={styles.modal}>
 				<div className={styles.modalHeader}>
-					<h2 className={styles.modalTitle}>안전결제</h2>
+					<h2 className={styles.modalTitle}>안전거래 결제하기</h2>
 					<button className={styles.modalCloseBtn} onClick={() => onClose(false)}>X</button>
 				</div>
 				<div className={styles.modalSeparator}></div>
