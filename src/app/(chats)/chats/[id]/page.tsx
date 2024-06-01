@@ -16,6 +16,7 @@ import useUserInfo from '@/hooks/useUserInfo';
 import ReviewModal from "@/components/modal/ReviewModal";
 import { BsChatHeart } from "react-icons/bs";
 import { IoReloadCircleOutline } from "react-icons/io5";
+import SafePayRequestModal from "@/components/modal/SafePayRequestModal";
 
 
 
@@ -36,26 +37,29 @@ export default function User() {
 
 	// 5/31 수정 부분
 	useEffect(() => {
-		console.log(chatRoomInfo)
 		if (chatRoomInfo != null) {
 			getSafePaymentInfo(chatRoomInfo);
-			console.log(chatRoomInfo)
-			console.log(safePaymentInfo)
 		}
 	}, [chatRoomInfo]);
 
 	const getChatRoomInfo = async () => {
-		try {
-			const res = await api.get(`chats/${id}?id=${id}`);
-			const { data: { resultCode, msg, data } } = res;
-			if (resultCode === '200') {
-				console.log('Chat Room Info:', data);
-				setChatRoomInfo(data);
-			}
-		} catch (error) {
-			console.error('Error fetching chat room info:', error);
+		const res = await api.get(`chats/${id}?id=${id}`);
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode === '200') {
+			setChatRoomInfo(data);
 		}
 	};
+
+
+	const reloadChatRoomInfo = async () => {
+		const res = await api.get(`chats/reload/${id}?id=${id}`);
+		const { data: { resultCode, msg, data } } = res;
+		if (resultCode === '200') {
+			setChatRoomInfo((prevState) => {
+				return { ...prevState, product: data.product }
+			});
+		}
+	}
 
 
 
@@ -183,22 +187,6 @@ export default function User() {
 	}, [sessionId, safePaymentInfo])
 
 
-	// 구매자가 안전 거래 요청 시
-	const safeTrade = () => {
-
-		const result = confirm('판매자에게 안전 거래를 요청하시겠습니까?')
-		if (result) {
-			const title = "상품의 안전거래가 요청되었습니다.";
-			const safety = true;
-			const safePayAccept = false;
-			const safeRefuse = false;
-			const justWord = false;
-			setSafePayAcception(1);
-			setSafePay(true);
-			insertMsg(title, safety, safePayAccept, safeRefuse, justWord);
-		}
-	}
-
 	// 안전거래 수락
 	const acceptSafePay = () => {
 
@@ -238,22 +226,43 @@ export default function User() {
 
 	// 5/31 변경 부분
 	const getSafePaymentInfo = async (data2) => {
-		try {
-			const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`);
-			let { data: { resultCode, msg, data } } = res;
-			if (resultCode === '200') {
-				setSafePaymentInfo(data);
-				if (data != null) {
-					setSafePayAcception(1);
-					setSafePay(true);
-				}
+
+		const res = await api.get(`/safe?productId=${data2.product.id}&sellerId=${data2.store.id}&buyerId=${data2.customer.id}`);
+		let { data: { resultCode, msg, data } } = res;
+		if (resultCode === '200') {
+			setSafePaymentInfo(data);
+			if (data != null) {
+				setSafePayAcception(1);
+				setSafePay(true);
 			}
-		} catch (error) {
-			console.error('Error fetching safe payment info:', error);
 		}
+
 	};
 
 
+	// 안전결제 요청모달 열기
+
+	const [showModal, setShowModal] = useState(false);
+
+	const handleSafeTradeRequest = () => {
+		setShowModal(true);
+	};
+
+	const handleConfirm = () => {
+		const title = "상품의 안전거래가 요청되었습니다.";
+		const safety = true;
+		const safePayAccept = false;
+		const safeRefuse = false;
+		const justWord = false;
+		setSafePayAcception(1);
+		setSafePay(true);
+		insertMsg(title, safety, safePayAccept, safeRefuse, justWord);
+		setShowModal(false);
+	};
+
+	const handleClose = () => {
+		setShowModal(false);
+	};
 
 	// 안전결제 모달 열기
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -416,15 +425,18 @@ export default function User() {
 				</div>
 				<div className={styles.safeTradeDiv}>
 					{(chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePaymentInfo == null) || (chatRoomInfo != null && chatRoomInfo.customer.id == userId && chatRoomInfo.product.salesTypeId === 'SA03' && safePay == false && safePayAcception == 0) ?
-						<button className={styles.safeTradeBtn} onClick={safeTrade} >
-							<span className={styles.safeIcon}><AiOutlineSafety /></span>
-							<span className={styles.safeWord}>안전거래</span>
-						</button>
+						<div>
+							<button className={styles.safeTradeBtn} onClick={handleSafeTradeRequest} >
+								<span className={styles.safeIcon}><AiOutlineSafety /></span>
+								<span className={styles.safeWord}>안전거래</span>
+							</button>
+							<SafePayRequestModal show={showModal} onClose={handleClose} onConfirm={handleConfirm} />
+						</div>
 						: ""}
 					{(chatRoomInfo != null && chatRoomInfo.customer.id != userId && safePaymentInfo != null && safePaymentInfo.status == 'SP01' && safePayAcception == 1) || (safePaymentInfo != null && chatRoomInfo != null && chatRoomInfo.customer.id != userId && msgList.length > 0 && safePay == true && safePayAcception == 0 && safePaymentInfo.status == 'SP01') ?
 						<div className={styles.safeTradeSeller}>
-							<button className={`${styles.safeTradeBtnAccept}`} onClick={acceptSafePay}>안전거래 수락</button>
-							<button className={`${styles.safeTradeBtnRefuse}`} onClick={refuseSafePay}>안전거래 거절</button>
+							<button className={`${styles.safeTradeBtnAccept}`} onClick={acceptSafePay}>안전거래 <span>😊</span></button>
+							<button className={`${styles.safeTradeBtnRefuse}`} onClick={refuseSafePay}>안전거래 <span>😟</span></button>
 						</div>
 						: ""}
 					{safePaymentInfo != null && safePaymentInfo.status == 'SP02' && chatRoomInfo != null && chatRoomInfo.customer.id == userId ?
@@ -477,7 +489,7 @@ export default function User() {
 				<div className={styles.chatProduct}>
 					<div className={styles.connectProduct}>
 						연결된 상품
-						<button className={styles.reloadBtn} onClick={getChatRoomInfo}>
+						<button className={styles.reloadBtn} onClick={reloadChatRoomInfo}>
 							<IoReloadCircleOutline className={styles.reloadIcon} />
 						</button>
 					</div>
