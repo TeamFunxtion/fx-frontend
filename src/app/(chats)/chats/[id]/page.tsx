@@ -68,7 +68,7 @@ export default function User() {
 	}
 
 	let today = new Date();
-	const insertMsg = (chat, safety, safePayAccept, safeRefuse) => {
+	const insertMsg = (chat, safety, safePayAccept, safeRefuse, justWord) => {
 
 		sendMessage(JSON.stringify({
 			type: 'message',
@@ -82,7 +82,8 @@ export default function User() {
 			createDate: today,
 			safe: safety,
 			safePayAccept: safePayAccept,
-			safeRefuse: safeRefuse
+			safeRefuse: safeRefuse,
+			justWord: justWord
 		}))
 
 	}
@@ -109,7 +110,7 @@ export default function User() {
 						setMsgList((prev) => [...prev, object]);
 
 
-						if ((object.safe || safePay) && !object.safePayAccept && !object.safePayRefuse) {
+						if ((object.safe || safePay) && !object.safePayAccept && !object.safePayRefuse && !object.justWord) {
 							setSafePay(object.safe);
 							setSafePayAcception(0);
 							setSafePaymentInfo((prevState) => {
@@ -117,7 +118,7 @@ export default function User() {
 							});
 						} else {
 
-							if (object.safePayAccept === true && safePaymentInfo.status != "SP03") {
+							if (object.safePayAccept === true && safePaymentInfo != null && safePaymentInfo.status != "SP03" && !object.justWord) {
 								setSafePay(true);
 								setSafePayAcception(1);
 								setSafePaymentInfo((prevState) => {
@@ -171,11 +172,6 @@ export default function User() {
 		getChatRoomInfo();
 	}, [])
 
-	if (safePaymentInfo) {
-		console.log("+++++++++++++++safepaymentinfo.status+++++++++++++++++++++++")
-		console.log(safePaymentInfo.status)
-		console.log("++++++++++++++++++++++++++++++++++++++")
-	}
 
 	// 구매자 & 판매자 모두 거래 완료 버튼 클릭 시
 	useEffect(() => {
@@ -196,9 +192,10 @@ export default function User() {
 			const safety = true;
 			const safePayAccept = false;
 			const safeRefuse = false;
+			const justWord = false;
 			setSafePayAcception(1);
 			setSafePay(true);
-			insertMsg(title, safety, safePayAccept, safeRefuse);
+			insertMsg(title, safety, safePayAccept, safeRefuse, justWord);
 		}
 	}
 
@@ -209,9 +206,10 @@ export default function User() {
 		const safety = false;
 		const safePayAccept = true;
 		const safeRefuse = false;
+		const justWord = false;
 		setSafePay(true);
 		setSafePayAcception(1);
-		insertMsg(title, safety, safePayAccept, safeRefuse);
+		insertMsg(title, safety, safePayAccept, safeRefuse, justWord);
 		setSafePaymentInfo((prevState) => {
 			return { ...prevState, status: "SP02" }
 		});
@@ -222,9 +220,10 @@ export default function User() {
 		const safety = false;
 		const safePayAccept = false;
 		const safeRefuse = true;
+		const justWord = false;
 		setSafePay(false);
 		setSafePayAcception(0);
-		insertMsg(title, safety, safePayAccept, safeRefuse);
+		insertMsg(title, safety, safePayAccept, safeRefuse, justWord);
 		deleteSafePayment();
 	}
 
@@ -388,10 +387,11 @@ export default function User() {
 			} else {
 				safety = false;
 			}
+			const justWord = true;
 			const safePayAccept = safePayAcception === 1;
 			const safeRefuse = false;
 			if (e.target.value.trim() != '') {
-				insertMsg(e.target.value, safety, safePayAccept, safeRefuse);
+				insertMsg(e.target.value, safety, safePayAccept, safeRefuse, justWord);
 			}
 			setChat('');
 		}
