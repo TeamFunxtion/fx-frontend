@@ -50,6 +50,8 @@ function HeaderMain() {
 	}
 
 	const addSearchHistory = (addItem) => {
+		if (!addItem) return;
+
 		let newList = [];
 		const storageList = localStorage.getItem('searchHistory');
 		if (storageList) {
