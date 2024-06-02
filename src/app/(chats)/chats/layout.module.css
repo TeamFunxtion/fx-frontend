@@ -36,7 +36,10 @@
 .list {
   display: flex;
   padding: 15px 20px;
+  border-top: 1px solid rgb(240, 240, 240);
+  border-bottom: 1px solid  rgb(240, 240, 240);
 }
+
 .list:hover {
   background-color: rgb(240, 240, 240);
 }
