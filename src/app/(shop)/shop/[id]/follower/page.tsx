@@ -22,7 +22,6 @@ export default function Follower() {
 		const res = await api.get(`/follow/follower?userId=${userId}&page=${page}&size=10`);
 		const { data: { resultCode, data } } = res;
 		if (resultCode === '200') {
-			console.log(data);
 			setFollowList(list => [...list, ...data.content]);
 			setHasMore(data.content.length > 0);
 

@@ -240,7 +240,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		const res = await api.post(`/follow/follower`, { toId: toId, fromId: userInfo.id });
 		const { data: { resultCode, msg } } = res;
 		if (resultCode === '200') {
-			toast.success(msg || '팔로우 상태 변경 성공!');
+
 		}
 	};
 
