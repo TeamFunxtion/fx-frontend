@@ -521,9 +521,14 @@ export default function User() {
 							}
 							let hour = (new Date(msg.createDate).getHours()).toString();
 
-							if (Number(hour) > 12) {
+							if (Number(hour) >= 12) {
 								if (Number(hour) - 12 < 10) {
-									hour = "오후 0" + (Number(hour) - 12);
+									if (Number(hour) == 12) {
+										hour = "오후 12";
+									} else {
+										hour = "오후 0" + (Number(hour) - 12);
+									}
+
 								} else {
 									hour = "오후 " + (Number(hour) - 12);
 								}
