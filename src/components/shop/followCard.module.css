@@ -52,3 +52,6 @@
 	color: white;
 	
 }
+.count {
+	white-space: nowrap; 
+}
