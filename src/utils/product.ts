@@ -27,9 +27,9 @@ export const getProductSalesNameKR = (typeId: string) => {
 };
 
 export const getQnaCategoryNameKR = categoryId => {
-  return _.find(qnaCategories, { categoryId }).categoryName;
+  return _.find(qnaCategories, { categoryId })?.categoryName;
 };
 
 export const getCategoryNameKR = categoryId => {
-  return _.find(categories, { categoryId }).categoryName;
+  return _.find(categories, { categoryId })?.categoryName;
 };

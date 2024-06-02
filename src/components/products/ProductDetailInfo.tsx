@@ -1,7 +1,7 @@
 "use client"
 import { BsAlarmFill, BsEyeFill, BsFillHeartFill, BsHeart, BsHeartFill, BsRobot, BsShare } from "react-icons/bs";
 import { scrollToTop, elapsedTime, dateFormatterYYYYMMDDHHmm, numberFormatter, copyClipboard } from "@/utils/common";
-import { getProductQualityNameKR } from "@/utils/product";
+import { getCategoryNameKR, getProductCategoryNameKR, getProductQualityNameKR } from "@/utils/product";
 import styles from "./ProductDetailInfo.module.css"
 import CardLabel from "./ProductCard/CardLabel";
 import { useState, useEffect } from "react";
@@ -340,6 +340,10 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 							<li className={styles.infoCol}>
 								<div className={styles.label}>거래 희망 지역</div>
 								<div className={styles.content}>{productDetail.location || '전국'}</div>
+							</li>
+							<li className={styles.infoCol}>
+								<div className={styles.label}>카테고리</div>
+								<div className={styles.content}>{getCategoryNameKR(productDetail.categoryId)}</div>
 							</li>
 						</ul>
 					</div>

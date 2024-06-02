@@ -2,10 +2,10 @@
 import { ModalBody, ModalBox, ModalContent, ModalFooter, ModalHeader } from './modalStyle'
 import { numberFormatter, dateFormatterYYYYMMDDHHmm } from '@/utils/common'
 import styles from "./BidHistoryModal.module.css"
+import _ from 'lodash'
 
 export default function BidHistoryModal({ clickModal, bidList }) {
 	console.log(bidList)
-
 	return (
 		// 뒷배경을 클릭하면 모달을 나갈 수 있게 해야하므로 뒷 배경 onClick에 state함수를 넣는다.
 		<ModalBox onClick={clickModal}>
@@ -22,7 +22,7 @@ export default function BidHistoryModal({ clickModal, bidList }) {
 							<th>입찰가</th>
 						</tr>
 						{
-							bidList.reverse().map((bid, index) => (
+							bidList && _.sortBy(bidList, 'bidPrice').reverse().map((bid, index) => (
 								<tr className={styles.tr}>
 									<td>{dateFormatterYYYYMMDDHHmm(bid.createDate)}</td>
 									<td>{numberFormatter(bid.bidPrice)}</td>
