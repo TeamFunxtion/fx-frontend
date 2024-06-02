@@ -18,18 +18,15 @@ export default function EditFAQPage({ params: { id } }: IParams) {
 
 	const userRoleId = userInfoValue.roleId;
 
-	const faqMove = () => {
-		router.push(`/faq`);
-	}
 	const updateFaq = async () => {
 		if (userRoleId !== 2) {
 			toast.error("접근 권한이 없습니다.");
 			return;
 		}
 
-		if (faqDetail.faqTitle === '') {
+		if (faqDetail.faqTitle.trim() === '') {
 			toast.error("제목을 입력해 주세요");
-		} else if (faqDetail.faqContent === '') {
+		} else if (faqDetail.faqContent.trim() === '') {
 			toast.error("내용을 입력해 주세요");
 		} else {
 			try {
@@ -99,7 +96,6 @@ export default function EditFAQPage({ params: { id } }: IParams) {
 			</div>
 			<div className={styles.faqButtonArea}>
 				<button className={styles.faqUpdateButton} onClick={updateFaq}>저장</button>
-				<button className={styles.faqUpdateButton} onClick={faqMove}>목록가기</button>
 			</div>
 		</div>
 	);

@@ -21,13 +21,13 @@ export default function NoticeNewPage() {
 			return;
 		}
 
-		if (faqTitle === '') {
+		if (faqTitle.trim() === '') {
 			toast.error("타이틀을 입력해 주세요");
-		} else if (faqContent === '') {
+		} else if (faqContent.trim() === '') {
 			toast.error("내용을 입력해 주세요");
 		} else {
 			try {
-				const res = await api.post('/faqs', { faqTitle: faqTitle, faqContent: faqContent });
+				const res = await api.post('/faqs', { faqTitle: faqTitle.trim(), faqContent: faqContent.trim() });
 				const { data: { resultCode, msg } } = res;
 				if (resultCode === '200') {
 					toast.success(msg || '성공적으로 생성되었습니다.');
