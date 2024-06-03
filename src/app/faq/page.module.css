@@ -22,13 +22,20 @@
 }
 
 .noticeSection{
-
-	width: 1200px;
+	margin: auto;
+	width: 60%;
 	
 }
 
-.noticeDiv{
+.noticeSectionDiv{
+	margin-bottom: 3%;
+	display: flex;
+	height: 80px;
 	border: 2px solid rgba(121, 121, 121, 0.5);
+}
+
+.noticeDiv{
+	border: 0px solid rgba(121, 121, 121, 0.5);
 	 /*display: flex;*/
 	 justify-content: space-between;
 }
@@ -37,11 +44,8 @@
 	justify-content: space-between;
 	border: 2px solid rgba(121, 121, 121, 0.5);
 	align-content: center;
+	border-top: 0px;
 }
-
-
-
-
 .noticeQ{
 	margin: 5px 0;
 	margin-left: 30px;
@@ -58,6 +62,7 @@
 	align-content: center;
 	text-align: left;
 	width: 60%;
+	margin-left: 2%;
 }
 
 .noticeSysdate{
@@ -77,20 +82,15 @@
 	color: rgb(35, 98, 176);
 	margin-top: 30px;
 	padding: 0.3rem 0.6rem;
-	border: 0.8px solid rgb(8, 115, 228,0.3);
+	border: 2px solid rgb(8, 115, 228,0.3);
 	border-radius: 2px;
 	font-weight: 400;
 }
-
-
-
-
 
 .container {
 	position: absolute;
 	background: var(--clr-white);
 	border-radius: var(--radius);
-	max-width: var(--fixed-width);
 	display: grid;
 	gap: 1rem 2rem;
 	margin-left: 200px;
@@ -99,33 +99,8 @@
 	line-height: 1.2;
 	font-weight: 500;
 }
-
-
-.article p {
-	margin-left: 40px;
-	border: 2px solid rgba(121, 121, 121, 0.5);
-	display: flex;
-	justify-content: space-between;
-}
-
-.btn {
-	background: transparent;
-	border-color: transparent;
-	width: 2rem;
-	height: 2rem;
-	background: var(--clr-grey-special);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 50%;
-	color: var(--clr-red-special);
-	cursor: pointer;
-	margin-left: 1rem;
-	align-self: center;
-	min-width: 2rem;
-}
 .faqnewbutton{
-	margin: 0 5px 0 5px;
+	margin: 0 5px 35px 40px;
 	background-color: rgb(14, 187, 255);
 	color: white;
 	font-size: 15px;
@@ -161,7 +136,7 @@
 	width: 80%;
 	word-break: break-all;
 	overflow:auto;
-	margin-left: 3%;
+	margin-left: 1.5%;
 }
 .faqPage{
 	display: flex;
@@ -170,3 +145,25 @@
 	text-align: center;
 	
 }
+
+.noticeDivTop{
+	border-bottom: 2px solid rgba(121, 121, 121, 0.5);
+}
+.faqContent{
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	justify-content: center;
+}
+.noticeMegaPohnIcon{
+	margin: auto 0 auto 40px;
+	font-size: 50px;
+}
+.noticeSectionDivDiv{
+	margin-left: 5%;
+	align-content: center;
+	color: rgba(121, 121, 121);
+	font-size: 40px;
+	font-weight: 600;
+}
+
