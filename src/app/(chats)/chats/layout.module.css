@@ -35,7 +35,10 @@
 }
 .list {
   display: flex;
-  padding: 15px 20px;
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 5px;
   border-top: 1px solid rgb(240, 240, 240);
   border-bottom: 1px solid  rgb(240, 240, 240);
 }
@@ -179,4 +182,14 @@
   margin-top: 6px;
   text-align: center;
   font-weight: 600;
+}
+.notRead2 {
+  border-radius: 50%;
+  color: white;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  font-size: 13px;
+  transform: translateY(-1px); /* 원하는 픽셀 수로 조절 */
+  margin-left: 3px;
 }

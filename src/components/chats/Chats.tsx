@@ -99,7 +99,7 @@ export default function Chats() {
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 													{item.notReadMessages != 0 ?
 														<div className={styles.notRead}><div>{item.notReadMessages}</div></div>
-														: ""}
+														: <div className={styles.notRead2}></div>}
 												</div>
 											</div>
 											<div className={styles.imageContainerP}>
