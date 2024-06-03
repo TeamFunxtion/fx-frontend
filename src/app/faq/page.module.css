@@ -125,7 +125,48 @@
 	min-width: 2rem;
 }
 .faqnewbutton{
-	width: 10%;
-	background-color: var(--primary-color) !important;
+	margin: 0 5px 0 5px;
+	background-color: rgb(14, 187, 255);
 	color: white;
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+.answerSection {
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	border-top: 0px;
+	display: flex;
+	word-break: break-all;
+	overflow:auto;
+}
+
+.answerA {
+	margin: 5px 0;
+	margin-left: 30px;
+	background-color: rgb(255, 106, 47);
+	color: white;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	align-content: center;
+	border-radius: 30px
+}
+
+.answerContent {
+	margin: 5px 10px;
+	line-height: 1.5;
+	color: rgb(0, 106, 219);
+	width: 80%;
+	word-break: break-all;
+	overflow:auto;
+	margin-left: 3%;
+}
+.faqPage{
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	
 }

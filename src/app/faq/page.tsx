@@ -118,19 +118,21 @@ export default function FAQPage() {
 								/>
 							))}
 						</div>
-						{faqList.length === 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
-						{faqList.length > 0 && (
-							<div className={styles.paginationBar}>
-								<Pagination
-									count={pageInfo.totalPages}
-									page={currentPage}
-									onChange={handleChange}
-									showFirstButton
-									showLastButton
-									size='large'
-								/>
-							</div>
-						)}
+						<ul className={styles.faqPage}>
+							{faqList.length === 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
+							{faqList.length > 0 && (
+								<div className={styles.paginationBar}>
+									<Pagination
+										count={pageInfo.totalPages}
+										page={currentPage}
+										onChange={handleChange}
+										showFirstButton
+										showLastButton
+										size='large'
+									/>
+								</div>
+							)}
+						</ul>
 					</section>
 				</div>
 			</div>
@@ -159,7 +161,12 @@ function AccordionItem({ index, question, answer, isOpen, toggleAccordion, creat
 					</>
 				)}
 			</div>
-			{isOpen && <div>{answer}</div>}
+			{isOpen && (
+				<div className={styles.answerSection}>
+					<div className={styles.answerA}>A</div>
+					<div className={styles.answerContent}>{answer}</div>
+				</div>
+			)}
 		</div>
 	);
 }

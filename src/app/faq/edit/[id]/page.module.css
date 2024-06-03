@@ -1,39 +1,148 @@
-.faqDiv{
-	border: 2px solid rgba(121, 121, 121, 0.5);
-	 /*display: flex;*/
-	 justify-content: space-between;
-	 margin-top: 30px;
+.faqInsertMain {
+	display: flex;
+	margin-top: 50px;
 }
 
+.faqSection {
+	width: 70%;
+	margin: 0 auto;
+}
 
-.faqContent{
+.faqInquirtTop {
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+}
+
+.faqInquirt {
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	border-top: 0;
+}
+
+.faqInquirtName {
+	align-content: center;
+	height: 80px;
+	width: 150px;
+	background-color: rgb(223, 223, 223);
+}
+
+.faqInquirtName > div {
+	margin-left: 20%;
+}
+
+.faqInquirtNameInput {
+	margin: auto;
+	width: 75%;
+	height: 40px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	font-size: 18px;
+	word-break: keep-all;
+}
+
+.faqIpquirtContent {
+	display: flex;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	border-top: 0;
+	height: 160px;
+}
+
+.faqIpquirtContentInput {
+	font-family: 'Raleway', sans-serif;
+	font-size: 18px;
+	margin: auto;
+	width: 85%;
+	height: 100px;
+	border-radius: 5px;
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	resize: none;
+}
+
+.faqInquirtButton {
+	margin-top: 15px;
+	text-align: center;
+	align-content: center;
+}
+
+.faqInquirtButtonInquirt {
+	margin: 0 5px 0 5px;
+	background-color: rgb(14, 187, 255);
+	color: white;
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.faqInquirtButtonMenu {
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	background-color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.faqDiv {
+	border: 2px solid rgba(121, 121, 121, 0.5);
+	justify-content: space-between;
+	margin-top: 30px;
+}
+
+.faqContent {
 	align-content: center;
 	text-align: left;
 	width: 60%;
 	margin-left: 20%;
 }
-.faqButtonArea{
-	display: flex;
-	justify-content: space-between;
+
+.faqButtonArea {
+	margin-top: 15px;
+	text-align: center;
+	align-content: center;
 }
 
-.faqUpdateButton{
+.faqUpdateButton {
+	margin: 0 5px 0 5px;
+	background-color: rgb(14, 187, 255);
 	color: white;
-  height: 50px;
-  background-color: var(--primary-color) !important;
-  width: 100px;
-	text-align: center;
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
 }
-.faqUpdate{
+
+.faqListButton {
+	border: 2px solid rgba(121, 121, 121, 0.3);
+	background-color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
+	font-size: 15px;
+	font-weight: 550;
+	width: 100px;
+	height: 50px;
+	border-radius: 5px;
+}
+
+.faqUpdate {
 	text-align: center;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
-.faqUpdateTitle{
+.faqUpdateTitle {
 	width: 60%;
-}
-.faqNewArea{
-	margin-top: 3%;
+	resize: none;
 }
 
+.faqNewArea {
+	margin-top: 3%;
+}
+.updatefaq{
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
