@@ -93,8 +93,8 @@ export default function Chats() {
 													<div className={styles.roomName} title={item.store.nickname}><span className={styles.seller}>Ⓢ</span><span>{item.store.nickname}</span></div> :
 													<div className={styles.roomName} title={item.customer.nickname}><span className={styles.buyer}>Ⓑ</span><span>{item.customer.nickname}</span></div>}
 												<div className={styles.msgArea}>
-													<div className={styles.lastMsg} title={chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}>
-														{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}
+													<div className={styles.lastMsg} title={chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[item.chatMessages.length - 1].message : "")}>
+														{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[item.chatMessages.length - 1].message : "")}
 													</div>
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
 													{item.notReadMessages != 0 ?
