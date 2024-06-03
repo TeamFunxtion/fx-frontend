@@ -55,6 +55,7 @@ export default function QnaInquiryHistory() {
 
 	useEffect(() => {
 		getList(1);
+		setCurrentPage(1);
 	}, [answerChange])
 
 
