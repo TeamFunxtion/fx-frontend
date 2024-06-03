@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // 인증이 필요한 경로 전체 작성
-    "/products/new",
-    "/chats/:path*",
+    // "/products/new",
+    // "/chats/:path*",
   ],
 };
