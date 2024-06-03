@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import Etcsidebar from "@/components/etc/etcsidebar";
+import { ImBullhorn } from "react-icons/im";
 
 export default function FAQPage() {
 	const [faqList, setFaqList] = useState([]);
@@ -91,52 +92,59 @@ export default function FAQPage() {
 	};
 
 	return (
-		<div>
-			<div className={styles.noticeMain}>
-				<aside className={styles.noticeAside}>
-					<br />
-					<Etcsidebar />
-				</aside>
-				<div className={styles.container}>
-					{userRoleId === 2 && <button className={styles.faqnewbutton} onClick={handleNewPostClick}>새 글 등록</button>}
-					<section className={styles.noticeSection}>
-						<div className={styles.noticeDiv}>
-							{faqList.map((faq, index) => (
-								<AccordionItem
-									key={index}
-									index={index}
-									id={faq.id}
-									question={faq.faqTitle}
-									answer={faq.faqContent}
-									isOpen={openIndex === index}
-									toggleAccordion={toggleAccordion}
-									createdate={faq.createDate}
-									dateFormatterYYYYMMDDHHmm={dateFormatterYYYYMMDDHHmm}
-									onEditClick={() => handleEditClick(faq.id)}
-									deleteFaq={() => deleteFaq(faq.id)}
-									userRoleId={userRoleId}
-								/>
-							))}
-						</div>
-						<ul className={styles.faqPage}>
-							{faqList.length === 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
-							{faqList.length > 0 && (
-								<div className={styles.paginationBar}>
-									<Pagination
-										count={pageInfo.totalPages}
-										page={currentPage}
-										onChange={handleChange}
-										showFirstButton
-										showLastButton
-										size='large'
-									/>
-								</div>
-							)}
-						</ul>
-					</section>
+		// <div>
+		<div className={styles.noticeMain}>
+			<aside className={styles.noticeAside}>
+				<br />
+				<Etcsidebar />
+			</aside>
+			{/* <div className={styles.container}> */}
+
+
+			<section className={styles.noticeSection}>
+				{userRoleId === 2 && <button className={styles.faqnewbutton} onClick={handleNewPostClick}>새 글 등록</button>}
+				<div className={styles.noticeSectionDiv}>
+					<div className={styles.noticeMegaPohnIcon}><ImBullhorn /></div>
+					<div className={styles.noticeSectionDivDiv}>자주묻는질문</div>
 				</div>
-			</div>
+				<div className={faqList.length != 0 && styles.noticeDivTop} />
+				<div className={styles.noticeDiv}>
+					{faqList.map((faq, index) => (
+						<AccordionItem
+							key={index}
+							index={index}
+							id={faq.id}
+							question={faq.faqTitle}
+							answer={faq.faqContent}
+							isOpen={openIndex === index}
+							toggleAccordion={toggleAccordion}
+							createdate={faq.createDate}
+							dateFormatterYYYYMMDDHHmm={dateFormatterYYYYMMDDHHmm}
+							onEditClick={() => handleEditClick(faq.id)}
+							deleteFaq={() => deleteFaq(faq.id)}
+							userRoleId={userRoleId}
+						/>
+					))}
+				</div>
+				<ul className={styles.faqPage}>
+					{faqList.length === 0 && <div className={styles.noResult}>😝 조회된 결과가 없습니다.</div>}
+					{faqList.length > 0 && (
+						<div className={styles.paginationBar}>
+							<Pagination
+								count={pageInfo.totalPages}
+								page={currentPage}
+								onChange={handleChange}
+								showFirstButton
+								showLastButton
+								size='large'
+							/>
+						</div>
+					)}
+				</ul>
+			</section>
 		</div>
+		//</div>
+		// </div>
 	);
 }
 
