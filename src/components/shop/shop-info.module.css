@@ -39,18 +39,6 @@
   right: 250px;
 }
 
-.headerRight div {
-  width: 80px;
-  height: 80px;
-  border: 1px solid rgb(0, 136, 255);
-  /* color: white; */
-  border-radius: 50%;
-  font-size: 1rem;
-  margin-left: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .introContainer {
   /* width: fit-content; */
@@ -60,4 +48,23 @@
   background: rgb(228, 228, 228);
   border-radius: 8px;
   font-size: 1rem;
+}
+
+.reviews {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  
+}
+.heartIcon {
+  font-size: 50px;
+  color: rgb(255, 30, 0);
+}
+
+.reviewScore {
+  font-size: large;
+  padding-top: 3px;
+}
+.user {
+  padding-top: 30px;
 }
