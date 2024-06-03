@@ -17,6 +17,7 @@ export default function QnaInquiryHistory() {
 	const [currentPage, setCurrentPage] = useState(Number(1));
 	const searchParams = useSearchParams();
 	const [Answer, setAnswer] = useState("");
+	const [answerChange, setAnswerChange] = useState('all');
 	const [pageInfo, setPageInfo] = useState({
 		totalPages: 1,
 		totalElements: 1,
@@ -29,13 +30,15 @@ export default function QnaInquiryHistory() {
 		setCurrentPage(value);
 		router.push(`/qna?&page=${value}`)
 	};
+
 	const getList = async (pageNo) => {
+		console.log(answerChange);
 		const result = await api.get(`/qnas/manager`, {
 			params: {
 				page: pageNo || 1,
+				ch: answerChange
 			}
 		}
-
 
 		);
 		setList(result.data.content);
@@ -49,6 +52,11 @@ export default function QnaInquiryHistory() {
 	useEffect(() => {
 		getList(currentPage);
 	}, [])
+
+	useEffect(() => {
+		getList(1);
+		setCurrentPage(1);
+	}, [answerChange])
 
 
 	useEffect(() => {
@@ -85,24 +93,30 @@ export default function QnaInquiryHistory() {
 	}
 
 
-
 	const qnaAnswerContent = (id) => {
 		if (Answer === id) {
 			setAnswer("");
+
 		} else {
 			setAnswer(id);
+
 		}
 	}
 
+	const answerCh = (id) => {
+		setAnswerChange(id);
 
-
-
+	}
 
 
 
 	return (
 		<div>
 			<div>
+				<ul className={styles.ch}>
+					<li className={answerChange === 'all' ? styles.on : styles.off} onClick={() => answerCh('all')}>전체목록조회</li>
+					<li className={answerChange === 'null' ? styles.on : styles.off} onClick={() => answerCh('null')}>미답변목록조회</li>
+				</ul>
 				<QnaInquiryHistoryBack list={list}
 					qnaAnswerContent={qnaAnswerContent}
 					setQnaManagerAnswer={setQnaManagerAnswer}
@@ -129,7 +143,7 @@ export default function QnaInquiryHistory() {
 						</ul>
 					}</div>
 			</div>
-		</div>
+		</div >
 
 	)
 }
