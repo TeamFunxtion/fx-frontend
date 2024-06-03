@@ -17,14 +17,14 @@
 .chatsContainer {
   width: 45%;
   padding-top: 30px;
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
   scrollbar-width: none;
-  overflow-y: scroll; 
+  overflow-y: scroll;
   border-right: 1px solid rgb(240, 240, 240);
 }
 
 .chatsContainer::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .chatsTitle {
@@ -40,7 +40,7 @@
   padding-right: 20px;
   padding-bottom: 5px;
   border-top: 1px solid rgb(240, 240, 240);
-  border-bottom: 1px solid  rgb(240, 240, 240);
+  border-bottom: 1px solid rgb(240, 240, 240);
 }
 
 .list:hover {
@@ -55,11 +55,9 @@
   padding-right: 50px;
 }
 .profileImg {
-  
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  
 }
 
 .productImg {
@@ -67,6 +65,7 @@
   height: 50px;
   border-radius: 50%;
   position: fixed;
+  z-index: 10;
 }
 
 .shortcut {
