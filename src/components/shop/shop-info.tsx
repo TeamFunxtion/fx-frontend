@@ -12,7 +12,7 @@ export default function ShopInfo({ params }) {
 	const baseUrl = `/shop/${user.id}`;
 	const [userInfo, setUserInfo] = useState({
 	});
-	const [reviewScore, setReviewScore] = useState(0.0);
+	const [reviewScore, setReviewScore] = useState("0.0");
 
 
 	const getShopUserDetail = async () => {
@@ -20,8 +20,13 @@ export default function ShopInfo({ params }) {
 
 		const { data: { resultCode, msg, data } } = result;
 		if (resultCode === '200') {
-			console.log(data);
 			setUserInfo(data);
+			if (data.reviewScore == 1 || data.reviewScore == 2 || data.reviewScore == 3 || data.reviewScore == 4 || data.reviewScore == 5) {
+				setReviewScore(data.reviewScore + ".0");
+			} else {
+				setReviewScore(data.reviewScore)
+			}
+
 		}
 	}
 
@@ -39,15 +44,14 @@ export default function ShopInfo({ params }) {
 						{userInfo.nickname || userInfo.email}
 						<div className={styles.reviews}>
 							<FavoriteIcon className={styles.heartIcon} />
-							<span className={styles.reviewScore}>{userInfo.reviewCount > 0 ? userInfo.reviewScore : "0.0"}({userInfo.reviewCount})</span>
+							<span className={styles.reviewScore}>
+								{userInfo.reviewCount > 0 ? reviewScore : "0.0"}
+								({userInfo.reviewCount})
+							</span>
 						</div>
 					</h1>
 					{!isGuest && <Link href={`${baseUrl}/profile`}>내 정보 변경</Link>}
-
 				</div>
-				{/* <div className={styles.headerRight}>
-					
-				</div> */}
 			</div>
 			<div className={styles.introContainer}>
 				{userInfo.intro || `${userInfo.nickname || userInfo.email}님의 상점에 오신것을 환영합니다.`}
