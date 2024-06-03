@@ -286,3 +286,28 @@
 	margin-right: 15px;
 	float: right;
 }
+
+
+
+.ch{
+	display: flex;
+	justify-content: flex-end;
+}
+
+
+
+
+.off {
+	margin-right: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: grey;
+}
+
+.on{
+	margin-right: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+	color: blue;
+}
+
