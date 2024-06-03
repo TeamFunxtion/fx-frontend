@@ -174,6 +174,7 @@ export default function User() {
 	useEffect(() => {
 		updateMsg();
 		getChatRoomInfo();
+
 	}, [])
 
 

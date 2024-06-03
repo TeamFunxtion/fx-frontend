@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { chatState } from "@/store/atoms";
 import { chatProduct } from "@/store/atoms";
 
+
 export default function Chats() {
 
 	const chats = useRecoilValue(chatState);
@@ -19,6 +20,7 @@ export default function Chats() {
 	const userInfoValue = useRecoilValue(userInfoState);
 	const [chatRoomList, setChatRoomList] = useState([]);
 	const [productImg, setProductImg] = useState("");
+
 
 	const getChatRoomList = async () => {
 		const res = await api.get('/chats?id=' + userInfoValue.id);
@@ -39,6 +41,11 @@ export default function Chats() {
 		setProductImg(chatProductImg.image)
 	}, [chatProductImg])
 
+	const changeNotRead = (index) => {
+		const newList = [...chatRoomList]
+		newList[index].notReadMessages = 0;
+		setChatRoomList(newList);
+	}
 
 	let lastMsgDate = "";
 	if (chats.length > 0) {
@@ -75,7 +82,7 @@ export default function Chats() {
 									date = "0" + date;
 								}
 								return (
-									<Link href={`/chats/${item.id}`}>
+									<Link href={`/chats/${item.id}`} onClick={() => changeNotRead(index)}>
 										<div key={index} className={styles.list}>
 											<div className={styles.imageContainer}>
 												<img src={item.store.id != userInfoValue.id ? item.store.profileImageUrl : item.customer.profileImageUrl}
@@ -87,8 +94,12 @@ export default function Chats() {
 													<div className={styles.roomName} title={item.customer.nickname}><span className={styles.buyer}>Ⓑ</span><span>{item.customer.nickname}</span></div>}
 												<div className={styles.msgArea}>
 													<div className={styles.lastMsg} title={chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}>
-														{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}</div>
+														{chats.length > 0 && chats[chats.length - 1].roomNumber == item.id ? chats[chats.length - 1].msg : (item.chatMessages.length != 0 ? item.chatMessages[0].message : "")}
+													</div>
 													<div className={styles.lastMsgDate}>{chats.length > 0 ? lastMsgDate : month + "/" + date}</div>
+													{item.notReadMessages != 0 ?
+														<div className={styles.notRead}><div>{item.notReadMessages}</div></div>
+														: ""}
 												</div>
 											</div>
 											<div className={styles.imageContainerP}>
