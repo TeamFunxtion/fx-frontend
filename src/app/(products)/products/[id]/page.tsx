@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
 import { API_URL } from "@/app/constants";
-import ProductDetailInfo from "@/components/products/ProductDetailInfo";
+const ProductDetailInfo = dynamic(() =>
+	import('@/components/products/ProductDetailInfo').then((ProductDetailInfo) => ProductDetailInfo)
+)
 import api from "@/utils/api";
 
 interface IParams {
