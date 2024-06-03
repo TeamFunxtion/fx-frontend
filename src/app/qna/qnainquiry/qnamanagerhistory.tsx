@@ -87,7 +87,7 @@ export default function QnaInquiryHistory() {
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
 				toast.success(msg || ` `);
-				router.push("/qna?page=1")
+				getList(currentPage);
 			}
 		}
 	}
@@ -105,7 +105,6 @@ export default function QnaInquiryHistory() {
 
 	const answerCh = (id) => {
 		setAnswerChange(id);
-
 	}
 
 
