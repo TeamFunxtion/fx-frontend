@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import styles from "./page.module.css";
+import Etcsidebar from '@/components/etc/etcsidebar';
 
 interface IParams {
 	params: { id: string }
@@ -71,32 +72,38 @@ export default function EditFAQPage({ params: { id } }: IParams) {
 			[name]: value,
 		}));
 	};
-
+	const faqMove = () => {
+		router.push(`/faq`);
+	}
 	return (
-		<div className={styles.faqDiv}>
-			<h2 className={styles.faqUpdate}>FAQ 수정</h2>
-			<div>
-				<label className={styles.faqContent}>제목 : </label>
-				<input
-					className={styles.faqUpdateTitle}
-					type="text"
-					name="faqTitle"
-					value={faqDetail.faqTitle}
-					onChange={handleInputChange}
-				/>
-			</div>
-			<div className={styles.faqNewArea}>
-				<label className={styles.faqContent}>내용 : </label>
-				<textarea
-					className={styles.faqUpdateTitle}
-					name="faqContent"
-					value={faqDetail.faqContent}
-					onChange={handleInputChange}
-				/>
-			</div>
-			<div className={styles.faqButtonArea}>
-				<button className={styles.faqUpdateButton} onClick={updateFaq}>저장</button>
-			</div>
-		</div>
+		<div className={styles.faqInsertMain}>
+			<Etcsidebar />
+			<section className={styles.faqSection}>
+				<div className={styles.updatefaq}>FAQ 글 수정</div>
+				<div className={styles.faqInquirtTop}></div>
+				<div className={styles.faqInquirt}>
+					<div className={styles.faqInquirtName}><div>제목 </div></div>
+					<input
+						className={styles.faqInquirtNameInput}
+						type="text"
+						name="faqTitle"
+						value={faqDetail.faqTitle}
+						onChange={handleInputChange}
+					/>
+				</div>
+				<div className={styles.faqIpquirtContent}>
+					<textarea
+						className={styles.faqIpquirtContentInput}
+						name="faqContent"
+						value={faqDetail.faqContent}
+						onChange={handleInputChange}
+					/>
+				</div>
+				<div className={styles.faqInquirtButton}>
+					<button className={styles.faqInquirtButtonInquirt} onClick={updateFaq}>저장</button>
+					<button className={styles.faqInquirtButtonMenu} onClick={faqMove}>목록가기</button>
+				</div>
+			</section >
+		</div >
 	);
 }

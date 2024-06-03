@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store/atoms";
 import styles from "./page.module.css";
+import Etcsidebar from '@/components/etc/etcsidebar';
 
-export default function NoticeNewPage() {
+export default function FaqNewPage() {
 	const [faqContent, setFaqContent] = useState('');
 	const [faqTitle, setFaqTitle] = useState('');
 	const router = useRouter();
@@ -58,37 +59,34 @@ export default function NoticeNewPage() {
 	}
 
 	return (
-		<div className={styles.faqDiv}>
-			<h1 className={styles.Newfaq}>새 글 등록</h1>
-			<div>
-				<label className={styles.faqContent}>제목:</label>
-				<input
-					className={styles.faqNewContent}
-					type="text"
-					name="faqTitle"
-					value={faqTitle}
-					onChange={(e) => {
-						setFaqTitle(e.target.value);
-					}}
-					required
-				/>
-			</div>
-			<div className={styles.faqNewArea}>
-				<label className={styles.faqContent}>내용:</label>
-				<textarea
-					className={styles.faqNewContent}
-					name="faqContent"
-					value={faqContent}
-					onChange={(e) => {
-						setFaqContent(e.target.value);
-					}}
-					required
-				></textarea>
-			</div >
-			<div className={styles.faqButtonArea}>
-				<button className={styles.faqUpdateButton} onClick={createFaq}>등록</button>
-				<button className={styles.faqUpdateButton} onClick={faqMove}>목록가기</button>
-			</div>
+		<div className={styles.faqInsertMain}>
+			<Etcsidebar />
+			<section className={styles.faqSection}>
+				<div className={styles.Newfaq}>새 글 등록</div>
+				<div className={styles.faqInquirtTop}></div>
+				<div className={styles.faqInquirt}>
+					<div className={styles.faqInquirtName}><div>제목</div></div>
+					<input
+						type="text"
+						className={styles.faqInquirtNameInput}
+						placeholder="제목을 입력해 주세요"
+						value={faqTitle}
+						onChange={(e) => setFaqTitle(e.target.value)}
+					/>
+				</div>
+				<div className={styles.faqIpquirtContent}>
+					<textarea
+						className={styles.faqIpquirtContentInput}
+						placeholder="내용을 입력해주세요"
+						value={faqContent}
+						onChange={(e) => setFaqContent(e.target.value)}
+					/>
+				</div>
+				<div className={styles.faqInquirtButton}>
+					<button className={styles.faqInquirtButtonInquirt} onClick={createFaq}>등록</button>
+					<button className={styles.faqInquirtButtonMenu} onClick={faqMove}>목록가기</button>
+				</div>
+			</section>
 		</div>
 	);
 }
