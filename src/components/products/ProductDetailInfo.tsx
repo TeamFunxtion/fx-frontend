@@ -350,7 +350,7 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 						<div className={styles.btnContainer}>
 							<button className={`${styles.btnChat} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickChatting} disabled={productDetail.statusTypeId !== 'ST01'}>💬1:1채팅</button>
 							{productDetail.salesTypeId !== "SA03" && <button className={`${styles.btnBid} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickBid} disabled={productDetail.statusTypeId !== 'ST01'}>✋입찰</button>}
-							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡바로 구매</button>}
+							{productDetail.salesTypeId === "SA01" && productDetail.coolPrice && <button className={`${styles.btnCool} ${productDetail.statusTypeId !== 'ST01' && 'disabled'}`} onClick={clickFastPurchase} disabled={productDetail.statusTypeId !== 'ST01'}>⚡즉시 낙찰</button>}
 						</div>
 					}
 				</div>
