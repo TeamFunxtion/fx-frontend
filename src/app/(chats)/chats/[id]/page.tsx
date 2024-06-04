@@ -217,11 +217,7 @@ export default function User() {
 	}
 
 	const deleteSafePayment = async () => {
-		const res = await api.post(`/safe/delete`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
-		const { data: { resultCode, msg, data } } = res;
-		if (resultCode == '200') {
-			toast.success(msg || '안전거래 삭제 성공');
-		}
+		await api.post(`/safe/delete`, { productId: chatRoomInfo.product.id, sellerId: chatRoomInfo.store.id, buyerId: chatRoomInfo.customer.id });
 	}
 
 
@@ -319,10 +315,6 @@ export default function User() {
 				status: 'sellerOk'
 			});
 			const { data: { resultCode, msg, data } } = res;
-			if (resultCode == '200') {
-				toast.success(msg || `판매 확정 성공`);
-
-			}
 			sendMessage(JSON.stringify({
 				type: "success",
 				roomNumber: id,
@@ -343,7 +335,6 @@ export default function User() {
 			});
 			const { data: { resultCode, msg, data } } = res;
 			if (resultCode == '200') {
-				toast.success(msg || `판매 확정 성공`);
 				sendMessage(JSON.stringify({
 					type: "success",
 					roomNumber: id,

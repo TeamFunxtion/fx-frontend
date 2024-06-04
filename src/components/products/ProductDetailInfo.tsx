@@ -85,8 +85,6 @@ export default function ProductDetailInfo({ id }: { id: string }) {
 		const res = await api.post(`/chats`, { customerId: userInfo.id, storeId: productDetail.seller.id, productId: productDetail.id });
 		const { data: { resultCode, msg, data } } = res;
 		if (resultCode == '200') {
-			// console.log(data);
-			toast.success(msg || `채팅방 추가 | 변경 성공`);
 			if (data) {
 				router.push("/chats/" + data);
 			}
